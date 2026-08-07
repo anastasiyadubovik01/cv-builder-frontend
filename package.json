@@ -10,7 +10,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "prepare": "husky"
   },
   "dependencies": {
     "@apollo/client": "^4.2.10",
@@ -36,9 +37,12 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.0",
     "eslint-config-prettier": "10.1.8",
+    "husky": "^9.1.7",
     "jsdom": "^30.0.1",
+    "lint-staged": "^17.3.0",
     "prettier": "3.9.6",
     "tailwindcss": "^4",
+    "tsc-files": "^1.1.4",
     "typescript": "^5",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.1.10"
