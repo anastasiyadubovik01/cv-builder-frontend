@@ -39,10 +39,10 @@ export default async function ResetPasswordPage() {
           required
         />
         <div className="mt-2 flex flex-col items-center gap-2 font-medium">
-          <Button type="submit" className="w-[120px]">
+          <Button type="submit" className="min-w-[120px] w-full max-w-[180px]">
             {t('auth.resetPassword.button')}
           </Button>
-          <Link href="/sign-in" className="w-[120px]">
+          <Link href="/sign-in" className="min-w-[120px] w-full max-w-[180px]">
             <Button variant="ghost" className="w-full">
               {t('auth.resetPassword.goToSignIn')}
             </Button>
