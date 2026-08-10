@@ -1,23 +1,32 @@
 import type { Metadata } from 'next';
+import { getT } from 'next-i18next/server';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { AuthTabs } from '../_components/auth-tabs';
 
-export const metadata: Metadata = {
-  title: 'Sign Up | CV Builder',
-  description: 'Sign up to continue',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
 
-export default function SignUpPage() {
+  return {
+    title: `${t('auth.signUp.title')} | CV Builder`,
+    description: t('auth.signUp.description'),
+  };
+}
+
+export default async function SignUpPage() {
+  const { t } = await getT();
+
   return (
     <>
       <AuthTabs />
       <div className="flex flex-col">
         <div className="mb-10 text-center text-foreground">
-          <h1 className="mb-5 text-[34px] font-regular">Sign up now</h1>
-          <p className="text-[16px]">Welcome! Sign up to continue</p>
+          <h1 className="mb-5 text-[34px] font-regular">
+            {t('auth.signUp.heading')}
+          </h1>
+          <p className="text-[16px]">{t('auth.signUp.subheading')}</p>
         </div>
 
         <form className="flex flex-col gap-9">
@@ -39,13 +48,13 @@ export default function SignUpPage() {
             className="w-full bg-transparent p-3 text-[16px]"
             required
           />
-          <div className="flex flex-col items-center gap-2 font-medium mt-2">
+          <div className="mt-2 flex flex-col items-center gap-2 font-medium">
             <Button type="submit" className="w-[220px]">
-              Create Account
+              {t('auth.signUp.button')}
             </Button>
             <Link href="/sign-in" className="w-[220px]">
               <Button variant="ghost" className="w-full">
-                I have an account
+                {t('auth.signUp.haveAccount')}
               </Button>
             </Link>
           </div>

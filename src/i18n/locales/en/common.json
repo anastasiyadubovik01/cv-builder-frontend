@@ -1,5 +1,52 @@
 {
   "cancel": "Cancel",
   "update": "Update",
-  "verifyEmail": "Verify email"
+  "verifyEmail": "Verify email",
+
+  "auth": {
+    "signIn": {
+      "title": "Sign In",
+      "description": "Sign in to continue",
+      "heading": "Welcome back",
+      "subheading": "Hello again! Sign in to continue",
+      "button": "Sign in",
+      "forgotPassword": "Forgot password"
+    },
+    "signUp": {
+      "title": "Sign Up",
+      "description": "Sign up to continue",
+      "heading": "Sign up now",
+      "subheading": "Welcome! Sign up to continue",
+      "button": "Create Account",
+      "haveAccount": "I have an account"
+    },
+    "forgotPassword": {
+      "title": "Forgot password",
+      "description": "We will sent you an email with further instructions",
+      "heading": "Forgot password",
+      "subheading": "We will sent you an email with further instructions",
+      "button": "Reset password",
+      "cancel": "Cancel"
+    },
+    "resetPassword": {
+      "title": "Reset password",
+      "description": "Here you should write a new password and confirm it",
+      "heading": "Reset password",
+      "subheading": "Here you should write a new password and confirm it",
+      "button": "Submit",
+      "goToSignIn": "Go to sign in"
+    },
+    "emailVerification": {
+      "title": "Email verification",
+      "description": "Enter the verification code we sent to your email",
+      "heading": "Email verification",
+      "subheading": "Enter the verification code we sent to your email",
+      "button": "Confirm",
+      "later": "Later"
+    },
+    "tabs": {
+      "signIn": "Sign in",
+      "signUp": "Sign up"
+    }
+  }
 }
