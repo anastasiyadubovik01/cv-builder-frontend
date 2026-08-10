@@ -8,15 +8,17 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
+interface PasswordInputProps extends React.ComponentProps<'input'> {
+  error?: string;
+}
+
 function PasswordInput({
   className,
   disabled,
+  error,
   ...props
-}: React.ComponentProps<'input'>) {
+}: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
-
-  const isInvalid =
-    props['aria-invalid'] === true || props['aria-invalid'] === 'true';
 
   return (
     <div className="relative">
@@ -24,6 +26,7 @@ function PasswordInput({
         {...props}
         type={showPassword ? 'text' : 'password'}
         disabled={disabled}
+        error={error}
         className={cn('pr-12', className)}
       />
 
@@ -34,7 +37,7 @@ function PasswordInput({
         onClick={() => setShowPassword(!showPassword)}
         className={cn(
           'absolute top-1/2 right-[6px] -translate-y-1/2 bg-transparent size-10',
-          isInvalid ? 'text-destructive' : 'text-[var(--password-icon)]',
+          error ? 'text-destructive' : 'text-[var(--password-icon)]',
           disabled && 'text-[var(--disabled-foreground)]',
         )}
       >
