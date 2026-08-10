@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import { getT } from 'next-i18next/server';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
 import { AuthTabs } from '../_components/auth-tabs';
+import { cn } from '@/lib/utils';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
@@ -52,10 +53,11 @@ export default async function SignUpPage() {
             <Button type="submit" className="w-[220px]">
               {t('auth.signUp.button')}
             </Button>
-            <Link href="/sign-in" className="w-[220px]">
-              <Button variant="ghost" className="w-full">
-                {t('auth.signUp.haveAccount')}
-              </Button>
+            <Link
+              href="/sign-in"
+              className={cn(buttonVariants({ variant: 'ghost' }), 'w-[220px]')}
+            >
+              {t('auth.signUp.haveAccount')}
             </Link>
           </div>
         </form>

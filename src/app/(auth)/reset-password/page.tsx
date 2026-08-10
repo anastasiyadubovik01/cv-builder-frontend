@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getT } from 'next-i18next/server';
 import { PasswordInput } from '@/components/ui/password-input';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
@@ -42,10 +43,14 @@ export default async function ResetPasswordPage() {
           <Button type="submit" className="min-w-[120px] w-full max-w-[180px]">
             {t('auth.resetPassword.button')}
           </Button>
-          <Link href="/sign-in" className="min-w-[120px] w-full max-w-[180px]">
-            <Button variant="ghost" className="w-full">
-              {t('auth.resetPassword.goToSignIn')}
-            </Button>
+          <Link
+            href="/sign-in"
+            className={cn(
+              buttonVariants({ variant: 'ghost' }),
+              'min-w-[120px] w-full max-w-[180px]',
+            )}
+          >
+            {t('auth.resetPassword.goToSignIn')}
           </Link>
         </div>
       </form>

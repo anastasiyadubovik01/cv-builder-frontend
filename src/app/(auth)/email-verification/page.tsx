@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getT } from 'next-i18next/server';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { DigitsInputOTP } from '@/components/ui/digits-input-otp';
+import { cn } from '@/lib/utils';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
@@ -33,10 +34,11 @@ export default async function EmailVerificationPage() {
           <Button type="submit" className="w-[160px]">
             {t('auth.emailVerification.button')}
           </Button>
-          <Link href="/" className="w-[160px]">
-            <Button variant="ghost" className="w-full">
-              {t('auth.emailVerification.later')}
-            </Button>
+          <Link
+            href="/"
+            className={cn(buttonVariants({ variant: 'ghost' }), 'w-[160px]')}
+          >
+            {t('auth.emailVerification.later')}
           </Link>
         </div>
       </form>

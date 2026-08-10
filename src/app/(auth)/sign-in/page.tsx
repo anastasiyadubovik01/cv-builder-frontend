@@ -3,8 +3,9 @@ import Link from 'next/link';
 import { getT } from 'next-i18next/server';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { AuthTabs } from '../_components/auth-tabs';
+import { cn } from '@/lib/utils';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
@@ -46,10 +47,11 @@ export default async function SignInPage() {
             <Button type="submit" className="w-[160px]">
               {t('auth.signIn.button')}
             </Button>
-            <Link href="/forgot-password" className="w-[160px]">
-              <Button variant="ghost" className="w-full">
-                {t('auth.signIn.forgotPassword')}
-              </Button>
+            <Link
+              href="/forgot-password"
+              className={cn(buttonVariants({ variant: 'ghost' }), 'w-[160px]')}
+            >
+              {t('auth.signIn.forgotPassword')}
             </Link>
           </div>
         </form>
