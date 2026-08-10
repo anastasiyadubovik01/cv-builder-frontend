@@ -2,13 +2,14 @@ import type { Metadata } from 'next';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Sign Up | CV Builder',
   description: 'Sign up to continue',
 };
 
-export default async function SignUpPage() {
+export default function SignUpPage() {
   return (
     <div className="flex flex-col">
       <div className="mb-10 text-center text-foreground">
@@ -39,9 +40,11 @@ export default async function SignUpPage() {
           <Button type="submit" className="w-[220px]">
             Create Account
           </Button>
-          <Button variant="ghost" className="w-[220px]">
-            I have an account
-          </Button>
+          <Link href="/sign-in" className="w-[220px]">
+            <Button variant="ghost" className="w-full">
+              I have an account
+            </Button>
+          </Link>
         </div>
       </form>
     </div>
