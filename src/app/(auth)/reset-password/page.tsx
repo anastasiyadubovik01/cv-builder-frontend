@@ -12,13 +12,13 @@ export default function ResetPasswordPage() {
   return (
     <div className="flex flex-col">
       <div className="mb-10 text-center text-foreground">
-        <h1 className="mb-6 text-[34px] font-regular">Reset password</h1>
+        <h1 className="mb-5 text-[34px] font-regular">Reset password</h1>
         <p className="text-[16px]">
           Here you should write a new password and confirm it
         </p>
       </div>
 
-      <form className="flex flex-col gap-9 mb-8">
+      <form className="flex flex-col gap-9">
         <PasswordInput
           type="password"
           placeholder="Password"
@@ -31,7 +31,7 @@ export default function ResetPasswordPage() {
           className="w-full bg-transparent p-3 text-[16px]"
           required
         />
-        <div className="flex flex-col items-center gap-2 font-medium">
+        <div className="flex flex-col items-center gap-2 font-medium mt-2">
           <Button type="submit" className="w-[120px]">
             Submit
           </Button>

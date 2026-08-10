@@ -12,17 +12,17 @@ export default function EmailVerificationPage() {
   return (
     <div className="flex flex-col">
       <div className="mb-10 text-center text-foreground">
-        <h1 className="mb-6 text-[34px] font-regular">Email verification</h1>
+        <h1 className="mb-5 text-[34px] font-regular">Email verification</h1>
         <p className="text-[16px]">
           Enter the verification code we sent to your email.
         </p>
       </div>
 
-      <form className="flex flex-col gap-9 mb-8">
+      <form className="flex flex-col gap-9">
         <div className="flex justify-center">
           <DigitsInputOTP />
         </div>
-        <div className="flex flex-col items-center gap-2 font-medium">
+        <div className="flex flex-col items-center gap-2 font-medium mt-2">
           <Button type="submit" className="w-[160px]">
             Confirm
           </Button>

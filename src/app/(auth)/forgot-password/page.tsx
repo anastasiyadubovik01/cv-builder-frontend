@@ -12,20 +12,20 @@ export default function ForgotPasswordPage() {
   return (
     <div className="flex flex-col">
       <div className="mb-10 text-center text-foreground">
-        <h1 className="mb-6 text-[34px] font-regular">Forgot password</h1>
+        <h1 className="mb-5 text-[34px] font-regular">Forgot password</h1>
         <p className="text-[16px]">
           We will sent you an email with further instructions
         </p>
       </div>
 
-      <form className="flex flex-col gap-9 mb-8">
+      <form className="flex flex-col gap-9">
         <Input
           type="email"
           placeholder="Email"
           className="w-full bg-transparent p-3 text-[16px]"
           required
         />
-        <div className="flex flex-col items-center gap-2 font-medium">
+        <div className="flex flex-col items-center gap-2 font-medium mt-[28px]">
           <Button type="submit" className="w-[220px]">
             Reset password
           </Button>
