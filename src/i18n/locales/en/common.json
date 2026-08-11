@@ -10,7 +10,10 @@
       "heading": "Welcome back",
       "subheading": "Hello again! Sign in to continue",
       "button": "Sign in",
-      "forgotPassword": "Forgot password"
+      "forgotPassword": "Forgot password",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Password",
+      "confirmPasswordPlaceholder": "Confirm Password"
     },
     "signUp": {
       "title": "Sign Up",
@@ -68,6 +71,7 @@
     "errors": {
       "userAlreadyExists": "An account with this email already exists",
       "failedToSendEmail": "Failed to send email",
+      "invalidCredentials": "Invalid email or password",
       "unknownError": "Something went wrong. Please try again later"
     }
   },

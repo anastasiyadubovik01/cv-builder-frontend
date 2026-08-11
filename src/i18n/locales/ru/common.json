@@ -10,7 +10,9 @@
       "heading": "С возвращением",
       "subheading": "Снова привет! Войдите, чтобы продолжить",
       "button": "Войти",
-      "forgotPassword": "Забыли пароль"
+      "forgotPassword": "Забыли пароль",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Пароль"
     },
     "signUp": {
       "title": "Регистрация",
@@ -68,6 +70,7 @@
     "errors": {
       "userAlreadyExists": "Аккаунт с таким email уже существует",
       "failedToSendEmail": "Не удалось отправить письмо для верификации",
+      "invalidCredentials": "Неверный email или пароль",
       "unknownError": "Что-то пошло не так. Попробуйте позже"
     }
   },
