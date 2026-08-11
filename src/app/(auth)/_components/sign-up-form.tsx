@@ -33,6 +33,11 @@ const signUpSchema = z
 
 type SignUpFormValues = z.infer<typeof signUpSchema>;
 
+const errorMessages: Record<string, string> = {
+  userAlreadyExists: 'An account with this email already exists',
+  failedToSendEmail: 'Failed to send verification email',
+};
+
 export function SignUpForm() {
   const { t } = useTranslation();
   const router = useRouter();
@@ -86,7 +91,20 @@ export function SignUpForm() {
         },
       });
     } catch (err: unknown) {
-      toast.error('Something went wrong. Please try again later');
+      let userFriendlyMessage = 'Something went wrong. Please try again later';
+
+      if (err instanceof Error) {
+        const message = err.message;
+
+        for (const [key, value] of Object.entries(errorMessages)) {
+          if (message.toLowerCase().includes(key.toLowerCase())) {
+            userFriendlyMessage = value;
+            break;
+          }
+        }
+      }
+
+      toast.error(userFriendlyMessage);
       console.error('SignUp error:', err);
     }
   };
