@@ -11,6 +11,7 @@ import React from 'react';
 function makeClient() {
   const httpLink = new HttpLink({
     uri: process.env.NEXT_PUBLIC_GRAPHQL_URL,
+    credentials: 'include',
   });
 
   return new ApolloClient({

@@ -1,21 +1,29 @@
 import type { Metadata } from 'next';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { getT } from 'next-i18next/server';
+import { Input } from '@/components/ui/input';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
-export const metadata: Metadata = {
-  title: 'Forgot password | CV Builder',
-  description: 'We will sent you an email with further instructions',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
 
-export default function ForgotPasswordPage() {
+  return {
+    title: `${t('auth.forgotPassword.title')} | CV Builder`,
+    description: t('auth.forgotPassword.description'),
+  };
+}
+
+export default async function ForgotPasswordPage() {
+  const { t } = await getT();
+
   return (
     <div className="flex flex-col">
       <div className="mb-10 text-center text-foreground">
-        <h1 className="mb-5 text-[34px] font-regular">Forgot password</h1>
-        <p className="text-[16px]">
-          We will sent you an email with further instructions
-        </p>
+        <h1 className="mb-5 text-[34px] font-regular">
+          {t('auth.forgotPassword.heading')}
+        </h1>
+        <p className="text-[16px]">{t('auth.forgotPassword.subheading')}</p>
       </div>
 
       <form className="flex flex-col gap-9">
@@ -25,14 +33,15 @@ export default function ForgotPasswordPage() {
           className="w-full bg-transparent p-3 text-[16px]"
           required
         />
-        <div className="flex flex-col items-center gap-2 font-medium mt-[28px]">
+        <div className="mt-[28px] flex flex-col items-center gap-2 font-medium">
           <Button type="submit" className="w-[220px]">
-            Reset password
+            {t('auth.forgotPassword.button')}
           </Button>
-          <Link href="/sign-in" className="w-[220px]">
-            <Button variant="ghost" className="w-full">
-              Cancel
-            </Button>
+          <Link
+            href="/sign-in"
+            className={cn(buttonVariants({ variant: 'ghost' }), 'w-[220px]')}
+          >
+            {t('auth.forgotPassword.cancel')}
           </Link>
         </div>
       </form>

@@ -10,6 +10,7 @@ import { NetworkGuard } from '@/components/layout/NetworkGuard';
 import i18nConfig from '../../i18n.config';
 
 import './globals.css';
+import { Toaster } from '@/components/ui/sonner';
 
 const roboto = Roboto({
   subsets: ['latin', 'cyrillic'],
@@ -33,7 +34,10 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
         <I18nProvider language={lng} resources={resources}>
           <DeviceGuard>
             <NetworkGuard>
-              <ApolloProvider>{children}</ApolloProvider>
+              <ApolloProvider>
+                {children}
+                <Toaster position="top-right" />
+              </ApolloProvider> 
             </NetworkGuard>
           </DeviceGuard>
         </I18nProvider>
