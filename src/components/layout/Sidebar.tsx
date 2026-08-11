@@ -105,6 +105,8 @@ function NavigationList({ items, pathname, isCollapsed }: NavigationListProps) {
 }
 
 export function Sidebar() {
+  // TODO: Подключить текущего пользователя и роль из auth/session,
+  // заменить временные данные пользователя и скрывать admin-навигацию для обычного User
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { t } = useT('common');
