@@ -18,7 +18,10 @@
       "heading": "Зарегистрироваться",
       "subheading": "Добро пожаловать! Зарегистрируйтесь, чтобы продолжить",
       "button": "Создать аккаунт",
-      "haveAccount": "У меня есть аккаунт"
+      "haveAccount": "У меня есть аккаунт",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Пароль",
+      "confirmPasswordPlaceholder": "Подтвердите пароль"
     },
     "forgotPassword": {
       "title": "Забыли пароль",
@@ -47,6 +50,25 @@
     "tabs": {
       "signIn": "ВХОД",
       "signUp": "РЕГИСТРАЦИЯ"
+    },
+    "validation": {
+      "email": {
+        "required": "Email обязателен",
+        "invalid": "Введите корректный email адрес"
+      },
+      "password": {
+        "required": "Пароль обязателен",
+        "minLength": "Пароль должен содержать минимум 6 символов"
+      },
+      "confirmPassword": {
+        "required": "Подтверждение пароля обязательно",
+        "match": "Пароли не совпадают"
+      }
+    },
+    "errors": {
+      "userAlreadyExists": "Аккаунт с таким email уже существует",
+      "failedToSendEmail": "Не удалось отправить письмо для верификации",
+      "unknownError": "Что-то пошло не так. Попробуйте позже"
     }
   }
 }
