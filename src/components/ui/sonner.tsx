@@ -1,7 +1,11 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { Toaster as Sonner, type ToasterProps } from 'sonner';
+import {
+  toast as sonnerToast,
+  Toaster as Sonner,
+  type ToasterProps,
+} from 'sonner';
 
 const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = 'system' } = useTheme();
@@ -21,7 +25,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
       toastOptions={{
         classNames: {
           toast:
-            '!w-[280px] !h-[80px] !min-h-[80px] !max-h-[80px] !p-0 !m-0 relative font-sans rounded-xl border flex flex-col justify-start items-start overflow-hidden box-border',
+            '!w-[280px] !min-h-[80px] !p-0 !m-0 relative font-sans rounded-xl border flex flex-col justify-start items-start overflow-hidden box-border',
           content:
             '!p-0 !m-0 !py-2 !pl-4 !pr-9 !w-full flex flex-col items-start',
 
@@ -43,4 +47,43 @@ const Toaster = ({ ...props }: ToasterProps) => {
   );
 };
 
-export { Toaster };
+const toast = {
+  success: (
+    message: string,
+    options?: Omit<Parameters<typeof sonnerToast.success>[1], 'description'>,
+  ) => {
+    return sonnerToast.success('Success', {
+      description: message,
+      ...options,
+    });
+  },
+  error: (
+    message: string,
+    options?: Omit<Parameters<typeof sonnerToast.error>[1], 'description'>,
+  ) => {
+    return sonnerToast.error('Error', {
+      description: message,
+      ...options,
+    });
+  },
+  warning: (
+    message: string,
+    options?: Omit<Parameters<typeof sonnerToast.warning>[1], 'description'>,
+  ) => {
+    return sonnerToast.warning('Warning', {
+      description: message,
+      ...options,
+    });
+  },
+  info: (
+    message: string,
+    options?: Omit<Parameters<typeof sonnerToast.info>[1], 'description'>,
+  ) => {
+    return sonnerToast.info('Info', {
+      description: message,
+      ...options,
+    });
+  },
+};
+
+export { Toaster, toast };

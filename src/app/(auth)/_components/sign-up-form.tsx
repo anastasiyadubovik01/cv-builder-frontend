@@ -12,7 +12,7 @@ import { PasswordInput } from '@/components/ui/password-input';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { z } from 'zod';
-import { toast } from 'sonner';
+import { toast } from '@/components/ui/sonner';
 
 const signUpSchema = z
   .object({
@@ -56,9 +56,7 @@ export function SignUpForm() {
       }
     },
     onError: (error) => {
-      toast.error('Error', {
-        description: error.message,
-      });
+      toast.error(error.message);
     },
   });
 
@@ -91,15 +89,13 @@ export function SignUpForm() {
         },
       });
     } catch (err: unknown) {
-      toast.error('Error', {
-        description: 'Something went wrong. Please try again later',
-      });
+      toast.error('Something went wrong. Please try again later');
       console.error('SignUp error:', err);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-9">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-9" noValidate>
       <Input
         type="email"
         placeholder="Email"
