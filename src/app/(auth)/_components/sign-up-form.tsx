@@ -11,6 +11,27 @@ import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { z } from 'zod';
+import { toast } from 'sonner';
+
+const signUpSchema = z
+  .object({
+    email: z
+      .string()
+      .min(1, 'Email is required')
+      .email('Please enter a valid email address'),
+    password: z
+      .string()
+      .min(1, 'Password is required')
+      .min(6, 'Password must be at least 6 characters long'),
+    confirmPassword: z.string().min(1, 'Confirm Password is required'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  });
+
+type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 export function SignUpForm() {
   const { t } = useTranslation();
@@ -19,9 +40,11 @@ export function SignUpForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [validationError, setValidationError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof SignUpFormValues, string>>
+  >({});
 
-  const [signup, { loading, error }] = useMutation(SIGN_UP_MUTATION, {
+  const [signup, { loading }] = useMutation(SIGN_UP_MUTATION, {
     onCompleted: async (data) => {
       if (data?.signup?.access_token && data?.signup?.refresh_token) {
         await setAuthCookies({
@@ -32,14 +55,32 @@ export function SignUpForm() {
         router.refresh();
       }
     },
+    onError: (error) => {
+      toast.error('Error', {
+        description: error.message,
+      });
+    },
   });
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    setValidationError(null);
+    setErrors({});
 
-    if (password !== confirmPassword) {
-      setValidationError('Passwords do not match');
+    const result = signUpSchema.safeParse({
+      email,
+      password,
+      confirmPassword,
+    });
+
+    if (!result.success) {
+      const fieldErrors: Partial<Record<keyof SignUpFormValues, string>> = {};
+      for (const issue of result.error.issues) {
+        const path = issue.path[0] as keyof SignUpFormValues;
+        if (path) {
+          fieldErrors[path] = issue.message;
+        }
+      }
+      setErrors(fieldErrors);
       return;
     }
 
@@ -49,12 +90,13 @@ export function SignUpForm() {
           auth: { email, password, confirmPassword },
         },
       });
-    } catch (err) {
+    } catch (err: unknown) {
+      toast.error('Error', {
+        description: 'Something went wrong. Please try again later',
+      });
       console.error('SignUp error:', err);
     }
   };
-
-  const displayError = validationError || error?.message;
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-9">
@@ -65,6 +107,7 @@ export function SignUpForm() {
         onChange={(e) => setEmail(e.target.value)}
         className="w-full bg-transparent p-3 text-[16px]"
         required
+        error={errors.email}
       />
       <PasswordInput
         type="password"
@@ -73,6 +116,7 @@ export function SignUpForm() {
         onChange={(e) => setPassword(e.target.value)}
         className="w-full bg-transparent p-3 text-[16px]"
         required
+        error={errors.password}
       />
       <PasswordInput
         type="password"
@@ -81,10 +125,8 @@ export function SignUpForm() {
         onChange={(e) => setConfirmPassword(e.target.value)}
         className="w-full bg-transparent p-3 text-[16px]"
         required
+        error={errors.confirmPassword}
       />
-      {displayError && (
-        <p className="text-center text-sm text-destructive">{displayError}</p>
-      )}
       <div className="mt-2 flex flex-col items-center gap-2 font-medium">
         <Button type="submit" disabled={loading} className="w-[220px]">
           {t('auth.signUp.button')}
