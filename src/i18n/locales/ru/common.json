@@ -3,6 +3,18 @@
   "update": "Обновить",
   "verifyEmail": "Подтвердить email",
 
+  "sidebar": {
+    "employees": "Сотрудники",
+    "skills": "Навыки",
+    "languages": "Языки",
+    "cvs": "Резюме",
+    "departments": "Отделы",
+    "positions": "Должности",
+    "projects": "Проекты",
+    "collapse": "Свернуть меню",
+    "expand": "Развернуть меню"
+  },
+
   "errors": {
     "notFound": {
       "title": "Хм...",
@@ -10,13 +22,11 @@
       "descriptionSecond": "Давайте вернёмся назад.",
       "goBack": "НАЗАД"
     },
-
     "device": {
       "title": "Упс",
       "descriptionFirst": "Приложение не поддерживается на мобильных устройствах.",
       "descriptionSecond": "Откройте его на компьютере или планшете, чтобы продолжить."
     },
-
     "noInternet": {
       "title": "Упс",
       "descriptionFirst": "Что-то пошло не так. Мы уже работаем над исправлением.",
