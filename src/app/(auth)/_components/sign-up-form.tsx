@@ -55,9 +55,6 @@ export function SignUpForm() {
         router.refresh();
       }
     },
-    onError: (error) => {
-      toast.error(error.message);
-    },
   });
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
