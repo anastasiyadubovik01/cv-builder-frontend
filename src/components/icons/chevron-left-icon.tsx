@@ -1,6 +1,6 @@
 import type { SVGProps } from 'react';
 
-function SidebarToggleIcon(props: SVGProps<SVGSVGElement>) {
+function ChevronLeftIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       width="24"
@@ -18,4 +18,4 @@ function SidebarToggleIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-export { SidebarToggleIcon };
+export { ChevronLeftIcon };

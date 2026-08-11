@@ -1,5 +1,17 @@
 {
   "cancel": "Отмена",
   "update": "Обновить",
-  "verifyEmail": "Подтвердить email"
+  "verifyEmail": "Подтвердить email",
+
+  "sidebar": {
+    "employees": "Сотрудники",
+    "skills": "Навыки",
+    "languages": "Языки",
+    "cvs": "Резюме",
+    "departments": "Отделы",
+    "positions": "Должности",
+    "projects": "Проекты",
+    "collapse": "Свернуть меню",
+    "expand": "Развернуть меню"
+  }
 }
