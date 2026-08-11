@@ -68,7 +68,39 @@
     "errors": {
       "userAlreadyExists": "An account with this email already exists",
       "failedToSendEmail": "Failed to send email",
-      "unknownError": "Something went wrong. Please try again later"
+      "unknownError": "Something went wrong. Please try again later" 
+    }
+  },
+  
+  "sidebar": {
+    "employees": "Employees",
+    "skills": "Skills",
+    "languages": "Languages",
+    "cvs": "CVs",
+    "departments": "Departments",
+    "positions": "Positions",
+    "projects": "Projects",
+    "collapse": "Collapse sidebar",
+    "expand": "Expand sidebar"
+  },
+
+  "errors": {
+    "notFound": {
+      "title": "Hmm...",
+      "descriptionFirst": "This doesn’t seem to be the page you were looking for.",
+      "descriptionSecond": "Let’s get you back on track.",
+      "goBack": "GO BACK"
+    },
+    "device": {
+      "title": "Oops",
+      "descriptionFirst": "This app isn’t supported on mobile devices.",
+      "descriptionSecond": "Please open it on a desktop or tablet to continue."
+    },
+    "noInternet": {
+      "title": "Oops",
+      "descriptionFirst": "Something went wrong. We’re already working on fixing it.",
+      "descriptionSecond": "Please try again or go back.",
+      "retry": "RETRY"
     }
   }
 }

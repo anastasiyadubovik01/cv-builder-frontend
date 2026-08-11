@@ -5,6 +5,8 @@ import { getResources, getT, initServerI18next } from 'next-i18next/server';
 
 import { ApolloProvider } from '@/providers/ApolloProvider';
 
+import { DeviceGuard } from '@/components/layout/DeviceGuard';
+import { NetworkGuard } from '@/components/layout/NetworkGuard';
 import i18nConfig from '../../i18n.config';
 
 import './globals.css';
@@ -30,10 +32,14 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
     <html lang={lng}>
       <body className={roboto.className}>
         <I18nProvider language={lng} resources={resources}>
-          <ApolloProvider>
-            {children}
-            <Toaster position="top-right" />
-          </ApolloProvider>
+          <DeviceGuard>
+            <NetworkGuard>
+              <ApolloProvider>
+                {children}
+                <Toaster position="top-right" />
+              </ApolloProvider> 
+            </NetworkGuard>
+          </DeviceGuard>
         </I18nProvider>
       </body>
     </html>
