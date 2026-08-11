@@ -1,11 +1,7 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { getT } from 'next-i18next/server';
-import { Input } from '@/components/ui/input';
-import { PasswordInput } from '@/components/ui/password-input';
-import { Button, buttonVariants } from '@/components/ui/button';
 import { AuthTabs } from '../_components/auth-tabs';
-import { cn } from '@/lib/utils';
+import { SignInForm } from '@/app/(auth)/_components/sign-in-form';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
@@ -29,32 +25,7 @@ export default async function SignInPage() {
           </h1>
           <p className="text-[16px]">{t('auth.signIn.subheading')}</p>
         </div>
-
-        <form className="flex flex-col gap-9">
-          <Input
-            type="email"
-            placeholder="Email"
-            className="w-full bg-transparent p-3 text-[16px]"
-            required
-          />
-          <PasswordInput
-            type="password"
-            placeholder="Password"
-            className="w-full bg-transparent p-3 text-[16px]"
-            required
-          />
-          <div className="mt-2 flex flex-col items-center gap-2 font-medium">
-            <Button type="submit" className="w-[160px]">
-              {t('auth.signIn.button')}
-            </Button>
-            <Link
-              href="/forgot-password"
-              className={cn(buttonVariants({ variant: 'ghost' }), 'w-[160px]')}
-            >
-              {t('auth.signIn.forgotPassword')}
-            </Link>
-          </div>
-        </form>
+        <SignInForm />
       </div>
     </>
   );
