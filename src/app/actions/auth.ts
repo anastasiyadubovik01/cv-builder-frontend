@@ -1,7 +1,7 @@
-'use me';
 'use server';
 
 import { cookies } from 'next/headers';
+import { TOKEN_EXPIRY } from '@/lib/constants/auth';
 
 interface SetTokensParams {
   accessToken: string;
@@ -19,7 +19,7 @@ export async function setAuthCookies({
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
-    maxAge: 15 * 60,
+    maxAge: TOKEN_EXPIRY.ACCESS_TOKEN,
   });
 
   cookieStore.set('refresh_token', refreshToken, {
@@ -27,7 +27,7 @@ export async function setAuthCookies({
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
-    maxAge: 7 * 24 * 60 * 60,
+    maxAge: TOKEN_EXPIRY.REFRESH_TOKEN,
   });
 }
 
