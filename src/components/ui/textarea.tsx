@@ -8,7 +8,13 @@ interface TextareaProps extends React.ComponentProps<'textarea'> {
   error?: string;
 }
 
-function Textarea({ className, placeholder, error, value, ...props }: TextareaProps) {
+function Textarea({
+  className,
+  placeholder,
+  error,
+  value,
+  ...props
+}: TextareaProps) {
   const hasValue = value !== undefined && value !== '';
 
   return (
