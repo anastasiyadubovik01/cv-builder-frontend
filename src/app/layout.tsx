@@ -37,7 +37,7 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
               <ApolloProvider>
                 {children}
                 <Toaster position="top-right" />
-              </ApolloProvider> 
+              </ApolloProvider>
             </NetworkGuard>
           </DeviceGuard>
         </I18nProvider>

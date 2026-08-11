@@ -9,7 +9,14 @@ interface InputProps extends React.ComponentProps<'input'> {
   error?: string;
 }
 
-function Input({ className, type, placeholder, error, value, ...props }: InputProps) {
+function Input({
+  className,
+  type,
+  placeholder,
+  error,
+  value,
+  ...props
+}: InputProps) {
   const hasValue = value !== undefined && value !== '';
 
   return (

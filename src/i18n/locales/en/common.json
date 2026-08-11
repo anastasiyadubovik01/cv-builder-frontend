@@ -68,10 +68,10 @@
     "errors": {
       "userAlreadyExists": "An account with this email already exists",
       "failedToSendEmail": "Failed to send email",
-      "unknownError": "Something went wrong. Please try again later" 
+      "unknownError": "Something went wrong. Please try again later"
     }
   },
-  
+
   "sidebar": {
     "employees": "Employees",
     "skills": "Skills",
