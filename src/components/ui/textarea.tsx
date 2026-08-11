@@ -8,17 +8,12 @@ interface TextareaProps extends React.ComponentProps<'textarea'> {
   error?: string;
 }
 
-function Textarea({ className, placeholder, error, ...props }: TextareaProps) {
-  const [value, setValue] = React.useState('');
-
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setValue(e.target.value);
-    props.onChange?.(e);
-  };
+function Textarea({ className, placeholder, error, value, ...props }: TextareaProps) {
+  const hasValue = value !== undefined && value !== '';
 
   return (
     <div className="relative">
-      {placeholder && (value || error) && (
+      {placeholder && (hasValue || error) && (
         <Label
           className={cn(
             'absolute -top-4 left-2.5 bg-background px-1 text-xs',
@@ -32,7 +27,6 @@ function Textarea({ className, placeholder, error, ...props }: TextareaProps) {
         data-slot="textarea"
         placeholder={placeholder}
         value={value}
-        onChange={handleChange}
         aria-invalid={!!error}
         className={cn(
           'h-[120px] w-full resize-none rounded-none border border-input bg-transparent px-3 pt-[14px] pb-3 text-sm font-normal leading-[23px] tracking-[0.15px] text-foreground transition-colors outline-none placeholder:text-base placeholder:text-muted-foreground hover:border-[var(--input-hover-border)] focus:border-[var(--input-active-border)] focus:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:border-[var(--input-disabled-border)] disabled:bg-[var(--input-disabled-bg)] disabled:text-[var(--input-disabled-foreground)] disabled:placeholder:text-[var(--input-disabled-foreground)] aria-invalid:border-destructive aria-invalid:bg-transparent aria-invalid:text-foreground aria-invalid:hover:border-destructive aria-invalid:focus:border-destructive aria-invalid:ring-0',

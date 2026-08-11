@@ -9,17 +9,12 @@ interface InputProps extends React.ComponentProps<'input'> {
   error?: string;
 }
 
-function Input({ className, type, placeholder, error, ...props }: InputProps) {
-  const [value, setValue] = React.useState('');
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-    props.onChange?.(e);
-  };
+function Input({ className, type, placeholder, error, value, ...props }: InputProps) {
+  const hasValue = value !== undefined && value !== '';
 
   return (
     <div className="relative">
-      {placeholder && (value || error) && (
+      {placeholder && (hasValue || error) && (
         <Label
           className={cn(
             'absolute -top-4 left-2.5 bg-background px-1 text-xs',
@@ -34,7 +29,6 @@ function Input({ className, type, placeholder, error, ...props }: InputProps) {
         data-slot="input"
         placeholder={placeholder}
         value={value}
-        onChange={handleChange}
         aria-invalid={!!error}
         className={cn(
           'h-12 w-full min-w-0 rounded-none border border-input bg-transparent px-2.5 py-1 text-base font-normal leading-[23px] tracking-[0.15px] text-foreground transition-colors outline-none file:inline-flex file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground hover:border-[var(--input-hover-border)] focus:border-[var(--input-active-border)] focus:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:border-[var(--input-disabled-border)] disabled:bg-[var(--input-disabled-bg)] disabled:text-[var(--input-disabled-foreground)] disabled:text-sm aria-invalid:border-destructive aria-invalid:bg-transparent aria-invalid:text-foreground aria-invalid:hover:border-destructive aria-invalid:focus:border-destructive aria-invalid:ring-0',
