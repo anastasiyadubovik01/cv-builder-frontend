@@ -1,5 +1,17 @@
 {
   "cancel": "Cancel",
   "update": "Update",
-  "verifyEmail": "Verify email"
+  "verifyEmail": "Verify email",
+
+  "sidebar": {
+    "employees": "Employees",
+    "skills": "Skills",
+    "languages": "Languages",
+    "cvs": "CVs",
+    "departments": "Departments",
+    "positions": "Positions",
+    "projects": "Projects",
+    "collapse": "Collapse sidebar",
+    "expand": "Expand sidebar"
+  }
 }
