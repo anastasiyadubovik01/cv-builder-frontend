@@ -8,6 +8,7 @@ import { ApolloProvider } from '@/providers/ApolloProvider';
 import i18nConfig from '../../i18n.config';
 
 import './globals.css';
+import { Toaster } from '@/components/ui/sonner';
 
 const roboto = Roboto({
   subsets: ['latin', 'cyrillic'],
@@ -29,7 +30,10 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
     <html lang={lng}>
       <body className={roboto.className}>
         <I18nProvider language={lng} resources={resources}>
-          <ApolloProvider>{children}</ApolloProvider>
+          <ApolloProvider>
+            {children}
+            <Toaster position="top-right" />
+          </ApolloProvider>
         </I18nProvider>
       </body>
     </html>
