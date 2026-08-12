@@ -42,7 +42,7 @@ export function useSignUpForm() {
       const fieldErrors: Partial<Record<keyof SignUpFormValues, string>> = {};
       for (const issue of result.error.issues) {
         const path = issue.path[0] as keyof SignUpFormValues;
-        if (path) {
+        if (path && !fieldErrors[path]) {
           fieldErrors[path] = issue.message;
         }
       }
