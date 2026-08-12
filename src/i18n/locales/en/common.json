@@ -10,7 +10,10 @@
       "heading": "Welcome back",
       "subheading": "Hello again! Sign in to continue",
       "button": "Sign in",
-      "forgotPassword": "Forgot password"
+      "forgotPassword": "Forgot password",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Password",
+      "confirmPasswordPlaceholder": "Confirm Password"
     },
     "signUp": {
       "title": "Sign Up",
@@ -63,11 +66,21 @@
       "confirmPassword": {
         "required": "Confirm Password is required",
         "match": "Passwords do not match"
+      },
+      "otp": {
+        "required": "Verification code is required",
+        "length": "Please enter a valid 6-digit code"
       }
     },
     "errors": {
       "userAlreadyExists": "An account with this email already exists",
       "failedToSendEmail": "Failed to send email",
+      "invalidCredentials": "Invalid email or password",
+      "unauthorized": "Unauthorized",
+      "invalidOtp": "Invalid verification code",
+      "expiredOtp": "Verification code has expired",
+      "expiredResetToken": "This password reset link has expired",
+      "userNotFound": "No account found with this email address",
       "unknownError": "Something went wrong. Please try again later"
     }
   },

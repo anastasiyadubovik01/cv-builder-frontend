@@ -29,7 +29,7 @@ export function useSignUpForm() {
           accessToken: data.signup.access_token,
           refreshToken: data.signup.refresh_token,
         });
-        router.push('/');
+        router.push('/verify-email');
         router.refresh();
       }
     },
@@ -42,9 +42,8 @@ export function useSignUpForm() {
       const fieldErrors: Partial<Record<keyof SignUpFormValues, string>> = {};
       for (const issue of result.error.issues) {
         const path = issue.path[0] as keyof SignUpFormValues;
-        if (path) {
-          // Используем i18n ключи из схемы
-          fieldErrors[path] = t(issue.message);
+        if (path && !fieldErrors[path]) {
+          fieldErrors[path] = issue.message;
         }
       }
       setErrors(fieldErrors);
@@ -59,7 +58,6 @@ export function useSignUpForm() {
     (field: keyof SignUpFormValues) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-      // Очищаем ошибку при изменении поля
       if (errors[field]) {
         setErrors((prev) => ({ ...prev, [field]: undefined }));
       }

@@ -10,7 +10,9 @@
       "heading": "С возвращением",
       "subheading": "Снова привет! Войдите, чтобы продолжить",
       "button": "Войти",
-      "forgotPassword": "Забыли пароль"
+      "forgotPassword": "Забыли пароль",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Пароль"
     },
     "signUp": {
       "title": "Регистрация",
@@ -63,11 +65,21 @@
       "confirmPassword": {
         "required": "Подтверждение пароля обязательно",
         "match": "Пароли не совпадают"
+      },
+      "otp": {
+        "required": "Код верификации обязателен",
+        "length": "Пожалуйста, введите корректный 6-значный код"
       }
     },
     "errors": {
       "userAlreadyExists": "Аккаунт с таким email уже существует",
       "failedToSendEmail": "Не удалось отправить письмо для верификации",
+      "invalidCredentials": "Неверный email или пароль",
+      "unauthorized": "Требуется авторизация",
+      "invalidOtp": "Неверный код верификации",
+      "expiredOtp": "Срок действия кода верификации истек",
+      "expiredResetToken": "Ссылка для сброса пароля устарела",
+      "userNotFound": "Аккаунт с таким email не найден",
       "unknownError": "Что-то пошло не так. Попробуйте позже"
     }
   },

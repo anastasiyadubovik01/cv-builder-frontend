@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { getT } from 'next-i18next/server';
-import { Input } from '@/components/ui/input';
-import { Button, buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { ForgotPasswordForm } from '@/app/(auth)/_components/forgot-password-form';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
@@ -25,26 +22,7 @@ export default async function ForgotPasswordPage() {
         </h1>
         <p className="text-[16px]">{t('auth.forgotPassword.subheading')}</p>
       </div>
-
-      <form className="flex flex-col gap-9">
-        <Input
-          type="email"
-          placeholder="Email"
-          className="w-full bg-transparent p-3 text-[16px]"
-          required
-        />
-        <div className="mt-[28px] flex flex-col items-center gap-2 font-medium">
-          <Button type="submit" className="w-[220px]">
-            {t('auth.forgotPassword.button')}
-          </Button>
-          <Link
-            href="/sign-in"
-            className={cn(buttonVariants({ variant: 'ghost' }), 'w-[220px]')}
-          >
-            {t('auth.forgotPassword.cancel')}
-          </Link>
-        </div>
-      </form>
+      <ForgotPasswordForm />
     </div>
   );
 }
