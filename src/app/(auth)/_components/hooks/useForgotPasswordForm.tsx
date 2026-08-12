@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
 import { toast } from '@/components/ui/sonner';
@@ -12,7 +11,6 @@ import {
 
 export function useForgotPasswordForm() {
   const { t } = useTranslation();
-  const router = useRouter();
 
   const [formData, setFormData] = useState<ForgotPasswordFormValues>({
     email: '',
@@ -23,7 +21,7 @@ export function useForgotPasswordForm() {
 
   const [forgotPassword, { loading }] = useMutation(FORGOT_PASSWORD_MUTATION, {
     onCompleted: () => {
-      router.push('/sign-in');
+      toast.success(t('auth.forgotPassword.successMessage'));
     },
   });
 

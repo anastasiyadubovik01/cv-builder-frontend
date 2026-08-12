@@ -24,12 +24,16 @@ function makeClient() {
   const authLink = new ApolloLink((operation, forward) => {
     const token = getCookie('access_token');
 
-    operation.setContext(({ headers = {} }) => ({
-      headers: {
-        ...headers,
-        authorization: token ? `Bearer ${token}` : '',
-      },
-    }));
+    operation.setContext(({ headers = {} }) => {
+      const customAuth = headers.authorization || headers.Authorization;
+      const authHeader = customAuth || (token ? `Bearer ${token}` : '');
+      return {
+        headers: {
+          ...headers,
+          ...(authHeader ? { authorization: authHeader } : {}),
+        },
+      };
+    });
 
     return forward(operation);
   });

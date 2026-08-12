@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
 import { toast } from '@/components/ui/sonner';
@@ -13,6 +13,8 @@ import {
 export function useResetPasswordForm() {
   const { t } = useTranslation();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const resetToken = searchParams.get('token');
 
   const [formData, setFormData] = useState<ResetPasswordFormValues>({
     newPassword: '',
@@ -24,9 +26,8 @@ export function useResetPasswordForm() {
 
   const [resetPassword, { loading }] = useMutation(RESET_PASSWORD_MUTATION, {
     onCompleted: () => {
-      // authenticate?
+      toast.success(t('auth.resetPassword.successMessage'));
       router.push('/');
-      router.refresh();
     },
   });
 
@@ -73,6 +74,11 @@ export function useResetPasswordForm() {
           auth: {
             newPassword: formData.newPassword,
             confirmPassword: formData.confirmPassword,
+          },
+        },
+        context: {
+          headers: {
+            authorization: `Bearer ${resetToken}`,
           },
         },
       });

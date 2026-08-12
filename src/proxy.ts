@@ -18,12 +18,21 @@ function stripLocalePrefix(pathname: string): string {
 }
 
 export async function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, searchParams } = request.nextUrl;
   const normalizedPath = stripLocalePrefix(pathname);
 
   const accessToken = request.cookies.get('access_token')?.value;
   const refreshToken = request.cookies.get('refresh_token')?.value;
   const isAuthenticated = Boolean(accessToken || refreshToken);
+
+  // Special cases
+  if (normalizedPath === '/reset-password') {
+    const resetToken = searchParams.get('token');
+    if (!resetToken) {
+      return NextResponse.redirect(new URL('/forgot-password', request.url));
+    }
+    return i18nProxy(request);
+  }
 
   const isPublicAuthRoute = PUBLIC_AUTH_ROUTES.some(
     (route) =>
@@ -38,7 +47,7 @@ export async function proxy(request: NextRequest) {
     return i18nProxy(request);
   }
 
-  // verify-email & reset-password?
+  // verify-email?
 
   // Private
   if (!isAuthenticated) {
