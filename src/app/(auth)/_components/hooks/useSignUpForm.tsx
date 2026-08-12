@@ -29,7 +29,7 @@ export function useSignUpForm() {
           accessToken: data.signup.access_token,
           refreshToken: data.signup.refresh_token,
         });
-        router.push('/email-verification');
+        router.push('/verify-email');
         router.refresh();
       }
     },
