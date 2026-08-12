@@ -73,7 +73,7 @@
     },
     "errors": {
       "userAlreadyExists": "Аккаунт с таким email уже существует",
-      "failedToSendEmail": "Не удалось отправить письмо для верификации",
+      "failedToSendEmail": "Аккаунт с таким email не найден",
       "invalidCredentials": "Неверный email или пароль",
       "unauthorized": "Требуется авторизация",
       "invalidOtp": "Неверный код верификации",

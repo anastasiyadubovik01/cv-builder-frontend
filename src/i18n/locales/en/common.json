@@ -74,7 +74,7 @@
     },
     "errors": {
       "userAlreadyExists": "An account with this email already exists",
-      "failedToSendEmail": "Failed to send email",
+      "failedToSendEmail": "No account found with this email address",
       "invalidCredentials": "Invalid email or password",
       "unauthorized": "Unauthorized",
       "invalidOtp": "Invalid verification code",
