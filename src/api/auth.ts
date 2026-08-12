@@ -38,6 +38,18 @@ export interface SignUpVariables {
   auth: SignupInput;
 }
 
+export interface VerifyMailInput {
+  otp: string;
+}
+
+export interface VerifyMailData {
+  verifyMail?: boolean | null;
+}
+
+export interface VerifyMailVariables {
+  mail: VerifyMailInput;
+}
+
 export const LOGIN_MUTATION: TypedDocumentNode<LoginData, LoginVariables> = gql`
   mutation Login($auth: AuthInput!) {
     login(auth: $auth) {
@@ -64,3 +76,12 @@ export const SIGN_UP_MUTATION: TypedDocumentNode<SignUpData, SignUpVariables> =
       }
     }
   `;
+
+export const VERIFY_MAIL_MUTATION: TypedDocumentNode<
+  VerifyMailData,
+  VerifyMailVariables
+> = gql`
+  mutation VerifyMail($mail: VerifyMailInput!) {
+    verifyMail(mail: $mail)
+  }
+`;

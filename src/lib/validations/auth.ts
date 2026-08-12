@@ -27,5 +27,12 @@ export const signInSchema = z.object({
   password: z.string().min(1, 'auth.validation.password.required'),
 });
 
+export const verifyMailSchema = z.object({
+  otp: z
+    .string()
+    .min(1, 'auth.validation.otp.required')
+    .length(6, 'auth.validation.otp.length'),
+});
+
 export type SignUpFormValues = z.infer<typeof signUpSchema>;
 export type SignInFormValues = z.infer<typeof signInSchema>;
