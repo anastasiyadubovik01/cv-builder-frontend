@@ -3,12 +3,14 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
 import { toast } from '@/components/ui/sonner';
-import { RESET_PASSWORD_MUTATION } from '@/api/auth';
+import { RESET_PASSWORD_MUTATION, LOGIN_MUTATION } from '@/api/auth';
+import { setAuthCookies } from '@/app/actions/auth';
 import { mapServerError } from '@/lib/helpers/errorMapper';
 import {
   ResetPasswordFormValues,
   resetPasswordSchema,
 } from '@/lib/validations/auth';
+import { getEmailFromJwt } from '@/lib/helpers/jwt';
 
 export function useResetPasswordForm() {
   const { t } = useTranslation();
@@ -24,12 +26,10 @@ export function useResetPasswordForm() {
     Partial<Record<keyof ResetPasswordFormValues, string>>
   >({});
 
-  const [resetPassword, { loading }] = useMutation(RESET_PASSWORD_MUTATION, {
-    onCompleted: () => {
-      toast.success(t('auth.resetPassword.successMessage'));
-      router.push('/');
-    },
-  });
+  const [resetPassword, { loading: resetLoading }] = useMutation(
+    RESET_PASSWORD_MUTATION,
+  );
+  const [signIn, { loading: signInLoading }] = useMutation(LOGIN_MUTATION);
 
   const validateForm = (): boolean => {
     const result = resetPasswordSchema.safeParse(formData);
@@ -64,7 +64,10 @@ export function useResetPasswordForm() {
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    if (!validateForm()) {
+    if (!validateForm()) return;
+
+    if (!resetToken) {
+      toast.error(t('auth.errors.expiredResetToken'));
       return;
     }
 
@@ -82,6 +85,36 @@ export function useResetPasswordForm() {
           },
         },
       });
+
+      const userEmail = getEmailFromJwt(resetToken);
+
+      if (userEmail) {
+        const signInResult = await signIn({
+          variables: {
+            auth: {
+              email: userEmail,
+              password: formData.newPassword,
+            },
+          },
+        });
+
+        const tokens = signInResult.data?.login;
+
+        if (tokens?.access_token && tokens?.refresh_token) {
+          await setAuthCookies({
+            accessToken: tokens.access_token,
+            refreshToken: tokens.refresh_token,
+          });
+
+          toast.success(t('auth.resetPassword.successMessage'));
+          router.push('/');
+          router.refresh();
+          return;
+        }
+      }
+
+      toast.success(t('auth.resetPassword.successMessage'));
+      router.push('/sign-in');
     } catch (err: unknown) {
       const translationKey = mapServerError(err);
       toast.error(t(translationKey));
@@ -92,7 +125,7 @@ export function useResetPasswordForm() {
   return {
     formData,
     errors,
-    loading,
+    loading: resetLoading || signInLoading,
     handleChange,
     handleSubmit,
   };
