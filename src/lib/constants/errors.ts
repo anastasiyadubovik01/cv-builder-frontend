@@ -3,6 +3,7 @@ export const SERVER_ERROR_CODES = {
   FAILED_TO_SEND_EMAIL: 'failedToSendEmail',
   INVALID_CREDENTIALS: 'invalidCredentials',
   UNAUTHORIZED: 'unauthorized',
+  EXPIRED_RESET_TOKEN: 'actionExpired',
 
   // Пока не протестированы конкретные имена ошибок
   INVALID_OTP: 'invalidOtp',

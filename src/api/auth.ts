@@ -50,6 +50,19 @@ export interface VerifyMailVariables {
   mail: VerifyMailInput;
 }
 
+export interface ResetPasswordInput {
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface ResetPasswordData {
+  resetPassword?: boolean | null;
+}
+
+export interface ResetPasswordVariables {
+  auth: ResetPasswordInput;
+}
+
 export const LOGIN_MUTATION: TypedDocumentNode<LoginData, LoginVariables> = gql`
   mutation Login($auth: AuthInput!) {
     login(auth: $auth) {
@@ -83,5 +96,14 @@ export const VERIFY_MAIL_MUTATION: TypedDocumentNode<
 > = gql`
   mutation VerifyMail($mail: VerifyMailInput!) {
     verifyMail(mail: $mail)
+  }
+`;
+
+export const RESET_PASSWORD_MUTATION: TypedDocumentNode<
+  ResetPasswordData,
+  ResetPasswordVariables
+> = gql`
+  mutation ResetPassword($auth: ResetPasswordInput!) {
+    resetPassword(auth: $auth)
   }
 `;

@@ -34,5 +34,22 @@ export const verifyMailSchema = z.object({
     .length(6, 'auth.validation.otp.length'),
 });
 
+export const resetPasswordSchema = z
+  .object({
+    newPassword: z
+      .string()
+      .min(1, 'auth.validation.password.required')
+      .min(6, 'auth.validation.password.minLength'),
+    confirmPassword: z
+      .string()
+      .min(1, 'auth.validation.confirmPassword.required'),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: 'auth.validation.confirmPassword.match',
+    path: ['confirmPassword'],
+  });
+
+export type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
+
 export type SignUpFormValues = z.infer<typeof signUpSchema>;
 export type SignInFormValues = z.infer<typeof signInSchema>;

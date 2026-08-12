@@ -79,6 +79,7 @@
       "unauthorized": "Unauthorized",
       "invalidOtp": "Invalid verification code",
       "expiredOtp": "Verification code has expired",
+      "expiredResetToken": "This password reset link has expired",
       "unknownError": "Something went wrong. Please try again later"
     }
   },
