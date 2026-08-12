@@ -1,4 +1,13 @@
-export function getEmailFromJwt(token: string): string | null {
+interface JwtPayload {
+  sub?: number | string;
+  email?: string;
+  role?: string;
+  iat?: number;
+  exp?: number;
+  [key: string]: unknown;
+}
+
+function decodeJwt<T = JwtPayload>(token: string): T | null {
   try {
     const base64Url = token.split('.')[1];
     if (!base64Url) return null;
@@ -11,10 +20,19 @@ export function getEmailFromJwt(token: string): string | null {
         .join(''),
     );
 
-    const payload = JSON.parse(jsonPayload);
-    return payload.email || null;
+    return JSON.parse(jsonPayload) as T;
   } catch (err) {
     console.error('Failed to parse JWT payload:', err);
     return null;
   }
+}
+
+export function getEmailFromJwt(token: string): string | null {
+  const payload = decodeJwt(token);
+  return payload?.email || null;
+}
+
+export function getRoleFromJwt(token: string): string | null {
+  const payload = decodeJwt(token);
+  return payload?.role || null;
 }
