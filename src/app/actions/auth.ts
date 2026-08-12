@@ -15,7 +15,6 @@ export async function setAuthCookies({
   const cookieStore = await cookies();
 
   cookieStore.set('access_token', accessToken, {
-    httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
