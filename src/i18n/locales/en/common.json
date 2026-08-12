@@ -80,6 +80,7 @@
       "invalidOtp": "Invalid verification code",
       "expiredOtp": "Verification code has expired",
       "expiredResetToken": "This password reset link has expired",
+      "userNotFound": "No account found with this email address",
       "unknownError": "Something went wrong. Please try again later"
     }
   },

@@ -63,6 +63,18 @@ export interface ResetPasswordVariables {
   auth: ResetPasswordInput;
 }
 
+export interface ForgotPasswordInput {
+  email: string;
+}
+
+export interface ForgotPasswordData {
+  forgotPassword?: boolean | null;
+}
+
+export interface ForgotPasswordVariables {
+  auth: ForgotPasswordInput;
+}
+
 export const LOGIN_MUTATION: TypedDocumentNode<LoginData, LoginVariables> = gql`
   mutation Login($auth: AuthInput!) {
     login(auth: $auth) {
@@ -105,5 +117,14 @@ export const RESET_PASSWORD_MUTATION: TypedDocumentNode<
 > = gql`
   mutation ResetPassword($auth: ResetPasswordInput!) {
     resetPassword(auth: $auth)
+  }
+`;
+
+export const FORGOT_PASSWORD_MUTATION: TypedDocumentNode<
+  ForgotPasswordData,
+  ForgotPasswordVariables
+> = gql`
+  mutation ForgotPassword($auth: ForgotPasswordInput!) {
+    forgotPassword(auth: $auth)
   }
 `;

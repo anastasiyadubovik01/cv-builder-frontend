@@ -8,6 +8,9 @@ export const SERVER_ERROR_CODES = {
   // Пока не протестированы конкретные имена ошибок
   INVALID_OTP: 'invalidOtp',
   EXPIRED_OTP: 'expiredOtp',
+
+  // Пока не ясно при каком эндпоинте отработает
+  USER_NOT_FOUND: 'userNotFound',
 } as const;
 
 export type ServerErrorCode =
