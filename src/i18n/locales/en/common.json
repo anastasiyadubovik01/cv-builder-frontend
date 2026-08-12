@@ -32,7 +32,8 @@
       "heading": "Forgot password",
       "subheading": "We will sent you an email with further instructions",
       "button": "Reset password",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "successMessage": "Email sent!"
     },
     "resetPassword": {
       "title": "Reset password",
@@ -40,7 +41,8 @@
       "heading": "Reset password",
       "subheading": "Here you should write a new password and confirm it",
       "button": "Submit",
-      "goToSignIn": "Go to sign in"
+      "goToSignIn": "Go to sign in",
+      "successMessage": "Password reset successful!"
     },
     "emailVerification": {
       "title": "Email verification",
@@ -74,13 +76,12 @@
     },
     "errors": {
       "userAlreadyExists": "An account with this email already exists",
-      "failedToSendEmail": "Failed to send email",
+      "failedToSendEmail": "No account found with this email address",
       "invalidCredentials": "Invalid email or password",
       "unauthorized": "Unauthorized",
       "invalidOtp": "Invalid verification code",
       "expiredOtp": "Verification code has expired",
       "expiredResetToken": "This password reset link has expired",
-      "userNotFound": "No account found with this email address",
       "unknownError": "Something went wrong. Please try again later"
     }
   },

@@ -31,7 +31,8 @@
       "heading": "Забыли пароль",
       "subheading": "Мы отправим вам письмо с дальнейшими инструкциями",
       "button": "Сбросить пароль",
-      "cancel": "Отмена"
+      "cancel": "Отмена",
+      "successMessage": "Письмо отправлено!"
     },
     "resetPassword": {
       "title": "Сброс пароля",
@@ -39,7 +40,8 @@
       "heading": "Сброс пароля",
       "subheading": "Введите новый пароль и подтвердите его",
       "button": "Отправить",
-      "goToSignIn": "Перейти ко входу"
+      "goToSignIn": "Перейти ко входу",
+      "successMessage": "Пароль успешно сброшен!"
     },
     "emailVerification": {
       "title": "Подтверждение email",
@@ -73,13 +75,12 @@
     },
     "errors": {
       "userAlreadyExists": "Аккаунт с таким email уже существует",
-      "failedToSendEmail": "Не удалось отправить письмо для верификации",
+      "failedToSendEmail": "Аккаунт с таким email не найден",
       "invalidCredentials": "Неверный email или пароль",
       "unauthorized": "Требуется авторизация",
       "invalidOtp": "Неверный код верификации",
       "expiredOtp": "Срок действия кода верификации истек",
       "expiredResetToken": "Ссылка для сброса пароля устарела",
-      "userNotFound": "Аккаунт с таким email не найден",
       "unknownError": "Что-то пошло не так. Попробуйте позже"
     }
   },
