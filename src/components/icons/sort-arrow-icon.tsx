@@ -1,0 +1,19 @@
+import type { SVGProps } from 'react';
+
+export function SortArrowIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 18 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M3 9L4.0575 10.0575L8.25 5.8725V15H9.75V5.8725L13.935 10.065L15 9L9 3L3 9Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}

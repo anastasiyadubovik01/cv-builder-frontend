@@ -175,7 +175,7 @@ export function Sidebar() {
       </nav>
 
       <div className="mt-auto mb-14 flex h-14 shrink-0 items-center pl-[10px]">
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-base text-primary-foreground">
+        <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-xl text-background">
           R
         </div>
 
