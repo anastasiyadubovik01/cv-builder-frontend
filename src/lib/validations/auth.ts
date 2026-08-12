@@ -19,4 +19,44 @@ export const signUpSchema = z
     path: ['confirmPassword'],
   });
 
+export const signInSchema = z.object({
+  email: z
+    .string()
+    .min(1, 'auth.validation.email.required')
+    .email('auth.validation.email.invalid'),
+  password: z.string().min(1, 'auth.validation.password.required'),
+});
+
+export const verifyMailSchema = z.object({
+  otp: z
+    .string()
+    .min(1, 'auth.validation.otp.required')
+    .length(6, 'auth.validation.otp.length'),
+});
+
+export const resetPasswordSchema = z
+  .object({
+    newPassword: z
+      .string()
+      .min(1, 'auth.validation.password.required')
+      .min(6, 'auth.validation.password.minLength'),
+    confirmPassword: z
+      .string()
+      .min(1, 'auth.validation.confirmPassword.required'),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: 'auth.validation.confirmPassword.match',
+    path: ['confirmPassword'],
+  });
+
+export const forgotPasswordSchema = z.object({
+  email: z
+    .string()
+    .min(1, 'auth.validation.email.required')
+    .email('auth.validation.email.invalid'),
+});
+
 export type SignUpFormValues = z.infer<typeof signUpSchema>;
+export type SignInFormValues = z.infer<typeof signInSchema>;
+export type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
+export type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
