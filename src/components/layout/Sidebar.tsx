@@ -104,9 +104,11 @@ function NavigationList({ items, pathname, isCollapsed }: NavigationListProps) {
   );
 }
 
-export function Sidebar() {
-  // TODO: Подключить текущего пользователя и роль из auth/session,
-  // заменить временные данные пользователя и скрывать admin-навигацию для обычного User
+type SidebarProps = {
+  role: string | null;
+};
+
+export function Sidebar({ role }: SidebarProps) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { t } = useT('common');
@@ -165,13 +167,17 @@ export function Sidebar() {
           isCollapsed={isCollapsed}
         />
 
-        <div className="my-[14px] h-px w-full bg-[var(--sidebar-divider)]" />
+        {role === 'Admin' && (
+          <>
+            <div className="my-[14px] h-px w-full bg-[var(--sidebar-divider)]" />
 
-        <NavigationList
-          items={adminNavigationItems}
-          pathname={pathname}
-          isCollapsed={isCollapsed}
-        />
+            <NavigationList
+              items={adminNavigationItems}
+              pathname={pathname}
+              isCollapsed={isCollapsed}
+            />
+          </>
+        )}
       </nav>
 
       <div className="mt-auto mb-14 flex h-14 shrink-0 items-center pl-[10px]">
