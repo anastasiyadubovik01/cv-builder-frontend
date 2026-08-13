@@ -75,6 +75,13 @@ export interface ForgotPasswordVariables {
   auth: ForgotPasswordInput;
 }
 
+export interface UpdateTokenResponse {
+  updateToken: {
+    access_token: string;
+    refresh_token: string;
+  };
+}
+
 export const LOGIN_MUTATION: TypedDocumentNode<LoginData, LoginVariables> = gql`
   mutation Login($auth: AuthInput!) {
     login(auth: $auth) {
@@ -126,5 +133,14 @@ export const FORGOT_PASSWORD_MUTATION: TypedDocumentNode<
 > = gql`
   mutation ForgotPassword($auth: ForgotPasswordInput!) {
     forgotPassword(auth: $auth)
+  }
+`;
+
+export const UPDATE_TOKEN_MUTATION = gql`
+  mutation UpdateToken {
+    updateToken {
+      access_token
+      refresh_token
+    }
   }
 `;
