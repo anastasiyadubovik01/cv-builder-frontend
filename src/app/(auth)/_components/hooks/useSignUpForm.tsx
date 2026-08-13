@@ -2,18 +2,16 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
-import { toast } from '@/components/ui/sonner';
 import { SIGN_UP_MUTATION } from '@/api/auth';
 import { setAuthCookies } from '@/app/actions/auth';
-
-import { mapServerError } from '@/lib/helpers/errorMapper';
+import { handleFormError } from '@/lib/error/errorHandler';
 import { SignUpFormValues, signUpSchema } from '@/lib/validations/auth';
 
 export function useSignUpForm() {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<SignUpFormValues>({
     email: '',
     password: '',
     confirmPassword: '',
@@ -77,9 +75,10 @@ export function useSignUpForm() {
         },
       });
     } catch (err: unknown) {
-      const translationKey = mapServerError(err);
-      toast.error(t(translationKey));
-      console.error('SignUp error:', err);
+      handleFormError(err, {
+        t,
+        context: 'SignUp error',
+      });
     }
   };
 

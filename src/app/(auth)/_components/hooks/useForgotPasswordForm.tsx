@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
 import { toast } from '@/components/ui/sonner';
 import { FORGOT_PASSWORD_MUTATION } from '@/api/auth';
-import { mapServerError } from '@/lib/helpers/errorMapper';
+import { handleFormError } from '@/lib/error/errorHandler';
 import {
   ForgotPasswordFormValues,
   forgotPasswordSchema,
@@ -63,14 +63,14 @@ export function useForgotPasswordForm() {
         },
       });
     } catch (err: unknown) {
-      const translationKey = mapServerError(err);
-
-      if (translationKey === 'auth.errors.userNotFound') {
-        setErrors({ email: translationKey });
-      } else {
-        toast.error(t(translationKey));
-      }
-      console.error('ForgotPassword error:', err);
+      handleFormError(err, {
+        t,
+        fieldErrorKeys: ['auth.errors.userNotFound'],
+        setFieldError: (translationKey) => {
+          setErrors({ email: translationKey });
+        },
+        context: 'ForgotPassword error',
+      });
     }
   };
 

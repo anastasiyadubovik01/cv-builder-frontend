@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/client/react';
 import { toast } from '@/components/ui/sonner';
 import { RESET_PASSWORD_MUTATION, LOGIN_MUTATION } from '@/api/auth';
 import { setAuthCookies } from '@/app/actions/auth';
-import { mapServerError } from '@/lib/helpers/errorMapper';
+import { handleFormError } from '@/lib/error/errorHandler';
 import {
   ResetPasswordFormValues,
   resetPasswordSchema,
@@ -116,9 +116,10 @@ export function useResetPasswordForm() {
       toast.success(t('auth.resetPassword.successMessage'));
       router.push('/sign-in');
     } catch (err: unknown) {
-      const translationKey = mapServerError(err);
-      toast.error(t(translationKey));
-      console.error('ResetPassword error:', err);
+      handleFormError(err, {
+        t,
+        context: 'ResetPassword error',
+      });
     }
   };
 
