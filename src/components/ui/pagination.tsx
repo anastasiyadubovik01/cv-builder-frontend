@@ -1,6 +1,7 @@
 import { ChevronLeftIcon } from '@/components/icons/chevron-left-icon';
+import { PAGE_SIZE_OPTIONS } from '@/lib/constants/pagination';
 
-type UsersPaginationProps = {
+type PaginationProps = {
   currentPage: number;
   totalPages: number;
   pageSize: number;
@@ -29,13 +30,13 @@ function getPaginationItems(
   return [1, 'ellipsis-left', currentPage, 'ellipsis-right', totalPages];
 }
 
-export function UsersPagination({
+export function Pagination({
   currentPage,
   totalPages,
   pageSize,
   onPageChange,
   onPageSizeChange,
-}: UsersPaginationProps) {
+}: PaginationProps) {
   if (totalPages <= 1) {
     return null;
   }
@@ -95,9 +96,11 @@ export function UsersPagination({
           onChange={(event) => onPageSizeChange(Number(event.target.value))}
           className="h-full w-full appearance-none border border-[var(--pagination-border)] bg-background px-3 text-base text-[var(--pagination-text)] outline-none"
         >
-          <option value={10}>10</option>
-          <option value={20}>20</option>
-          <option value={50}>50</option>
+          {PAGE_SIZE_OPTIONS.map((size) => (
+            <option key={size} value={size}>
+              {size}
+            </option>
+          ))}
         </select>
 
         <ChevronLeftIcon className="pointer-events-none absolute top-1/2 right-2 size-6 -translate-y-1/2 -rotate-90 text-[var(--pagination-arrow)]" />

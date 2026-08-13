@@ -7,7 +7,8 @@ import { SearchInput } from '@/components/ui/search-input';
 import { UsersTable } from '@/features/users/components/UsersTable';
 
 import type { SortDirection, SortField, User } from '@/features/users/types';
-import { UsersPagination } from '@/features/users/components/UsersPagination';
+import { Pagination } from '@/components/ui/pagination';
+import { DEFAULT_PAGE_SIZE } from '@/lib/constants/pagination';
 
 type UsersContentProps = {
   users: User[];
@@ -21,7 +22,7 @@ export function UsersContent({ users }: UsersContentProps) {
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
 
   const normalizedSearch = search.trim().toLowerCase();
 
@@ -85,7 +86,7 @@ export function UsersContent({ users }: UsersContentProps) {
           onSort={handleSort}
         />
 
-        <UsersPagination
+        <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
           pageSize={pageSize}

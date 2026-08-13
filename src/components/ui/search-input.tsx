@@ -1,5 +1,6 @@
 import { SearchIcon } from '@/components/icons/search-icon';
 import { cn } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
 
 type SearchInputProps = React.ComponentProps<'input'>;
 
@@ -13,10 +14,11 @@ export function SearchInput({ className, ...props }: SearchInputProps) {
     >
       <SearchIcon className="size-6 shrink-0 text-[var(--search-icon)]" />
 
-      <input
+      <Input
         type="search"
-        placeholder="Search"
-        className="w-full bg-transparent text-base leading-[23px] tracking-[0.15px] text-foreground outline-none placeholder:text-[var(--search-placeholder)]"
+        floatingLabel={false}
+        containerClassName="flex-1"
+        className="h-auto border-0 bg-transparent p-0 text-base leading-[23px] tracking-[0.15px] text-foreground outline-none placeholder:text-[var(--search-placeholder)] hover:border-0 focus:border-0"
         {...props}
       />
     </div>
