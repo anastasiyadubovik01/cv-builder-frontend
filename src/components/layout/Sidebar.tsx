@@ -137,12 +137,12 @@ export function Sidebar({ role }: SidebarProps) {
       .join('')
       .toUpperCase() ||
     currentUser?.email?.[0]?.toUpperCase() ||
-    '?';
+    '';
 
   return (
     <aside
       className={cn(
-        'relative flex min-h-screen w-14 shrink-0 flex-col bg-background transition-[width] duration-200',
+        'sticky top-0 flex h-screen w-14 shrink-0 flex-col bg-background transition-[width] duration-200',
         !isCollapsed && 'lg:w-[200px]',
       )}
     >
@@ -206,24 +206,26 @@ export function Sidebar({ role }: SidebarProps) {
         )}
       </nav>
 
-      <div className="mt-auto mb-14 flex h-14 shrink-0 items-center pl-[10px]">
-        <Avatar className="size-10 shrink-0">
-          <AvatarImage
-            src={currentUser?.avatar ?? undefined}
-            alt={userName || 'User avatar'}
-          />
+      {currentUser && (
+        <div className="mt-auto mb-14 flex h-14 shrink-0 items-center pl-[10px]">
+          <Avatar className="size-10 shrink-0">
+            <AvatarImage
+              src={currentUser.avatar ?? undefined}
+              alt={userName || 'User avatar'}
+            />
 
-          <AvatarFallback className="bg-primary text-xl text-background">
-            {initials}
-          </AvatarFallback>
-        </Avatar>
+            <AvatarFallback className="bg-primary text-xl text-background">
+              {initials}
+            </AvatarFallback>
+          </Avatar>
 
-        {!isCollapsed && (
-          <span className="ml-2 hidden truncate text-base text-foreground lg:block">
-            {userName}
-          </span>
-        )}
-      </div>
+          {!isCollapsed && (
+            <span className="ml-2 hidden truncate text-base text-foreground lg:block">
+              {userName}
+            </span>
+          )}
+        </div>
+      )}
     </aside>
   );
 }

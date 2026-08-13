@@ -24,7 +24,7 @@ export function NoInternetError({ onRetry }: NoInternetErrorProps) {
           {t('errors.noInternet.descriptionSecond')}
         </>
       }
-      actionLabel={t('errors.noInternet.retry')}
+      actionLabel={t('retry')}
       onAction={handleRetry}
     />
   );

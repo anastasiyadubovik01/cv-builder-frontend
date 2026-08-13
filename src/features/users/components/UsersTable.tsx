@@ -25,7 +25,7 @@ export function UsersTable({
 
   return (
     <div className="w-full">
-      <table className="w-full border-collapse text-[14px] text-[var(--users-foreground)]">
+      <table className="w-full table-fixed border-collapse text-[14px] text-[var(--users-foreground)]">
         <thead>
           <tr className="h-[58px] border-b border-[var(--users-divider)] text-left">
             <th className="w-20" />

@@ -2,6 +2,7 @@
   "cancel": "Cancel",
   "update": "Update",
   "verifyEmail": "Verify email",
+  "retry": "RETRY",
 
   "auth": {
     "signIn": {
@@ -113,8 +114,7 @@
     "noInternet": {
       "title": "Oops",
       "descriptionFirst": "Something went wrong. We’re already working on fixing it.",
-      "descriptionSecond": "Please try again or go back.",
-      "retry": "RETRY"
+      "descriptionSecond": "Please try again or go back."
     }
   },
 
@@ -122,6 +122,7 @@
     "title": "Employees",
     "search": "Search",
     "noResults": "No results",
+    "loadError": "Failed to load users",
     "table": {
       "firstName": "First Name",
       "lastName": "Last Name",
