@@ -25,21 +25,6 @@ export function useEmailVerificationForm() {
     },
   });
 
-  const validateForm = (): boolean => {
-    const result = verifyMailSchema.safeParse({ otp });
-
-    if (!result.success) {
-      const issue = result.error.issues[0];
-      if (issue) {
-        setError(issue.message);
-      }
-      return false;
-    }
-
-    setError(undefined);
-    return true;
-  };
-
   const handleOtpChange = (value: string) => {
     setOtp(value);
     if (error) {
@@ -50,9 +35,16 @@ export function useEmailVerificationForm() {
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    if (!validateForm()) {
+    const result = verifyMailSchema.safeParse({ otp });
+    if (!result.success) {
+      const issue = result.error.issues[0];
+      if (issue) {
+        setError(issue.message);
+      }
       return;
     }
+
+    setError(undefined);
 
     try {
       await verifyMail({
