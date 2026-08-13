@@ -1,53 +1,33 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
 import { toast } from '@/components/ui/sonner';
 import { FORGOT_PASSWORD_MUTATION } from '@/api/auth';
-import { mapServerError } from '@/lib/helpers/errorMapper';
+import { handleFormError } from '@/lib/error/errorHandler';
 import {
   ForgotPasswordFormValues,
   forgotPasswordSchema,
 } from '@/lib/validations/auth';
+import { useValidatedForm } from '@/app/(auth)/_components/hooks/useValidatedForm';
+
+const INITIAL_VALUES: ForgotPasswordFormValues = {
+  email: '',
+};
 
 export function useForgotPasswordForm() {
   const { t } = useTranslation();
 
-  const [formData, setFormData] = useState<ForgotPasswordFormValues>({
-    email: '',
-  });
-  const [errors, setErrors] = useState<
-    Partial<Record<keyof ForgotPasswordFormValues, string>>
-  >({});
+  const { formData, errors, setErrors, validateForm, handleChange } =
+    useValidatedForm<ForgotPasswordFormValues>({
+      initialValues: INITIAL_VALUES,
+      schema: forgotPasswordSchema,
+    });
 
   const [forgotPassword, { loading }] = useMutation(FORGOT_PASSWORD_MUTATION, {
     onCompleted: () => {
       toast.success(t('auth.forgotPassword.successMessage'));
     },
   });
-
-  const validateForm = (): boolean => {
-    const result = forgotPasswordSchema.safeParse(formData);
-
-    if (!result.success) {
-      const issue = result.error.issues[0];
-      if (issue) {
-        setErrors({ email: issue.message });
-      }
-      return false;
-    }
-
-    setErrors({});
-    return true;
-  };
-
-  const handleChange =
-    (field: keyof ForgotPasswordFormValues) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-      if (errors[field]) {
-        setErrors((prev) => ({ ...prev, [field]: undefined }));
-      }
-    };
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -63,14 +43,14 @@ export function useForgotPasswordForm() {
         },
       });
     } catch (err: unknown) {
-      const translationKey = mapServerError(err);
-
-      if (translationKey === 'auth.errors.userNotFound') {
-        setErrors({ email: translationKey });
-      } else {
-        toast.error(t(translationKey));
-      }
-      console.error('ForgotPassword error:', err);
+      handleFormError(err, {
+        t,
+        fieldErrorKeys: ['auth.errors.userNotFound'],
+        setFieldError: (translationKey) => {
+          setErrors({ email: translationKey });
+        },
+        context: 'ForgotPassword error',
+      });
     }
   };
 

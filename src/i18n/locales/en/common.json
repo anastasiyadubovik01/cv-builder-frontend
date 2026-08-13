@@ -83,6 +83,7 @@
       "invalidOtp": "Invalid verification code",
       "expiredOtp": "Verification code has expired",
       "expiredResetToken": "This password reset link has expired",
+      "authRefreshFailed": "Session expired. Please sign in again",
       "unknownError": "Something went wrong. Please try again later"
     }
   },

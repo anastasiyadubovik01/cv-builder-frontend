@@ -1,24 +1,26 @@
-import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
-import { toast } from '@/components/ui/sonner';
 import { LOGIN_MUTATION } from '@/api/auth';
 import { setAuthCookies } from '@/app/actions/auth';
-import { mapServerError } from '@/lib/helpers/errorMapper';
+import { handleFormError } from '@/lib/error/errorHandler';
 import { SignInFormValues, signInSchema } from '@/lib/validations/auth';
+import { useValidatedForm } from '@/app/(auth)/_components/hooks/useValidatedForm';
+
+const INITIAL_VALUES: SignInFormValues = {
+  email: '',
+  password: '',
+};
 
 export function useSignInForm() {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const [formData, setFormData] = useState<SignInFormValues>({
-    email: '',
-    password: '',
-  });
-  const [errors, setErrors] = useState<
-    Partial<Record<keyof SignInFormValues, string>>
-  >({});
+  const { formData, errors, validateForm, handleChange } =
+    useValidatedForm<SignInFormValues>({
+      initialValues: INITIAL_VALUES,
+      schema: signInSchema,
+    });
 
   const [login, { loading }] = useMutation(LOGIN_MUTATION, {
     onCompleted: async (data) => {
@@ -32,34 +34,6 @@ export function useSignInForm() {
       }
     },
   });
-
-  const validateForm = (): boolean => {
-    const result = signInSchema.safeParse(formData);
-
-    if (!result.success) {
-      const fieldErrors: Partial<Record<keyof SignInFormValues, string>> = {};
-      for (const issue of result.error.issues) {
-        const path = issue.path[0] as keyof SignInFormValues;
-        if (path) {
-          fieldErrors[path] = issue.message;
-        }
-      }
-      setErrors(fieldErrors);
-      return false;
-    }
-
-    setErrors({});
-    return true;
-  };
-
-  const handleChange =
-    (field: keyof SignInFormValues) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-      if (errors[field]) {
-        setErrors((prev) => ({ ...prev, [field]: undefined }));
-      }
-    };
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -75,9 +49,10 @@ export function useSignInForm() {
         },
       });
     } catch (err: unknown) {
-      const translationKey = mapServerError(err);
-      toast.error(t(translationKey));
-      console.error('SignIn error:', err);
+      handleFormError(err, {
+        t,
+        context: 'SignIn error',
+      });
     }
   };
 
