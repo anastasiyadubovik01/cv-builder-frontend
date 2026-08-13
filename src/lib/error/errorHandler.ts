@@ -1,6 +1,6 @@
 import type { TFunction } from 'i18next';
 import { toast } from '@/components/ui/sonner';
-import { mapServerError } from '@/lib/helpers/errorMapper';
+import { mapServerError } from '@/lib/error/errorMapper';
 
 interface HandleFormErrorOptions {
   t: TFunction;

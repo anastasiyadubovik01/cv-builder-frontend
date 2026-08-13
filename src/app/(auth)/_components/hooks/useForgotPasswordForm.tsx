@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
 import { toast } from '@/components/ui/sonner';
 import { FORGOT_PASSWORD_MUTATION } from '@/api/auth';
-import { handleFormError } from '@/lib/helpers/errorHandler';
+import { handleFormError } from '@/lib/error/errorHandler';
 import {
   ForgotPasswordFormValues,
   forgotPasswordSchema,

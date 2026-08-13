@@ -12,7 +12,7 @@ import React from 'react';
 import type { Subscription } from 'rxjs';
 import { getAccessToken } from '@/lib/auth/tokenUtils';
 import { refreshAuthTokensAction } from '@/app/actions/auth';
-import { AuthRefreshError } from '@/lib/constants/errors';
+import { AuthRefreshError } from '@/lib/error/errors';
 
 const REFRESHED_OPERATION_CONTEXT = 'tokenRefreshed';
 const UNAUTHENTICATED_CODE = 'UNAUTHENTICATED';

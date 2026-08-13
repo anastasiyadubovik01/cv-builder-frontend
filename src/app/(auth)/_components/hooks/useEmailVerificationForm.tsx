@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
 import { VERIFY_MAIL_MUTATION } from '@/api/auth';
-import { handleFormError } from '@/lib/helpers/errorHandler';
+import { handleFormError } from '@/lib/error/errorHandler';
 import { verifyMailSchema } from '@/lib/validations/auth';
 
 const FIELD_ERROR_KEYS = [

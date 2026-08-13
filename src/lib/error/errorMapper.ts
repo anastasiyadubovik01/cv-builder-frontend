@@ -4,7 +4,7 @@ import {
   CLIENT_ERROR_CODES,
   type ServerErrorCode,
   type ClientErrorCode,
-} from '@/lib/constants/errors';
+} from '@/lib/error/errors';
 
 type ErrorMapping = Partial<Record<ServerErrorCode, string>>;
 

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
 import { LOGIN_MUTATION } from '@/api/auth';
 import { setAuthCookies } from '@/app/actions/auth';
-import { handleFormError } from '@/lib/helpers/errorHandler';
+import { handleFormError } from '@/lib/error/errorHandler';
 import { SignInFormValues, signInSchema } from '@/lib/validations/auth';
 
 export function useSignInForm() {
