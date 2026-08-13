@@ -4,8 +4,11 @@ import { useState, type ComponentType, type SVGProps } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
+import { useQuery } from '@apollo/client/react';
 import { useT } from 'next-i18next/client';
+
+import { ME_QUERY } from '@/api/profile';
+import { Button } from '@/components/ui/button';
 
 import { CvsIcon } from '@/components/icons/cvs-icon';
 import { DepartmentsIcon } from '@/components/icons/departments-icon';
@@ -15,6 +18,7 @@ import { PositionsIcon } from '@/components/icons/positions-icon';
 import { ProjectsIcon } from '@/components/icons/projects-icon';
 import { SkillsIcon } from '@/components/icons/skills-icon';
 import { ChevronLeftIcon } from '@/components/icons/chevron-left-icon';
+
 import { cn } from '@/lib/utils';
 
 type NavigationItem = {
@@ -27,6 +31,10 @@ type NavigationListProps = {
   items: NavigationItem[];
   pathname: string;
   isCollapsed: boolean;
+};
+
+type SidebarProps = {
+  role: string | null;
 };
 
 const mainNavigationItems: NavigationItem[] = [
@@ -104,14 +112,31 @@ function NavigationList({ items, pathname, isCollapsed }: NavigationListProps) {
   );
 }
 
-type SidebarProps = {
-  role: string | null;
-};
-
 export function Sidebar({ role }: SidebarProps) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { t } = useT('common');
+
+  const { data } = useQuery(ME_QUERY);
+
+  const currentUser = data?.me;
+
+  const userName =
+    currentUser?.full_name ||
+    [currentUser?.first_name, currentUser?.last_name]
+      .filter(Boolean)
+      .join(' ') ||
+    currentUser?.email ||
+    '';
+
+  const initials =
+    [currentUser?.first_name, currentUser?.last_name]
+      .filter(Boolean)
+      .map((name) => name?.[0])
+      .join('')
+      .toUpperCase() ||
+    currentUser?.email?.[0]?.toUpperCase() ||
+    '?';
 
   return (
     <aside
@@ -181,13 +206,23 @@ export function Sidebar({ role }: SidebarProps) {
       </nav>
 
       <div className="mt-auto mb-14 flex h-14 shrink-0 items-center pl-[10px]">
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-xl text-background">
-          R
-        </div>
+        {currentUser?.avatar ? (
+          <Image
+            src={currentUser.avatar}
+            alt={userName || 'User avatar'}
+            width={40}
+            height={40}
+            className="size-10 shrink-0 rounded-full object-cover"
+          />
+        ) : (
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-xl text-background">
+            {initials}
+          </div>
+        )}
 
         {!isCollapsed && (
           <span className="ml-2 hidden truncate text-base text-foreground lg:block">
-            Rostislav Harlanov
+            {userName}
           </span>
         )}
       </div>
