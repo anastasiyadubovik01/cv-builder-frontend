@@ -115,5 +115,18 @@
       "descriptionSecond": "Попробуйте ещё раз или вернитесь назад.",
       "retry": "ПОВТОРИТЬ"
     }
+  },
+
+  "users": {
+    "title": "Сотрудники",
+    "search": "Поиск",
+    "noResults": "Нет результатов",
+    "table": {
+      "firstName": "Имя",
+      "lastName": "Фамилия",
+      "email": "Email",
+      "department": "Департамент",
+      "position": "Должность"
+    }
   }
 }

@@ -7,10 +7,14 @@ import { cn } from '@/lib/utils';
 
 interface InputProps extends React.ComponentProps<'input'> {
   error?: string;
+  containerClassName?: string;
+  floatingLabel?: boolean;
 }
 
 function Input({
   className,
+  containerClassName,
+  floatingLabel = true,
   type,
   placeholder,
   error,
@@ -20,8 +24,8 @@ function Input({
   const hasValue = value !== undefined && value !== '';
 
   return (
-    <div className="relative">
-      {placeholder && (hasValue || error) && (
+    <div className={cn('relative', containerClassName)}>
+      {floatingLabel && placeholder && (hasValue || error) && (
         <Label
           className={cn(
             'absolute -top-4 left-2.5 bg-background px-1 text-xs',

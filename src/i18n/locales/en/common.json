@@ -116,5 +116,18 @@
       "descriptionSecond": "Please try again or go back.",
       "retry": "RETRY"
     }
+  },
+
+  "users": {
+    "title": "Employees",
+    "search": "Search",
+    "noResults": "No results",
+    "table": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "department": "Department",
+      "position": "Position"
+    }
   }
 }
