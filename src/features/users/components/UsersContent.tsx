@@ -163,10 +163,10 @@ export function UsersContent() {
     loading || Boolean(data && allUsers.length < data.users.total);
 
   return (
-    <>
+    <div className="flex h-[calc(100dvh-3.5rem)] min-h-0 flex-col overflow-hidden">
       {!hasError && isLoading && <LoadingOverlay />}
 
-      <div className="sticky top-14 z-20 ml-6 mt-[7px] w-fit">
+      <div className="ml-6 mt-[7px] shrink-0">
         <SearchInput
           value={search}
           onChange={(event) => {
@@ -178,36 +178,41 @@ export function UsersContent() {
         />
       </div>
 
-      <div className="mt-4 px-5 pb-8">
+      <div className="flex min-h-0 flex-1 flex-col px-5 pt-4">
         {hasError ? (
-          <div className="flex min-h-64 flex-col items-center justify-center gap-4">
+          <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4">
             <p className="text-base text-foreground">{t('users.loadError')}</p>
+
             <Button type="button" onClick={() => void handleRetry()}>
               {t('retry')}
             </Button>
           </div>
         ) : (
           <>
-            <UsersTable
-              users={paginatedUsers}
-              sortBy={sortBy}
-              sortDirection={sortDirection}
-              onSort={handleSort}
-            />
+            <div className="min-h-0 flex-1 overflow-y-auto">
+              <UsersTable
+                users={paginatedUsers}
+                sortBy={sortBy}
+                sortDirection={sortDirection}
+                onSort={handleSort}
+              />
+            </div>
 
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              pageSize={pageSize}
-              onPageChange={setCurrentPage}
-              onPageSizeChange={(size) => {
-                setPageSize(size);
-                setCurrentPage(1);
-              }}
-            />
+            <div className="shrink-0 bg-background pb-4">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                pageSize={pageSize}
+                onPageChange={setCurrentPage}
+                onPageSizeChange={(size) => {
+                  setPageSize(size);
+                  setCurrentPage(1);
+                }}
+              />
+            </div>
           </>
         )}
       </div>
-    </>
+    </div>
   );
 }
