@@ -128,3 +128,12 @@ export const FORGOT_PASSWORD_MUTATION: TypedDocumentNode<
     forgotPassword(auth: $auth)
   }
 `;
+
+export const UPDATE_TOKEN_MUTATION = gql`
+  mutation UpdateToken {
+    updateToken {
+      access_token
+      refresh_token
+    }
+  }
+`;
