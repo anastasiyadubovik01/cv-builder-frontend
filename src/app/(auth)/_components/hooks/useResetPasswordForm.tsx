@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
@@ -11,6 +10,12 @@ import {
   resetPasswordSchema,
 } from '@/lib/validations/auth';
 import { getEmailFromJwt } from '@/lib/helpers/jwt';
+import { useValidatedForm } from '@/app/(auth)/_components/hooks/useValidatedForm';
+
+const INITIAL_VALUES: ResetPasswordFormValues = {
+  newPassword: '',
+  confirmPassword: '',
+};
 
 export function useResetPasswordForm() {
   const { t } = useTranslation();
@@ -18,48 +23,17 @@ export function useResetPasswordForm() {
   const searchParams = useSearchParams();
   const resetToken = searchParams.get('token');
 
-  const [formData, setFormData] = useState<ResetPasswordFormValues>({
-    newPassword: '',
-    confirmPassword: '',
-  });
-  const [errors, setErrors] = useState<
-    Partial<Record<keyof ResetPasswordFormValues, string>>
-  >({});
+  const { formData, errors, validateForm, handleChange } =
+    useValidatedForm<ResetPasswordFormValues>({
+      initialValues: INITIAL_VALUES,
+      schema: resetPasswordSchema,
+    });
 
   const [resetPassword, { loading: resetLoading }] = useMutation(
     RESET_PASSWORD_MUTATION,
   );
+
   const [signIn, { loading: signInLoading }] = useMutation(LOGIN_MUTATION);
-
-  const validateForm = (): boolean => {
-    const result = resetPasswordSchema.safeParse(formData);
-
-    if (!result.success) {
-      const fieldErrors: Partial<
-        Record<keyof ResetPasswordFormValues, string>
-      > = {};
-      for (const issue of result.error.issues) {
-        const path = issue.path[0] as keyof ResetPasswordFormValues;
-        if (path && !fieldErrors[path]) {
-          fieldErrors[path] = issue.message;
-        }
-      }
-      setErrors(fieldErrors);
-      return false;
-    }
-
-    setErrors({});
-    return true;
-  };
-
-  const handleChange =
-    (field: keyof ResetPasswordFormValues) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-      if (errors[field]) {
-        setErrors((prev) => ({ ...prev, [field]: undefined }));
-      }
-    };
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
