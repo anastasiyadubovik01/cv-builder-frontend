@@ -18,6 +18,7 @@ import { PositionsIcon } from '@/components/icons/positions-icon';
 import { ProjectsIcon } from '@/components/icons/projects-icon';
 import { SkillsIcon } from '@/components/icons/skills-icon';
 import { ChevronLeftIcon } from '@/components/icons/chevron-left-icon';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 import { cn } from '@/lib/utils';
 
@@ -206,19 +207,16 @@ export function Sidebar({ role }: SidebarProps) {
       </nav>
 
       <div className="mt-auto mb-14 flex h-14 shrink-0 items-center pl-[10px]">
-        {currentUser?.avatar ? (
-          <Image
-            src={currentUser.avatar}
+        <Avatar className="size-10 shrink-0">
+          <AvatarImage
+            src={currentUser?.avatar ?? undefined}
             alt={userName || 'User avatar'}
-            width={40}
-            height={40}
-            className="size-10 shrink-0 rounded-full object-cover"
           />
-        ) : (
-          <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-xl text-background">
+
+          <AvatarFallback className="bg-primary text-xl text-background">
             {initials}
-          </div>
-        )}
+          </AvatarFallback>
+        </Avatar>
 
         {!isCollapsed && (
           <span className="ml-2 hidden truncate text-base text-foreground lg:block">
