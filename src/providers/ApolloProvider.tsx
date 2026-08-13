@@ -5,15 +5,16 @@ import {
   ApolloClient,
   InMemoryCache,
 } from '@apollo/client-integration-nextjs';
-import { HttpLink, ApolloLink } from '@apollo/client';
+import { HttpLink, ApolloLink, Observable } from '@apollo/client';
+import { CombinedGraphQLErrors } from '@apollo/client/errors';
+import { ErrorLink } from '@apollo/client/link/error';
 import React from 'react';
+import type { Subscription } from 'rxjs';
+import { getAccessToken } from '@/lib/auth/tokenUtils';
+import { refreshAuthTokensAction } from '@/app/actions/auth';
 
-function getCookie(name: string): string | undefined {
-  if (typeof document === 'undefined') return undefined;
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop()?.split(';').shift();
-}
+const REFRESHED_OPERATION_CONTEXT = 'tokenRefreshed';
+const UNAUTHENTICATED_CODE = 'UNAUTHENTICATED';
 
 function makeClient() {
   const httpLink = new HttpLink({
@@ -21,8 +22,49 @@ function makeClient() {
     credentials: 'include',
   });
 
+  // Unauthenticated GraphQL errors
+  const errorLink = new ErrorLink(({ error, operation, forward }) => {
+    if (!CombinedGraphQLErrors.is(error)) return;
+
+    const isUnauthenticated = error.errors.some(
+      (graphQLError) => graphQLError.extensions?.code === UNAUTHENTICATED_CODE,
+    );
+    if (!isUnauthenticated) return;
+
+    const alreadyRefreshed =
+      operation.getContext()[REFRESHED_OPERATION_CONTEXT] === true;
+    if (alreadyRefreshed) return;
+
+    operation.setContext({
+      [REFRESHED_OPERATION_CONTEXT]: true,
+    });
+
+    return new Observable<ApolloLink.Result>((observer) => {
+      let subscription: Subscription | undefined;
+
+      refreshAuthTokensAction()
+        .then((refreshed) => {
+          if (!refreshed) {
+            observer.error(
+              new Error('Unable to refresh authentication tokens'),
+            );
+            return;
+          }
+          subscription = forward(operation).subscribe(observer);
+        })
+        .catch((error) => {
+          observer.error(error);
+        });
+
+      return () => {
+        subscription?.unsubscribe();
+      };
+    });
+  });
+
+  // Access token to the request
   const authLink = new ApolloLink((operation, forward) => {
-    const token = getCookie('access_token');
+    const token = getAccessToken();
 
     operation.setContext(({ headers = {} }) => {
       const customAuth = headers.authorization || headers.Authorization;
@@ -38,9 +80,10 @@ function makeClient() {
     return forward(operation);
   });
 
+  // GraphQL client
   return new ApolloClient({
     cache: new InMemoryCache(),
-    link: authLink.concat(httpLink),
+    link: errorLink.concat(authLink).concat(httpLink),
   });
 }
 
