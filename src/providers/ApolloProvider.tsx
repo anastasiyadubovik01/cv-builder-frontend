@@ -12,6 +12,7 @@ import React from 'react';
 import type { Subscription } from 'rxjs';
 import { getAccessToken } from '@/lib/auth/tokenUtils';
 import { refreshAuthTokensAction } from '@/app/actions/auth';
+import { AuthRefreshError } from '@/lib/constants/errors';
 
 const REFRESHED_OPERATION_CONTEXT = 'tokenRefreshed';
 const UNAUTHENTICATED_CODE = 'UNAUTHENTICATED';
@@ -45,9 +46,7 @@ function makeClient() {
       refreshAuthTokensAction()
         .then((refreshed) => {
           if (!refreshed) {
-            observer.error(
-              new Error('Unable to refresh authentication tokens'),
-            );
+            observer.error(new AuthRefreshError());
             return;
           }
           subscription = forward(operation).subscribe(observer);

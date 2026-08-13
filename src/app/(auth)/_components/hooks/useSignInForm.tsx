@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
-import { toast } from '@/components/ui/sonner';
 import { LOGIN_MUTATION } from '@/api/auth';
 import { setAuthCookies } from '@/app/actions/auth';
-import { mapServerError } from '@/lib/helpers/errorMapper';
+import { handleFormError } from '@/lib/helpers/errorHandler';
 import { SignInFormValues, signInSchema } from '@/lib/validations/auth';
 
 export function useSignInForm() {
@@ -40,7 +39,7 @@ export function useSignInForm() {
       const fieldErrors: Partial<Record<keyof SignInFormValues, string>> = {};
       for (const issue of result.error.issues) {
         const path = issue.path[0] as keyof SignInFormValues;
-        if (path) {
+        if (path && !fieldErrors[path]) {
           fieldErrors[path] = issue.message;
         }
       }
@@ -75,9 +74,10 @@ export function useSignInForm() {
         },
       });
     } catch (err: unknown) {
-      const translationKey = mapServerError(err);
-      toast.error(t(translationKey));
-      console.error('SignIn error:', err);
+      handleFormError(err, {
+        t,
+        context: 'SignIn error',
+      });
     }
   };
 

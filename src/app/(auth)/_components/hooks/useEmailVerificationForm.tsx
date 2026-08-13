@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
-import { toast } from '@/components/ui/sonner';
 import { VERIFY_MAIL_MUTATION } from '@/api/auth';
-import { mapServerError } from '@/lib/helpers/errorMapper';
+import { handleFormError } from '@/lib/helpers/errorHandler';
 import { verifyMailSchema } from '@/lib/validations/auth';
+
+const FIELD_ERROR_KEYS = [
+  'auth.errors.invalidOtp',
+  'auth.errors.expiredOtp',
+] as const;
 
 export function useEmailVerificationForm() {
   const { t } = useTranslation();
@@ -57,16 +61,12 @@ export function useEmailVerificationForm() {
         },
       });
     } catch (err: unknown) {
-      const translationKey = mapServerError(err);
-      if (
-        translationKey === 'auth.errors.invalidOtp' ||
-        translationKey === 'auth.errors.expiredOtp'
-      ) {
-        setError(translationKey);
-      } else {
-        toast.error(t(translationKey));
-      }
-      console.error('Email verification error:', err);
+      handleFormError(err, {
+        t,
+        fieldErrorKeys: FIELD_ERROR_KEYS,
+        setFieldError: setError,
+        context: 'Email verification error',
+      });
     }
   };
 

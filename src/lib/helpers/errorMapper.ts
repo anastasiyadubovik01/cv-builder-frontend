@@ -1,10 +1,15 @@
 import {
+  AuthRefreshError,
   SERVER_ERROR_CODES,
+  CLIENT_ERROR_CODES,
   type ServerErrorCode,
+  type ClientErrorCode,
 } from '@/lib/constants/errors';
 
-type ErrorMapping = {
-  [K in ServerErrorCode]?: string;
+type ErrorMapping = Partial<Record<ServerErrorCode, string>>;
+
+const CLIENT_ERROR_MAPPING: Record<ClientErrorCode, string> = {
+  [CLIENT_ERROR_CODES.AUTH_REFRESH_FAILED]: 'auth.errors.authRefreshFailed',
 };
 
 export const DEFAULT_ERROR_MAPPING: ErrorMapping = {
@@ -23,6 +28,10 @@ export function mapServerError(
   error: unknown,
   customMapping: ErrorMapping = {},
 ): string {
+  if (error instanceof AuthRefreshError) {
+    return CLIENT_ERROR_MAPPING[CLIENT_ERROR_CODES.AUTH_REFRESH_FAILED];
+  }
+
   if (!(error instanceof Error)) {
     return 'auth.errors.unknownError';
   }
@@ -30,8 +39,8 @@ export function mapServerError(
   const message = error.message.toLowerCase();
   const mapping = { ...DEFAULT_ERROR_MAPPING, ...customMapping };
 
-  for (const [key, translationKey] of Object.entries(mapping)) {
-    if (message.includes(key.toLowerCase())) {
+  for (const [code, translationKey] of Object.entries(mapping)) {
+    if (translationKey && message.includes(code.toLowerCase())) {
       return translationKey;
     }
   }
