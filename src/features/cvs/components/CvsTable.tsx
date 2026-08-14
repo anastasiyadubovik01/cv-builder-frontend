@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
-import { ChevronLeftIcon } from '@/components/icons/chevron-left-icon';
+import { MoreVerticalIcon } from '@/components/icons/more-vertical-icon';
 import { DataTable, type DataTableColumn } from '@/components/ui/data-table';
+import { Button } from '@/components/ui/button';
 
 import type { Cv, SortDirection, SortField } from '@/features/cvs/types';
 
@@ -52,7 +53,9 @@ export function CvsTable({
           aria-label={`Open ${cv.name}`}
           className="flex size-10 items-center justify-center text-[var(--users-arrow)]"
         >
-          <ChevronLeftIcon className="size-5 rotate-180" />
+          <Button variant="icon" className="size-7">
+            <MoreVerticalIcon className="size-5" />
+          </Button>
         </Link>
       ),
     },
