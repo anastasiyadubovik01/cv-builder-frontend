@@ -131,5 +131,35 @@
       "department": "Department",
       "position": "Position"
     }
+  },
+
+  "dialogs": {
+    "delete": {
+      "title": "Delete ",
+      "description": "Are you sure you want to delete ",
+      "confirm": "Confirm",
+      "cancel": "Cancel"
+    },
+    "actions": {
+      "create": "Create",
+      "add": "Add",
+      "update": "Update",
+      "delete": "Delete",
+      "remove": "Remove"
+    },
+    "itemTypes": {
+      "user": "user",
+      "skill": "skill",
+      "language": "language",
+      "cv": "CV",
+      "cvProject": "CV project",
+      "department": "department",
+      "position": "position",
+      "project": "project"
+    },
+    "common": {
+      "confirm": "Confirm",
+      "cancel": "Cancel"
+    }
   }
 }
