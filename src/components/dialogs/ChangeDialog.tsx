@@ -18,6 +18,10 @@ import {
   itemType,
   updateActionTitles,
 } from '@/components/dialogs/types';
+import {
+  getActionTranslation,
+  getItemTypeTranslation,
+} from '@/components/dialogs/i18n';
 
 interface ChangeDialogProps {
   actionTitle: createActionTitles | updateActionTitles;
@@ -25,6 +29,7 @@ interface ChangeDialogProps {
   children: React.ReactNode;
   onConfirm: () => void;
   trigger?: React.ReactNode;
+  t: (key: string) => string;
 }
 
 export function ChangeDialog({
@@ -33,6 +38,7 @@ export function ChangeDialog({
   children,
   onConfirm,
   trigger,
+  t,
 }: ChangeDialogProps) {
   const [open, setOpen] = useState(false);
 
@@ -41,20 +47,27 @@ export function ChangeDialog({
     setOpen(false);
   };
 
+  const translatedItemType = getItemTypeTranslation(itemType, t);
+  const translatedAction = getActionTranslation(actionTitle, t);
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button>Open</Button>}>{trigger}</DialogTrigger>
+      <DialogTrigger render={<Button>{translatedAction}</Button>}>
+        {trigger}
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {actionTitle} {itemType}
+            {translatedAction} {translatedItemType}
           </DialogTitle>
           <DialogCloseButton />
         </DialogHeader>
         {children}
         <DialogFooter>
-          <DialogCancel>Cancel</DialogCancel>
-          <DialogAction onClick={handleConfirm}>{actionTitle}</DialogAction>
+          <DialogCancel>{t('dialogs.common.cancel')}</DialogCancel>
+          <DialogAction onClick={handleConfirm}>
+            {translatedAction}
+          </DialogAction>
         </DialogFooter>
       </DialogContent>
     </Dialog>

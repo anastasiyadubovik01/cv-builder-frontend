@@ -15,12 +15,14 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { itemType } from '@/components/dialogs/types';
+import { getItemTypeTranslation } from '@/components/dialogs/i18n';
 
 interface DeleteDialogProps {
   name: string;
   itemType: itemType;
   onConfirm: () => void;
   trigger?: React.ReactNode;
+  t: (key: string) => string;
 }
 
 export function DeleteDialog({
@@ -28,6 +30,7 @@ export function DeleteDialog({
   itemType,
   onConfirm,
   trigger,
+  t,
 }: DeleteDialogProps) {
   const [open, setOpen] = useState(false);
 
@@ -36,25 +39,35 @@ export function DeleteDialog({
     setOpen(false);
   };
 
+  const translatedItemType = getItemTypeTranslation(itemType, t);
+
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger
-        render={<Button variant="destructive">Delete</Button>}
+        render={
+          <Button variant="destructive">{t('dialogs.actions.delete')}</Button>
+        }
       >
         {trigger}
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete {itemType}</AlertDialogTitle>
+          <AlertDialogTitle>
+            {t('dialogs.delete.title')}
+            {translatedItemType}
+          </AlertDialogTitle>
           <AlertDialogDescription className="font-regular text-foreground">
-            Are you sure you want to delete {itemType}{' '}
-            <span className="font-bold">{name}</span>?
+            {t('dialogs.delete.description')} {translatedItemType}{' '}
+            <span className="font-bold">{name}</span>
+            {'?'}
           </AlertDialogDescription>
           <AlertDialogCloseButton />
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleConfirm}>Confirm</AlertDialogAction>
+          <AlertDialogCancel>{t('dialogs.common.cancel')}</AlertDialogCancel>
+          <AlertDialogAction onClick={handleConfirm}>
+            {t('dialogs.common.confirm')}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
