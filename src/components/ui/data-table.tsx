@@ -1,6 +1,6 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 import { SortArrowIcon } from '@/components/icons/sort-arrow-icon';
 
@@ -23,6 +23,7 @@ type DataTableProps<T, K extends string = string> = {
   sortDirection?: SortDirection;
   onSort?: (field: K) => void;
   emptyState: ReactNode;
+  renderSubRow?: (item: T) => ReactNode;
 };
 
 export function DataTable<T, K extends string = string>({
@@ -33,7 +34,9 @@ export function DataTable<T, K extends string = string>({
   sortDirection,
   onSort,
   emptyState,
+  renderSubRow,
 }: DataTableProps<T, K>) {
+  const hasSubRow = Boolean(renderSubRow);
   return (
     <div className="w-full">
       <table className="w-full table-fixed border-collapse text-[14px]">
@@ -88,21 +91,36 @@ export function DataTable<T, K extends string = string>({
               </td>
             </tr>
           ) : (
-            data.map((item) => (
-              <tr
-                key={getRowKey(item)}
-                className="h-[56px] border-b border-[var(--users-divider)]"
-              >
-                {columns.map((column) => (
-                  <td
-                    key={column.id}
-                    className={`${column.widthClassName ?? ''} ${column.className ?? ''}`}
+            data.map((item) => {
+              const rowKey = getRowKey(item);
+              const subRowContent = renderSubRow?.(item);
+              return (
+                <React.Fragment key={rowKey}>
+                  <tr
+                    className={`h-[71px] ${
+                      // Пока что так
+                      !hasSubRow ? 'border-b border-[var(--users-divider)]' : ''
+                    }`}
                   >
-                    {column.render(item)}
-                  </td>
-                ))}
-              </tr>
-            ))
+                    {columns.map((column) => (
+                      <td
+                        key={column.id}
+                        className={`${column.widthClassName ?? ''} ${column.className ?? ''}`}
+                      >
+                        {column.render(item)}
+                      </td>
+                    ))}
+                  </tr>
+                  {hasSubRow && subRowContent && (
+                    <tr className="border-b">
+                      <td colSpan={columns.length} className="pb-[21px]">
+                        {subRowContent}
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              );
+            })
           )}
         </tbody>
       </table>
