@@ -14,7 +14,7 @@ import { Toaster } from '@/components/ui/sonner';
 
 const roboto = Roboto({
   subsets: ['latin', 'cyrillic'],
-  weight: ['400', '500', '700'],
+  weight: ['400', '500', '600', '700'],
 });
 
 initServerI18next(i18nConfig);
