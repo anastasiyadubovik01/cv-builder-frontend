@@ -9,13 +9,15 @@ import { CvsTable } from '@/features/cvs/components/CvsTable';
 import { DEFAULT_PAGE_SIZE } from '@/lib/constants/pagination';
 
 import type { Cv, SortDirection, SortField } from '@/features/cvs/types';
+import { Button } from '@/components/ui/button';
+import { PlusIcon } from '@/components/icons/plus-icon';
 
 const MOCK_CVS: Cv[] = [
   {
     id: '1',
     name: 'Frontend Developer CV',
     education: 'Test State Technical University',
-    employee: 'Test',
+    employee: 'test@example.com',
     description:
       'Highly motivated and experienced Software Engineer with 5+ years of proven success in leading and developing robust and scalable applications. Adept at\n' +
       'leveraging React, Node.js, Three.js, and WebGL to create innovative and visually appealing user interfaces. Possesses strong leadership and mentoring skills,\n' +
@@ -26,7 +28,7 @@ const MOCK_CVS: Cv[] = [
     id: '2',
     name: 'Fullstack Engineer CV',
     education: 'Test State Technical University',
-    employee: 'Carrot',
+    employee: 'carrot@example.com',
     description:
       'Highly motivated and experienced Software Engineer with 5+ years of proven success in designing and developing complex software solutions. Adept at\n' +
       'utilizing cutting-edge technologies such as React and Node.js to create user-friendly and scalable applications. Possesses a strong understanding of Computer\n' +
@@ -40,10 +42,11 @@ export function CvsContent() {
   const { t } = useTranslation();
 
   const [search, setSearch] = useState('');
-  const [sortBy, setSortBy] = useState<SortField>('name');
+  const sortBy: SortField = 'name';
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const normalizedSearch = search.trim().toLowerCase();
 
@@ -72,30 +75,32 @@ export function CvsContent() {
   const startIndex = (currentPage - 1) * pageSize;
   const paginatedCvs = sortedCvs.slice(startIndex, startIndex + pageSize);
 
-  const handleSort = (field: SortField) => {
-    if (sortBy === field) {
-      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-      setCurrentPage(1);
-      return;
-    }
-
-    setSortBy(field);
-    setSortDirection('asc');
+  const handleSort = () => {
+    setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
     setCurrentPage(1);
   };
 
   return (
     <div className="flex h-[calc(100dvh-3.5rem)] min-h-0 flex-col overflow-hidden">
-      <div className="ml-6 mt-[7px] shrink-0">
+      <div className="mx-6 mt-[7px] flex items-center justify-between shrink-0">
         <SearchInput
           value={search}
           onChange={(event) => {
             setSearch(event.target.value);
             setCurrentPage(1);
           }}
-          placeholder={t('cvs.search', 'Search CVs...')}
+          placeholder={t('cvs.search', 'Search')}
           className="bg-background"
         />
+        <Button
+          type="button"
+          onClick={() => setIsCreateModalOpen(true)}
+          className="flex items-center gap-2 uppercase font-medium text-[14px]"
+          variant="primaryV2"
+        >
+          <PlusIcon className="size-6" />
+          {t('cvs.createCv', 'CREATE CV')}
+        </Button>
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col px-6 pt-4">

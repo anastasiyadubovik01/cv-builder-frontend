@@ -1,5 +1,5 @@
 export type SortDirection = 'asc' | 'desc';
-export type SortField = 'name' | 'education' | 'employee';
+export type SortField = 'name';
 
 export type Cv = {
   id: string;

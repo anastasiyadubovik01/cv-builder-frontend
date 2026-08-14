@@ -33,13 +33,11 @@ export function CvsTable({
     },
     {
       id: 'education',
-      sortKey: 'education',
       header: t('cvs.table.education', 'Education'),
       render: (cv) => cv.education,
     },
     {
       id: 'employee',
-      sortKey: 'employee',
       header: t('cvs.table.employee', 'Employee'),
       render: (cv) => cv.employee,
     },
