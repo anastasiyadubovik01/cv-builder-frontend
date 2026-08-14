@@ -133,6 +133,12 @@
     }
   },
 
+  "cvs": {
+    "name": "Name",
+    "education": "Education",
+    "description": "Description"
+  },
+
   "dialogs": {
     "delete": {
       "title": "Delete ",

@@ -132,6 +132,12 @@
     }
   },
 
+  "cvs": {
+    "name": "Имя",
+    "education": "Образование",
+    "description": "Описание"
+  },
+
   "dialogs": {
     "delete": {
       "title": "Удалить ",
