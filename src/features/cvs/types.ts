@@ -6,4 +6,5 @@ export type Cv = {
   name: string;
   education: string;
   employee: string;
+  description: string;
 };

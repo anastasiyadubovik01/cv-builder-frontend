@@ -16,12 +16,23 @@ const MOCK_CVS: Cv[] = [
     name: 'Frontend Developer CV',
     education: 'Test State Technical University',
     employee: 'Test',
+    description:
+      'Highly motivated and experienced Software Engineer with 5+ years of proven success in leading and developing robust and scalable applications. Adept at\n' +
+      'leveraging React, Node.js, Three.js, and WebGL to create innovative and visually appealing user interfaces. Possesses strong leadership and mentoring skills,\n' +
+      'effectively guiding junior developers and fostering a collaborative team environment. Adept at architecting complex systems, ensuring efficient performance,\n' +
+      'and adhering to best practices. Passionate about delivering high-quality solutions and contributing to the success of dynamic projects.',
   },
   {
     id: '2',
     name: 'Fullstack Engineer CV',
     education: 'Test State Technical University',
     employee: 'Carrot',
+    description:
+      'Highly motivated and experienced Software Engineer with 5+ years of proven success in designing and developing complex software solutions. Adept at\n' +
+      'utilizing cutting-edge technologies such as React and Node.js to create user-friendly and scalable applications. Possesses a strong understanding of Computer\n' +
+      'Systems Design principles and methodologies. A results-oriented individual with a passion for delivering high-quality work and exceeding expectations. A strong\n' +
+      'team leader and mentor with a proven ability to guide and motivate others to achieve shared goals. Seeking a challenging and rewarding Software Engineer\n' +
+      'position where I can leverage my skills and experience to contribute to the success of a dynamic and innovative organization.',
   },
 ];
 
@@ -87,7 +98,7 @@ export function CvsContent() {
         />
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col px-5 pt-4">
+      <div className="flex min-h-0 flex-1 flex-col px-6 pt-4">
         <div className="min-h-0 flex-1 overflow-y-auto">
           <CvsTable
             cvs={paginatedCvs}

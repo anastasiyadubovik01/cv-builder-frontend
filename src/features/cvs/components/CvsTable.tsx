@@ -67,6 +67,14 @@ export function CvsTable({
       sortDirection={sortDirection}
       onSort={onSort}
       emptyState={t('cvs.noResults', 'No CVs found')}
+      renderSubRow={(cv) => (
+        <p
+          className="text-[16px] font-regular leading-relaxed"
+          style={{ color: 'var(--users-foreground)', opacity: 0.5 }}
+        >
+          {cv.description}
+        </p>
+      )}
     />
   );
 }
