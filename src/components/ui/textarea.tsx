@@ -22,7 +22,7 @@ function Textarea({
       {placeholder && (hasValue || error) && (
         <Label
           className={cn(
-            'absolute -top-4 left-2.5 bg-background px-1 text-xs',
+            'absolute -top-4 left-2.5 px-1 text-xs',
             error && 'text-destructive',
           )}
         >

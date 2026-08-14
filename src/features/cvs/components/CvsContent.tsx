@@ -11,6 +11,7 @@ import { DEFAULT_PAGE_SIZE } from '@/lib/constants/pagination';
 import type { Cv, SortDirection, SortField } from '@/features/cvs/types';
 import { Button } from '@/components/ui/button';
 import { PlusIcon } from '@/components/icons/plus-icon';
+import { CreateCvModal } from '@/features/cvs/components/CreateCvModal';
 
 const MOCK_CVS: Cv[] = [
   {
@@ -46,7 +47,7 @@ export function CvsContent() {
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [, setIsCreateModalOpen] = useState(false);
 
   const normalizedSearch = search.trim().toLowerCase();
 
@@ -92,15 +93,23 @@ export function CvsContent() {
           placeholder={t('cvs.search', 'Search')}
           className="bg-background"
         />
-        <Button
-          type="button"
-          onClick={() => setIsCreateModalOpen(true)}
-          className="flex items-center gap-2 uppercase font-medium text-[14px]"
-          variant="primaryV2"
-        >
-          <PlusIcon className="size-6" />
-          {t('cvs.createCv', 'CREATE CV')}
-        </Button>
+        <CreateCvModal
+          trigger={
+            <Button
+              type="button"
+              onClick={() => setIsCreateModalOpen(true)}
+              className="flex items-center gap-2 uppercase font-medium text-[14px]"
+              variant="primaryV2"
+            >
+              <PlusIcon className="size-6" />
+              {t('cvs.createCv', 'CREATE CV')}
+            </Button>
+          }
+          onSubmit={(data) => {
+            // mock submit
+            console.log('New CV Data:', data);
+          }}
+        />
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col px-6 pt-4">
