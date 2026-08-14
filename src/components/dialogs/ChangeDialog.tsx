@@ -52,7 +52,10 @@ export function ChangeDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button>{translatedAction}</Button>}>
+      <DialogTrigger
+        render={trigger ? <div className="inline-block" /> : undefined}
+        nativeButton={false}
+      >
         {trigger}
       </DialogTrigger>
       <DialogContent>

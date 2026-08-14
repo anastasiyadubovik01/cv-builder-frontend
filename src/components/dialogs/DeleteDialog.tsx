@@ -13,7 +13,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
 import { itemType } from '@/components/dialogs/types';
 import { getItemTypeTranslation } from '@/components/dialogs/i18n';
 
@@ -44,9 +43,8 @@ export function DeleteDialog({
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger
-        render={
-          <Button variant="destructive">{t('dialogs.actions.delete')}</Button>
-        }
+        render={trigger ? <div className="inline-block" /> : undefined}
+        nativeButton={false}
       >
         {trigger}
       </AlertDialogTrigger>
