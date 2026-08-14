@@ -23,3 +23,25 @@ export const ME_QUERY: TypedDocumentNode<MeData> = gql`
     }
   }
 `;
+
+type UploadAvatarData = {
+  uploadAvatar: string;
+};
+
+type UploadAvatarVariables = {
+  avatar: {
+    userId: string;
+    base64: string;
+    size: number;
+    type: string;
+  };
+};
+
+export const UPLOAD_AVATAR_MUTATION: TypedDocumentNode<
+  UploadAvatarData,
+  UploadAvatarVariables
+> = gql`
+  mutation UploadAvatar($avatar: UploadAvatarInput!) {
+    uploadAvatar(avatar: $avatar)
+  }
+`;

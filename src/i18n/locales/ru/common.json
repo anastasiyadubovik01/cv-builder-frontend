@@ -129,6 +129,34 @@
       "email": "Email",
       "department": "Департамент",
       "position": "Должность"
+    },
+    "details": {
+      "tabs": {
+        "profile": "Профиль",
+        "skills": "Навыки",
+        "languages": "Языки",
+        "cvs": "Резюме"
+      },
+      "avatar": {
+        "upload": "Загрузить изображение",
+        "uploading": "Загрузка...",
+        "hint": "png, jpg или gif размером не более 0.5MB",
+        "invalidType": "Допустимы только PNG, JPG и GIF",
+        "tooLarge": "Размер изображения не должен превышать 0.5 MB",
+        "uploadSuccess": "Аватар успешно обновлён",
+        "uploadError": "Не удалось загрузить аватар"
+      },
+      "fields": {
+        "firstName": "Имя",
+        "lastName": "Фамилия",
+        "department": "Отдел",
+        "position": "Должность"
+      },
+      "memberSince": "Участник с {{date}}",
+      "updateSuccess": "Успешно",
+      "updateSuccessDescription": "Профиль успешно обновлён",
+      "updateError": "Ошибка",
+      "updateErrorDescription": "Не удалось обновить профиль"
     }
   },
 

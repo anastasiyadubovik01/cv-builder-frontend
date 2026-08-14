@@ -36,3 +36,13 @@ export function getRoleFromJwt(token: string): string | null {
   const payload = decodeJwt(token);
   return payload?.role || null;
 }
+
+export function getUserIdFromJwt(token: string): string | null {
+  const payload = decodeJwt(token);
+
+  if (payload?.sub === undefined) {
+    return null;
+  }
+
+  return String(payload.sub);
+}

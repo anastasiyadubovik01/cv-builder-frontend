@@ -1,5 +1,8 @@
-import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
-import { cn } from '@/lib/utils';
+import { cookies } from 'next/headers';
+
+import { UserDetailsNavigation } from '@/features/users/components/details/UserDetailsNavigation';
+import { getT } from 'next-i18next/server';
+import { getRoleFromJwt, getUserIdFromJwt } from '@/lib/helpers/jwt';
 
 type UserDetailsLayoutProps = {
   children: React.ReactNode;
@@ -8,66 +11,39 @@ type UserDetailsLayoutProps = {
   }>;
 };
 
-const tabs = [
-  {
-    label: 'PROFILE',
-    href: '',
-  },
-  {
-    label: 'SKILLS',
-    href: 'skills',
-  },
-  {
-    label: 'LANGUAGES',
-    href: 'languages',
-  },
-];
-
 export default async function UserDetailsLayout({
   children,
   params,
 }: UserDetailsLayoutProps) {
   const { id } = await params;
+  const { t } = await getT();
 
-  // временно
-  const userName = 'Rostislav Harlanov';
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('access_token')?.value;
+
+  const currentUserId = accessToken ? getUserIdFromJwt(accessToken) : null;
+
+  const role = accessToken ? getRoleFromJwt(accessToken) : null;
+
+  const isOwner = currentUserId === id;
+
+  const canViewCvs = role === 'Admin' || isOwner;
 
   return (
     <div className="min-h-screen">
-      <Breadcrumbs
-        items={[
-          {
-            label: 'Employees',
-            href: '/users',
-          },
-          {
-            label: userName,
-          },
-          {
-            label: 'Profile',
-          },
-        ]}
+      <UserDetailsNavigation
+        userId={id}
+        showCvs={canViewCvs}
+        labels={{
+          employees: t('users.title'),
+          profile: t('users.details.tabs.profile'),
+          skills: t('users.details.tabs.skills'),
+          languages: t('users.details.tabs.languages'),
+          cvs: t('users.details.tabs.cvs'),
+        }}
       />
 
-      <div className="px-5">
-        <nav className="flex h-12">
-          {tabs.map((tab, index) => (
-            <div
-              key={tab.label}
-              className={cn(
-                'flex h-12 w-[150px] items-center justify-center text-[14px] leading-[18px] font-semibold tracking-[0.4px]',
-                index === 0
-                  ? 'border-b-2 border-destructive text-destructive'
-                  : 'text-foreground',
-              )}
-            >
-              {tab.label}
-            </div>
-          ))}
-        </nav>
-
-        {children}
-      </div>
+      <div className="px-5">{children}</div>
     </div>
   );
 }
