@@ -14,18 +14,11 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { itemType } from '@/components/dialogs/types';
 
 interface DeleteDialogProps {
   name: string;
-  itemType:
-    | 'user'
-    | 'skill'
-    | 'language'
-    | 'CV'
-    | 'CV Project'
-    | 'department'
-    | 'position'
-    | 'project';
+  itemType: itemType;
   onConfirm: () => void;
   trigger?: React.ReactNode;
 }
