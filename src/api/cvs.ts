@@ -54,6 +54,30 @@ export const CVS_QUERY: TypedDocumentNode<CvsData, CvsVariables> = gql`
   }
 `;
 
+type CvData = {
+  cv: ApiCv;
+};
+
+type CvVariables = {
+  cvId: string;
+};
+
+export const CV_QUERY: TypedDocumentNode<CvData, CvVariables> = gql`
+  query Cv($cvId: ID!) {
+    cv(cvId: $cvId) {
+      id
+      created_at
+      name
+      education
+      description
+      user {
+        id
+        email
+      }
+    }
+  }
+`;
+
 export type CreateCvInput = {
   name: string;
   education?: string;
