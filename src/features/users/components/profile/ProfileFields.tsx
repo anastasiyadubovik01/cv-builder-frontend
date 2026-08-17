@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -12,6 +11,7 @@ import {
   UPDATE_PROFILE_MUTATION,
   UPDATE_USER_MUTATION,
 } from '@/api/users';
+import { useValidatedForm } from '@/app/(auth)/_components/hooks/useValidatedForm';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -22,6 +22,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  profileSchema,
+  type ProfileFormValues,
+} from '@/lib/validations/profile';
 
 type ProfileFieldsProps = {
   userId: string;
@@ -34,7 +38,6 @@ type ProfileFieldsProps = {
   role: string;
   canEdit: boolean;
   canVerifyEmail: boolean;
-
   onUpdated: () => Promise<unknown>;
 };
 
@@ -52,13 +55,31 @@ export function ProfileFields({
   onUpdated,
 }: ProfileFieldsProps) {
   const { t } = useTranslation();
-
   const router = useRouter();
 
-  const [currentFirstName, setCurrentFirstName] = useState(firstName);
-  const [currentLastName, setCurrentLastName] = useState(lastName);
-  const [currentDepartmentId, setCurrentDepartmentId] = useState(departmentId);
-  const [currentPositionId, setCurrentPositionId] = useState(positionId);
+  const {
+    formData,
+    setFormData,
+    errors,
+    setErrors,
+    validateForm,
+    handleChange,
+  } = useValidatedForm<ProfileFormValues>({
+    initialValues: {
+      firstName,
+      lastName,
+      departmentId,
+      positionId,
+    },
+    schema: profileSchema,
+  });
+
+  const {
+    firstName: currentFirstName,
+    lastName: currentLastName,
+    departmentId: currentDepartmentId,
+    positionId: currentPositionId,
+  } = formData;
 
   const { data: departmentsData } = useQuery(DEPARTMENTS_QUERY, {
     variables: {
@@ -101,26 +122,6 @@ export function ProfileFields({
   const trimmedFirstName = currentFirstName.trim();
   const trimmedLastName = currentLastName.trim();
 
-  const firstNameError =
-    trimmedFirstName.length === 0
-      ? t('users.details.validation.firstNameRequired')
-      : null;
-
-  const lastNameError =
-    trimmedLastName.length === 0
-      ? t('users.details.validation.lastNameRequired')
-      : null;
-
-  const departmentError =
-    currentDepartmentId === ''
-      ? t('users.details.validation.departmentRequired')
-      : null;
-
-  const positionError =
-    currentPositionId === ''
-      ? t('users.details.validation.positionRequired')
-      : null;
-
   const namesChanged =
     trimmedFirstName !== firstName.trim() ||
     trimmedLastName !== lastName.trim();
@@ -129,19 +130,47 @@ export function ProfileFields({
     currentDepartmentId !== departmentId || currentPositionId !== positionId;
 
   const isChanged = namesChanged || organizationChanged;
-
-  const isValid =
-    !firstNameError &&
-    !lastNameError &&
-    !departmentError &&
-    !positionError &&
-    trimmedFirstName.length <= 100 &&
-    trimmedLastName.length <= 100;
-
+  const isValid = profileSchema.safeParse(formData).success;
   const isUpdating = profileUpdating || userUpdating;
 
+  const handleDepartmentChange = (value: string | null) => {
+    if (value === null) return;
+
+    setFormData((prev) => ({
+      ...prev,
+      departmentId: value,
+    }));
+
+    if (errors.departmentId) {
+      setErrors((prev) => ({
+        ...prev,
+        departmentId: undefined,
+      }));
+    }
+  };
+
+  const handlePositionChange = (value: string | null) => {
+    if (value === null) return;
+
+    setFormData((prev) => ({
+      ...prev,
+      positionId: value,
+    }));
+
+    if (errors.positionId) {
+      setErrors((prev) => ({
+        ...prev,
+        positionId: undefined,
+      }));
+    }
+  };
+
   const handleUpdate = async () => {
-    if (!canEdit || !isChanged || !isValid || isUpdating) {
+    if (!canEdit || !isChanged || isUpdating) {
+      return;
+    }
+
+    if (!validateForm()) {
       return;
     }
 
@@ -197,17 +226,14 @@ export function ProfileFields({
           <Input
             id="firstName"
             value={currentFirstName}
-            onChange={(event) => setCurrentFirstName(event.target.value)}
+            onChange={handleChange('firstName')}
             disabled={!canEdit}
             maxLength={100}
+            error={
+              canEdit && errors.firstName ? t(errors.firstName) : undefined
+            }
             className="h-12 w-full disabled:opacity-100"
           />
-
-          {canEdit && firstNameError && (
-            <p className="ml-4 mt-1 text-sm text-destructive">
-              {firstNameError}
-            </p>
-          )}
         </div>
 
         <div>
@@ -218,17 +244,12 @@ export function ProfileFields({
           <Input
             id="lastName"
             value={currentLastName}
-            onChange={(event) => setCurrentLastName(event.target.value)}
+            onChange={handleChange('lastName')}
             disabled={!canEdit}
             maxLength={100}
+            error={canEdit && errors.lastName ? t(errors.lastName) : undefined}
             className="h-12 w-full disabled:opacity-100"
           />
-
-          {canEdit && lastNameError && (
-            <p className="ml-4 mt-1 text-sm text-destructive">
-              {lastNameError}
-            </p>
-          )}
         </div>
 
         <div>
@@ -238,14 +259,14 @@ export function ProfileFields({
 
           <Select
             value={currentDepartmentId}
-            onValueChange={(value) => {
-              if (value !== null) {
-                setCurrentDepartmentId(value);
-              }
-            }}
+            onValueChange={handleDepartmentChange}
             disabled={!canEdit}
           >
-            <SelectTrigger id="department" className="h-12 w-full">
+            <SelectTrigger
+              id="department"
+              className="h-12 w-full"
+              aria-invalid={Boolean(canEdit && errors.departmentId)}
+            >
               <SelectValue>
                 {selectedDepartment?.name ||
                   department ||
@@ -262,9 +283,9 @@ export function ProfileFields({
             </SelectContent>
           </Select>
 
-          {canEdit && departmentError && (
-            <p className="ml-4 mt-1 text-sm text-destructive">
-              {departmentError}
+          {canEdit && errors.departmentId && (
+            <p className="ml-4 mt-1 text-xs text-destructive">
+              {t(errors.departmentId)}
             </p>
           )}
         </div>
@@ -276,14 +297,14 @@ export function ProfileFields({
 
           <Select
             value={currentPositionId}
-            onValueChange={(value) => {
-              if (value !== null) {
-                setCurrentPositionId(value);
-              }
-            }}
+            onValueChange={handlePositionChange}
             disabled={!canEdit}
           >
-            <SelectTrigger id="position" className="h-12 w-full">
+            <SelectTrigger
+              id="position"
+              className="h-12 w-full"
+              aria-invalid={Boolean(canEdit && errors.positionId)}
+            >
               <SelectValue>
                 {selectedPosition?.name ||
                   position ||
@@ -300,9 +321,9 @@ export function ProfileFields({
             </SelectContent>
           </Select>
 
-          {canEdit && positionError && (
-            <p className="ml-4 mt-1 text-sm text-destructive">
-              {positionError}
+          {canEdit && errors.positionId && (
+            <p className="ml-4 mt-1 text-xs text-destructive">
+              {t(errors.positionId)}
             </p>
           )}
         </div>

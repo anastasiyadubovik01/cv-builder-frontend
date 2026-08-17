@@ -146,7 +146,9 @@
         "firstNameRequired": "First name is required",
         "lastNameRequired": "Last name is required",
         "departmentRequired": "Department is required",
-        "positionRequired": "Position is required"
+        "positionRequired": "Position is required",
+        "firstNameMaxLength": "First name must be 100 characters or less",
+        "lastNameMaxLength": "Last name must be 100 characters or less"
       },
       "avatar": {
         "upload": "Upload avatar image",
