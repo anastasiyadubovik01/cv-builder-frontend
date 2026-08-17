@@ -16,7 +16,7 @@ import {
 import { itemType } from '@/components/dialogs/types';
 import { getItemTypeTranslation } from '@/components/dialogs/i18n';
 
-interface DeleteDialogProps {
+export interface DeleteDialogProps {
   name: string;
   itemType: itemType;
   onConfirm: () => void;
