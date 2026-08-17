@@ -239,6 +239,11 @@
       "description": {
         "required": "Описание обязательно"
       }
+    },
+    "notifications": {
+      "createSuccess": "Резюме успешно создано!",
+      "updateSuccess": "Резюме успешно обновлено!",
+      "deleteSuccess": "Резюме успешно удалено!"
     }
   },
 

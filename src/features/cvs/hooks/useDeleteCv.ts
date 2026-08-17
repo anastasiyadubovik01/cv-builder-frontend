@@ -1,6 +1,8 @@
 import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
+
 import { DELETE_CV_MUTATION } from '@/api/cvs';
+import { toast } from '@/components/ui/sonner';
 
 type DeleteCvData = {
   deleteCv: {
@@ -16,7 +18,6 @@ type DeleteCvVariables = {
 
 export function useDeleteCv() {
   const { t } = useTranslation();
-
   const [deleteCv, { loading }] = useMutation<DeleteCvData, DeleteCvVariables>(
     DELETE_CV_MUTATION,
     {
@@ -34,7 +35,17 @@ export function useDeleteCv() {
         },
       });
 
-      return Boolean(response.data?.deleteCv?.affected);
+      const isSuccess = Boolean(response.data?.deleteCv?.affected);
+
+      if (isSuccess) {
+        toast.success(
+          t(
+            'cvs.notifications.deleteSuccess',
+            'The CV was successfully deleted!',
+          ),
+        );
+      }
+      return isSuccess;
     } catch (err) {
       console.error('Failed to delete CV:', err);
       return false;
