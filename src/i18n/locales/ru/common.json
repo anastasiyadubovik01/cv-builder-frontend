@@ -127,7 +127,7 @@
       "firstName": "Имя",
       "lastName": "Фамилия",
       "email": "Email",
-      "department": "Департамент",
+      "department": "Отдел",
       "position": "Должность"
     },
     "details": {
@@ -169,6 +169,47 @@
       "updateSuccessDescription": "Профиль успешно обновлён",
       "updateError": "Ошибка",
       "updateErrorDescription": "Не удалось обновить профиль"
+    },
+    "create": {
+      "button": "Создать пользователя",
+      "email": "Email",
+      "password": "Пароль",
+      "firstName": "Имя",
+      "lastName": "Фамилия",
+      "department": "Отдел",
+      "position": "Должность",
+      "role": "Роль",
+      "success": "Пользователь успешно создан",
+      "error": "Не удалось создать пользователя"
+    },
+    "roles": {
+      "employee": "Сотрудник",
+      "admin": "Администратор"
+    },
+    "validation": {
+      "email": {
+        "required": "Email обязателен",
+        "invalid": "Введите корректный email"
+      },
+      "password": {
+        "required": "Пароль обязателен",
+        "minLength": "Минимум 6 символов"
+      },
+      "firstName": {
+        "required": "Имя обязательно"
+      },
+      "lastName": {
+        "required": "Фамилия обязательна"
+      },
+      "department": {
+        "required": "Отдел обязателен"
+      },
+      "position": {
+        "required": "Должность обязательна"
+      },
+      "role": {
+        "required": "Роль обязательна"
+      }
     }
   },
 
