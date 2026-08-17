@@ -1,13 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-
-import { MoreVerticalIcon } from '@/components/icons/more-vertical-icon';
 import { DataTable, type DataTableColumn } from '@/components/ui/data-table';
-import { Button } from '@/components/ui/button';
-
 import type { Cv, SortDirection, SortField } from '@/features/cvs/types';
+import { useState } from 'react';
+import { RowActionsMenu } from '@/components/ui/row-actions-menu';
 
 type CvsTableProps = {
   cvs: Cv[];
@@ -29,6 +26,8 @@ export function CvsTable({
   const emptyStateMessage = isAdmin
     ? t('cvs.emptyState.admin', 'No CVs found')
     : t('cvs.emptyState.employee', 'You have no CVs yet');
+
+  const [openMenuCvId, setOpenMenuCvId] = useState<string | null>(null);
 
   const columns: DataTableColumn<Cv, SortField>[] = [
     {
@@ -52,15 +51,29 @@ export function CvsTable({
       header: '',
       widthClassName: 'w-10',
       render: (cv) => (
-        <Link
-          href={`/cvs/${cv.id}`}
-          aria-label={`Open ${cv.name}`}
-          className="flex size-10 items-center justify-center text-[var(--users-arrow)]"
-        >
-          <Button variant="icon" className="size-7">
-            <MoreVerticalIcon className="size-5" />
-          </Button>
-        </Link>
+        <RowActionsMenu
+          open={openMenuCvId === cv.id}
+          onOpenChange={(open) => setOpenMenuCvId(open ? cv.id : null)}
+          ariaLabel={`Actions for ${cv.name}`}
+          actions={[
+            {
+              label: t('dialogs.actions.view', 'View'),
+              href: `/cvs/${cv.id}`,
+            },
+            {
+              label: t('dialogs.actions.update', 'Update'),
+              onClick: () => {
+                // update CV
+              },
+            },
+            {
+              label: t('dialogs.actions.delete', 'Delete'),
+              onClick: () => {
+                // delete CV
+              },
+            },
+          ]}
+        />
       ),
     },
   ];

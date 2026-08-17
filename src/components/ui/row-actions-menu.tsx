@@ -3,6 +3,7 @@
 import Link from 'next/link';
 
 import { MoreVerticalIcon } from '@/components/icons/more-vertical-icon';
+import { Button } from '@/components/ui/button';
 
 type RowAction = {
   label: string;
@@ -32,8 +33,8 @@ export function RowActionsMenu({
         }
       }}
     >
-      <button
-        type="button"
+      <Button
+        variant="icon"
         aria-label={ariaLabel}
         aria-haspopup="menu"
         aria-expanded={open}
@@ -41,7 +42,7 @@ export function RowActionsMenu({
         className="flex size-8 cursor-pointer items-center justify-center"
       >
         <MoreVerticalIcon className="size-6 text-[#626262] dark:text-[#F5F5F7]" />
-      </button>
+      </Button>
 
       {open && (
         <div
