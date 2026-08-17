@@ -1,11 +1,12 @@
 'use client';
 
-import Link from 'next/link';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { MoreVerticalIcon } from '@/components/icons/more-vertical-icon';
 import { DataTable, type DataTableColumn } from '@/components/ui/data-table';
-import { Button } from '@/components/ui/button';
+import { RowActionsMenu } from '@/components/ui/row-actions-menu';
+import { UpdateCvModal } from '@/features/cvs/components/modals/UpdateCvModal';
+import { DeleteCvModal } from '@/features/cvs/components/modals/DeleteCvModal';
 
 import type { Cv, SortDirection, SortField } from '@/features/cvs/types';
 
@@ -15,6 +16,7 @@ type CvsTableProps = {
   sortDirection: SortDirection;
   onSort: (field: SortField) => void;
   isAdmin?: boolean;
+  onRefresh?: () => void;
 };
 
 export function CvsTable({
@@ -23,12 +25,17 @@ export function CvsTable({
   sortDirection,
   onSort,
   isAdmin = false,
+  onRefresh,
 }: CvsTableProps) {
   const { t } = useTranslation();
 
   const emptyStateMessage = isAdmin
     ? t('cvs.emptyState.admin', 'No CVs found')
     : t('cvs.emptyState.employee', 'You have no CVs yet');
+
+  const [openMenuCvId, setOpenMenuCvId] = useState<string | null>(null);
+  const [editingCv, setEditingCv] = useState<Cv | null>(null);
+  const [deletingCv, setDeletingCv] = useState<Cv | null>(null);
 
   const columns: DataTableColumn<Cv, SortField>[] = [
     {
@@ -52,38 +59,88 @@ export function CvsTable({
       header: '',
       widthClassName: 'w-10',
       render: (cv) => (
-        <Link
-          href={`/cvs/${cv.id}`}
-          aria-label={`Open ${cv.name}`}
-          className="flex size-10 items-center justify-center text-[var(--users-arrow)]"
-        >
-          <Button variant="icon" className="size-7">
-            <MoreVerticalIcon className="size-5" />
-          </Button>
-        </Link>
+        <RowActionsMenu
+          open={openMenuCvId === cv.id}
+          onOpenChange={(open) => setOpenMenuCvId(open ? cv.id : null)}
+          ariaLabel={`Actions for ${cv.name}`}
+          actions={[
+            {
+              label: t('dialogs.actions.view', 'View'),
+              href: `/cvs/${cv.id}`,
+            },
+            {
+              label: t('dialogs.actions.update', 'Update'),
+              onClick: () => setEditingCv(cv),
+            },
+            {
+              label: t('dialogs.actions.delete', 'Delete'),
+              onClick: () => setDeletingCv(cv),
+            },
+          ]}
+        />
       ),
     },
   ];
 
   return (
-    <DataTable
-      data={cvs}
-      columns={columns}
-      getRowKey={(cv) => cv.id}
-      sortBy={sortBy}
-      sortDirection={sortDirection}
-      onSort={onSort}
-      emptyState={emptyStateMessage}
-      renderSubRow={(cv) =>
-        cv.description ? (
-          <p
-            className="text-[16px] font-regular leading-relaxed"
-            style={{ color: 'var(--users-foreground)', opacity: 0.5 }}
-          >
-            {cv.description}
-          </p>
-        ) : null
-      }
-    />
+    <>
+      <DataTable
+        data={cvs}
+        columns={columns}
+        getRowKey={(cv) => cv.id}
+        sortBy={sortBy}
+        sortDirection={sortDirection}
+        onSort={onSort}
+        emptyState={emptyStateMessage}
+        renderSubRow={(cv) =>
+          cv.description ? (
+            <p
+              className="text-[16px] font-regular leading-relaxed"
+              style={{ color: 'var(--users-foreground)', opacity: 0.5 }}
+            >
+              {cv.description}
+            </p>
+          ) : null
+        }
+      />
+
+      {editingCv && (
+        <UpdateCvModal
+          cvId={editingCv.id}
+          open={Boolean(editingCv)}
+          onOpenChange={(open) => {
+            if (!open) {
+              setEditingCv(null);
+            }
+          }}
+          initialValues={{
+            name: editingCv.name,
+            education: editingCv.education,
+            description: editingCv.description,
+          }}
+          onSuccess={() => {
+            onRefresh?.();
+            setEditingCv(null);
+          }}
+        />
+      )}
+
+      {deletingCv && (
+        <DeleteCvModal
+          cvId={deletingCv.id}
+          name={deletingCv.name}
+          open={Boolean(deletingCv)}
+          onOpenChange={(open) => {
+            if (!open) {
+              setDeletingCv(null);
+            }
+          }}
+          onSuccess={() => {
+            onRefresh?.();
+            setDeletingCv(null);
+          }}
+        />
+      )}
+    </>
   );
 }

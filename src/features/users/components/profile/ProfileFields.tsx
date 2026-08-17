@@ -11,7 +11,7 @@ import {
   UPDATE_PROFILE_MUTATION,
   UPDATE_USER_MUTATION,
 } from '@/api/users';
-import { useValidatedForm } from '@/app/(auth)/_components/hooks/useValidatedForm';
+import { useValidatedForm } from '@/components/hooks/useValidatedForm';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

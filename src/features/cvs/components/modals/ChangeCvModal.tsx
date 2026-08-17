@@ -5,30 +5,55 @@ import { ChangeDialog } from '@/components/dialogs/ChangeDialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useCreateCvForm } from '@/features/cvs/hooks/useCreateCvForm';
+import { useUpdateCvForm } from '@/features/cvs/hooks/useUpdateCvForm';
 import type {
   createActionTitles,
   updateActionTitles,
 } from '@/components/dialogs/types';
+import type { CreateCvFormValues } from '@/lib/validations/cv';
 
 export interface ChangeCvModalProps {
   type: createActionTitles | updateActionTitles;
-  trigger: React.ReactNode;
+  trigger?: React.ReactNode;
+  cvId?: string;
   userId?: string;
+  initialValues?: CreateCvFormValues;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   onSuccess?: () => void;
-  onSubmit?: (data: {
-    name: string;
-    education: string;
-    description: string;
-  }) => void;
+  onSubmit?: (data: CreateCvFormValues) => void;
 }
 
 export function ChangeCvModal({
   type,
   trigger,
+  cvId,
   userId,
+  initialValues,
+  open,
+  onOpenChange,
   onSuccess,
   onSubmit,
 }: ChangeCvModalProps) {
+  const isUpdate = type === 'Update';
+
+  const defaultInitialValues: CreateCvFormValues = initialValues || {
+    name: '',
+    education: '',
+    description: '',
+  };
+
+  const createForm = useCreateCvForm({
+    userId,
+    onSuccess,
+  });
+
+  const updateForm = useUpdateCvForm({
+    cvId: cvId || '',
+    initialValues: defaultInitialValues,
+    onSuccess,
+  });
+
   const {
     formData,
     errors,
@@ -37,12 +62,7 @@ export function ChangeCvModal({
     handleSubmit,
     resetForm,
     t,
-  } = useCreateCvForm({
-    userId,
-    onSuccess: () => {
-      onSuccess?.();
-    },
-  });
+  } = isUpdate ? updateForm : createForm;
 
   const handleConfirm = async (): Promise<boolean> => {
     if (!validateForm()) {
@@ -65,6 +85,8 @@ export function ChangeCvModal({
       onConfirm={handleConfirm}
       trigger={trigger}
       t={t}
+      open={open}
+      onOpenChange={onOpenChange}
     >
       <div className="flex flex-col gap-9">
         <Input

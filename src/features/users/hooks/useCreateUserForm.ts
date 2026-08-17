@@ -8,7 +8,7 @@ import {
   DEPARTMENTS_QUERY,
   POSITIONS_QUERY,
 } from '@/api/users';
-import { useValidatedForm } from '@/app/(auth)/_components/hooks/useValidatedForm';
+import { useValidatedForm } from '@/components/hooks/useValidatedForm';
 import {
   createUserSchema,
   type CreateUserFormValues,

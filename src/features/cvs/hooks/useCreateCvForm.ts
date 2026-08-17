@@ -1,9 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
-
+import { handleFormError } from '@/lib/error/errorHandler';
 import { CREATE_CV_MUTATION } from '@/api/cvs';
 import { type CreateCvFormValues, createCvSchema } from '@/lib/validations/cv';
-import { useValidatedForm } from '@/app/(auth)/_components/hooks/useValidatedForm';
+import { useValidatedForm } from '@/components/hooks/useValidatedForm';
+import { toast } from '@/components/ui/sonner';
 
 const INITIAL_VALUES: CreateCvFormValues = {
   name: '',
@@ -55,10 +56,21 @@ export function useCreateCvForm({
 
       setFormData(INITIAL_VALUES);
       clearErrors();
+
+      toast.success(
+        t(
+          'cvs.notifications.createSuccess',
+          'CV has been successfully created',
+        ),
+      );
+
       onSuccess?.();
       return true;
     } catch (err) {
-      console.error('Failed to create CV:', err);
+      handleFormError(err, {
+        t,
+        context: 'Create CV',
+      });
       return false;
     }
   };

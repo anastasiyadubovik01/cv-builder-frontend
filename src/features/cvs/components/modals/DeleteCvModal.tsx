@@ -1,10 +1,42 @@
+'use client';
+
 import {
   DeleteDialog,
-  DeleteDialogProps,
+  type DeleteDialogProps,
 } from '@/components/dialogs/DeleteDialog';
+import { useDeleteCv } from '@/features/cvs/hooks/useDeleteCv';
 
-type DeleteCvModalProps = Omit<DeleteDialogProps, 'type'>;
+export interface DeleteCvModalProps extends Omit<
+  DeleteDialogProps,
+  'itemType' | 'onConfirm' | 't'
+> {
+  cvId: string;
+  onSuccess?: () => void;
+}
 
-export function DeleteCvModal({ ...props }: DeleteCvModalProps) {
-  return <DeleteDialog {...props} itemType="CV" />;
+export function DeleteCvModal({
+  cvId,
+  name,
+  onSuccess,
+  ...props
+}: DeleteCvModalProps) {
+  const { handleDelete, t } = useDeleteCv();
+
+  const handleConfirm = async (): Promise<boolean> => {
+    const success = await handleDelete(cvId);
+    if (success) {
+      onSuccess?.();
+    }
+    return success;
+  };
+
+  return (
+    <DeleteDialog
+      {...props}
+      name={name}
+      itemType="CV"
+      onConfirm={handleConfirm}
+      t={t}
+    />
+  );
 }
