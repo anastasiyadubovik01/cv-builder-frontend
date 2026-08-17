@@ -1,11 +1,14 @@
 'use client';
 
-import { useTranslation } from 'react-i18next';
-import { DataTable, type DataTableColumn } from '@/components/ui/data-table';
-import type { Cv, SortDirection, SortField } from '@/features/cvs/types';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { DataTable, type DataTableColumn } from '@/components/ui/data-table';
 import { RowActionsMenu } from '@/components/ui/row-actions-menu';
 import { UpdateCvModal } from '@/features/cvs/components/modals/UpdateCvModal';
+import { DeleteCvModal } from '@/features/cvs/components/modals/DeleteCvModal';
+
+import type { Cv, SortDirection, SortField } from '@/features/cvs/types';
 
 type CvsTableProps = {
   cvs: Cv[];
@@ -32,6 +35,7 @@ export function CvsTable({
 
   const [openMenuCvId, setOpenMenuCvId] = useState<string | null>(null);
   const [editingCv, setEditingCv] = useState<Cv | null>(null);
+  const [deletingCv, setDeletingCv] = useState<Cv | null>(null);
 
   const columns: DataTableColumn<Cv, SortField>[] = [
     {
@@ -70,9 +74,7 @@ export function CvsTable({
             },
             {
               label: t('dialogs.actions.delete', 'Delete'),
-              onClick: () => {
-                // delete CV
-              },
+              onClick: () => setDeletingCv(cv),
             },
           ]}
         />
@@ -119,6 +121,23 @@ export function CvsTable({
           onSuccess={() => {
             onRefresh?.();
             setEditingCv(null);
+          }}
+        />
+      )}
+
+      {deletingCv && (
+        <DeleteCvModal
+          cvId={deletingCv.id}
+          name={deletingCv.name}
+          open={Boolean(deletingCv)}
+          onOpenChange={(open) => {
+            if (!open) {
+              setDeletingCv(null);
+            }
+          }}
+          onSuccess={() => {
+            onRefresh?.();
+            setDeletingCv(null);
           }}
         />
       )}

@@ -19,9 +19,11 @@ import { getItemTypeTranslation } from '@/components/dialogs/i18n';
 export interface DeleteDialogProps {
   name: string;
   itemType: itemType;
-  onConfirm: () => void;
+  onConfirm: () => boolean | Promise<boolean> | void;
   trigger?: React.ReactNode;
   t: (key: string) => string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 export function DeleteDialog({
@@ -30,24 +32,41 @@ export function DeleteDialog({
   onConfirm,
   trigger,
   t,
+  open: externalOpen,
+  onOpenChange: externalOnOpenChange,
 }: DeleteDialogProps) {
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
 
-  const handleConfirm = () => {
-    onConfirm();
-    setOpen(false);
+  const isControlled = externalOpen !== undefined;
+  const isOpen = isControlled ? externalOpen : internalOpen;
+
+  const handleOpenChange = (newOpen: boolean) => {
+    if (isControlled) {
+      externalOnOpenChange?.(newOpen);
+    } else {
+      setInternalOpen(newOpen);
+    }
+  };
+
+  const handleConfirm = async () => {
+    const result = await onConfirm();
+    if (result !== false) {
+      handleOpenChange(false);
+    }
   };
 
   const translatedItemType = getItemTypeTranslation(itemType, t);
 
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger
-        render={trigger ? <div className="inline-block" /> : undefined}
-        nativeButton={false}
-      >
-        {trigger}
-      </AlertDialogTrigger>
+    <AlertDialog open={isOpen} onOpenChange={handleOpenChange}>
+      {trigger && (
+        <AlertDialogTrigger
+          render={<div className="inline-block" />}
+          nativeButton={false}
+        >
+          {trigger}
+        </AlertDialogTrigger>
+      )}
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>

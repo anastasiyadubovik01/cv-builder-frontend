@@ -30,7 +30,9 @@ export function useUpdateCvForm({
     schema: createCvSchema,
   });
 
-  const [updateCv, { loading }] = useMutation(UPDATE_CV_MUTATION);
+  const [updateCv, { loading }] = useMutation(UPDATE_CV_MUTATION, {
+    refetchQueries: ['Cvs'],
+  });
 
   const handleSubmit = async (): Promise<boolean> => {
     if (!validateForm()) {
