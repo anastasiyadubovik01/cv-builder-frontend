@@ -326,3 +326,24 @@ export const CREATE_USER_MUTATION: TypedDocumentNode<
     }
   }
 `;
+
+type DeleteUserData = {
+  deleteUser: {
+    affected: number;
+  };
+};
+
+type DeleteUserVariables = {
+  userId: string;
+};
+
+export const DELETE_USER_MUTATION: TypedDocumentNode<
+  DeleteUserData,
+  DeleteUserVariables
+> = gql`
+  mutation DeleteUser($userId: ID!) {
+    deleteUser(userId: $userId) {
+      affected
+    }
+  }
+`;

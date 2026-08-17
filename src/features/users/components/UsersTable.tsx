@@ -9,6 +9,8 @@ import { DataTable, type DataTableColumn } from '@/components/ui/data-table';
 import { RowActionsMenu } from '@/components/ui/row-actions-menu';
 
 import type { SortDirection, SortField, User } from '@/features/users/types';
+import { DeleteUserModal } from '@/features/users/components/DeleteUserModal';
+import { UpdateUserModal } from '@/features/users/components/UpdateUserModal';
 
 type UsersTableProps = {
   users: User[];
@@ -16,6 +18,7 @@ type UsersTableProps = {
   sortDirection: SortDirection;
   onSort: (field: SortField) => void;
   isAdmin: boolean;
+  onRefresh?: () => Promise<void>;
 };
 
 export function UsersTable({
@@ -24,9 +27,12 @@ export function UsersTable({
   sortDirection,
   onSort,
   isAdmin,
+  onRefresh,
 }: UsersTableProps) {
   const { t } = useTranslation();
   const [openMenuUserId, setOpenMenuUserId] = useState<string | null>(null);
+  const [deletingUser, setDeletingUser] = useState<User | null>(null);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
 
   const columns: DataTableColumn<User, SortField>[] = [
     {
@@ -114,11 +120,11 @@ export function UsersTable({
               },
               {
                 label: t('dialogs.actions.update'),
-                onClick: () => {},
+                onClick: () => setEditingUser(user),
               },
               {
                 label: t('dialogs.actions.delete'),
-                onClick: () => {},
+                onClick: () => setDeletingUser(user),
               },
             ]}
           />
@@ -128,14 +134,49 @@ export function UsersTable({
   ];
 
   return (
-    <DataTable
-      data={users}
-      columns={columns}
-      getRowKey={(user) => user.id}
-      sortBy={sortBy}
-      sortDirection={sortDirection}
-      onSort={onSort}
-      emptyState={t('users.noResults')}
-    />
+    <>
+      <DataTable
+        data={users}
+        columns={columns}
+        getRowKey={(user) => user.id}
+        sortBy={sortBy}
+        sortDirection={sortDirection}
+        onSort={onSort}
+        emptyState={t('users.noResults')}
+      />
+
+      {editingUser && (
+        <UpdateUserModal
+          userId={editingUser.id}
+          open={Boolean(editingUser)}
+          onOpenChange={(open) => {
+            if (!open) {
+              setEditingUser(null);
+            }
+          }}
+          onSuccess={async () => {
+            await onRefresh?.();
+            setEditingUser(null);
+          }}
+        />
+      )}
+
+      {deletingUser && (
+        <DeleteUserModal
+          userId={deletingUser.id}
+          name={`${deletingUser.firstName} ${deletingUser.lastName}`}
+          open={Boolean(deletingUser)}
+          onOpenChange={(open) => {
+            if (!open) {
+              setDeletingUser(null);
+            }
+          }}
+          onSuccess={async () => {
+            await onRefresh?.();
+            setDeletingUser(null);
+          }}
+        />
+      )}
+    </>
   );
 }

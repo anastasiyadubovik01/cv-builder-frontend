@@ -183,6 +183,9 @@
       "success": "User created successfully",
       "error": "Failed to create user"
     },
+    "update": {
+      "success": "User successfully updated"
+    },
     "roles": {
       "employee": "Employee",
       "admin": "Admin"
@@ -211,6 +214,9 @@
       "role": {
         "required": "Role is required"
       }
+    },
+    "notifications": {
+      "deleteSuccess": "User successfully deleted"
     }
   },
 

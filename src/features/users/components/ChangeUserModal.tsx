@@ -1,6 +1,6 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import type { ChangeEvent, ReactNode } from 'react';
 
 import type {
   createActionTitles,
@@ -16,13 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useCreateUserForm } from '@/features/users/hooks/useCreateUserForm';
-
-export type ChangeUserModalProps = {
-  type: createActionTitles | updateActionTitles;
-  trigger: ReactNode;
-  onSuccess?: () => void | Promise<void>;
-};
+import type { CreateUserFormValues } from '@/lib/validations/user';
+import { Label } from '@/components/ui/label';
 
 type SelectOption = {
   value: string;
@@ -34,38 +29,59 @@ type NamedEntity = {
   name: string;
 };
 
+export type ChangeUserModalProps = {
+  type: createActionTitles | updateActionTitles;
+  trigger?: ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  authDisabled?: boolean;
+
+  formData: CreateUserFormValues;
+  errors: Partial<Record<keyof CreateUserFormValues, string>>;
+
+  departments: NamedEntity[];
+  positions: NamedEntity[];
+
+  loading: boolean;
+  isValid: boolean;
+
+  handleChange: (
+    field: keyof CreateUserFormValues,
+  ) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+
+  setFieldValue: (field: keyof CreateUserFormValues, value: string) => void;
+  validateField: (field: keyof CreateUserFormValues) => boolean;
+  handleSubmit: () => Promise<boolean>;
+  t: (key: string) => string;
+};
+
 export function ChangeUserModal({
   type,
   trigger,
-  onSuccess,
+  open,
+  onOpenChange,
+  authDisabled = false,
+  formData,
+  errors,
+  departments,
+  positions,
+  loading,
+  isValid,
+  handleChange,
+  setFieldValue,
+  validateField,
+  handleSubmit,
+  t,
 }: ChangeUserModalProps) {
-  const {
-    formData,
-    errors,
-    departments,
-    positions,
-    loading,
-    isValid,
-    handleChange,
-    setFieldValue,
-    validateField,
-    handleSubmit,
-    t,
-  } = useCreateUserForm({ onSuccess });
+  const departmentItems: SelectOption[] = departments.map((department) => ({
+    value: String(department.id),
+    label: department.name,
+  }));
 
-  const departmentItems: SelectOption[] = departments.map(
-    (department: NamedEntity) => ({
-      value: String(department.id),
-      label: department.name,
-    }),
-  );
-
-  const positionItems: SelectOption[] = positions.map(
-    (position: NamedEntity) => ({
-      value: String(position.id),
-      label: position.name,
-    }),
-  );
+  const positionItems: SelectOption[] = positions.map((position) => ({
+    value: String(position.id),
+    label: position.name,
+  }));
 
   const roleItems: SelectOption[] = [
     {
@@ -83,6 +99,8 @@ export function ChangeUserModal({
       actionTitle={type}
       itemType="user"
       trigger={trigger}
+      open={open}
+      onOpenChange={onOpenChange}
       onConfirm={handleSubmit}
       confirmDisabled={!isValid || loading}
       size="wide"
@@ -95,14 +113,16 @@ export function ChangeUserModal({
           onBlur={() => validateField('email')}
           placeholder={t('users.create.email')}
           error={errors.email ? t(errors.email) : undefined}
+          disabled={authDisabled}
         />
 
         <PasswordInput
-          value={formData.password}
+          value={authDisabled ? '************' : formData.password}
           onChange={handleChange('password')}
           onBlur={() => validateField('password')}
           placeholder={t('users.create.password')}
           error={errors.password ? t(errors.password) : undefined}
+          disabled={authDisabled}
         />
 
         <Input
@@ -121,7 +141,10 @@ export function ChangeUserModal({
           error={errors.lastName ? t(errors.lastName) : undefined}
         />
 
-        <div>
+        <div className="relative">
+          <Label className="absolute -top-4 left-2.5 px-1 text-xs">
+            {t('users.create.department')}
+          </Label>
           <Select
             items={departmentItems}
             value={formData.departmentId}
@@ -132,7 +155,7 @@ export function ChangeUserModal({
             }}
           >
             <SelectTrigger
-              className="bg-secondary border-[#AEAEAE]"
+              className="border-[#AEAEAE] bg-secondary"
               aria-label={t('users.create.department')}
               aria-invalid={Boolean(errors.departmentId)}
               onBlur={() => validateField('departmentId')}
@@ -155,8 +178,10 @@ export function ChangeUserModal({
             </p>
           )}
         </div>
-
-        <div>
+        <div className="relative">
+          <Label className="absolute -top-4 left-2.5 px-1 text-xs">
+            {t('users.create.position')}
+          </Label>
           <Select
             items={positionItems}
             value={formData.positionId}
@@ -167,7 +192,7 @@ export function ChangeUserModal({
             }}
           >
             <SelectTrigger
-              className="bg-secondary border-[#AEAEAE]"
+              className="border-[#AEAEAE] bg-secondary"
               aria-label={t('users.create.position')}
               aria-invalid={Boolean(errors.positionId)}
               onBlur={() => validateField('positionId')}
@@ -191,7 +216,10 @@ export function ChangeUserModal({
           )}
         </div>
 
-        <div>
+        <div className="relative">
+          <Label className="absolute -top-4 left-2.5 px-1 text-xs">
+            {t('users.create.role')}
+          </Label>
           <Select
             items={roleItems}
             value={formData.role}
@@ -202,7 +230,7 @@ export function ChangeUserModal({
             }}
           >
             <SelectTrigger
-              className="bg-secondary border-[#AEAEAE]"
+              className="border-[#AEAEAE] bg-secondary"
               aria-label={t('users.create.role')}
               aria-invalid={Boolean(errors.role)}
               onBlur={() => validateField('role')}

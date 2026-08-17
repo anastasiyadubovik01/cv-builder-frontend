@@ -36,9 +36,9 @@ function PasswordInput({
         disabled={disabled}
         onClick={() => setShowPassword(!showPassword)}
         className={cn(
-          'absolute top-1/2 right-[6px] -translate-y-1/2 bg-transparent size-10',
+          'absolute top-1/2 right-[6px] size-10 -translate-y-1/2 bg-transparent',
           error ? 'text-destructive' : 'text-[var(--password-icon)]',
-          disabled && 'text-[var(--disabled-foreground)]',
+          disabled && 'disabled:text-[#AEAEAE]',
         )}
       >
         {showPassword ? <EyeOffIcon /> : <EyeIcon />}
