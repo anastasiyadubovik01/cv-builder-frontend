@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 
 import { ChevronLeftIcon } from '@/components/icons/chevron-left-icon';
 import { DataTable, type DataTableColumn } from '@/components/ui/data-table';
-import { useState } from 'react';
 import { RowActionsMenu } from '@/components/ui/row-actions-menu';
 
 import type { SortDirection, SortField, User } from '@/features/users/types';
