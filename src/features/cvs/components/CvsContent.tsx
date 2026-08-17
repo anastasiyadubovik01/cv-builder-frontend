@@ -1,57 +1,132 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
+import { useMutation, useQuery } from '@apollo/client/react';
+import { CREATE_CV_MUTATION, CVS_QUERY } from '@/api/cvs';
 import { SearchInput } from '@/components/ui/search-input';
 import { Pagination } from '@/components/ui/pagination';
 import { CvsTable } from '@/features/cvs/components/CvsTable';
-import { DEFAULT_PAGE_SIZE } from '@/lib/constants/pagination';
-
-import type { Cv, SortDirection, SortField } from '@/features/cvs/types';
+import {
+  BACKEND_PAGE_SIZE,
+  DEFAULT_PAGE_SIZE,
+} from '@/lib/constants/pagination';
 import { Button } from '@/components/ui/button';
 import { PlusIcon } from '@/components/icons/plus-icon';
-import { CreateCvModal } from '@/features/cvs/components/CreateCvModal';
+import { CreateCvModal } from '@/features/cvs/components/modals/CreateCvModal';
+import { LoadingOverlay } from '@/components/ui/loading-overlay';
+import type { ApiCv } from '@/api/cvs';
+import type { Cv, SortDirection, SortField } from '@/features/cvs/types';
 
-const MOCK_CVS: Cv[] = [
-  {
-    id: '1',
-    name: 'Frontend Developer CV',
-    education: 'Test State Technical University',
-    employee: 'test@example.com',
-    description:
-      'Highly motivated and experienced Software Engineer with 5+ years of proven success in leading and developing robust and scalable applications. Adept at\n' +
-      'leveraging React, Node.js, Three.js, and WebGL to create innovative and visually appealing user interfaces. Possesses strong leadership and mentoring skills,\n' +
-      'effectively guiding junior developers and fostering a collaborative team environment. Adept at architecting complex systems, ensuring efficient performance,\n' +
-      'and adhering to best practices. Passionate about delivering high-quality solutions and contributing to the success of dynamic projects.',
-  },
-  {
-    id: '2',
-    name: 'Fullstack Engineer CV',
-    education: 'Test State Technical University',
-    employee: 'carrot@example.com',
-    description:
-      'Highly motivated and experienced Software Engineer with 5+ years of proven success in designing and developing complex software solutions. Adept at\n' +
-      'utilizing cutting-edge technologies such as React and Node.js to create user-friendly and scalable applications. Possesses a strong understanding of Computer\n' +
-      'Systems Design principles and methodologies. A results-oriented individual with a passion for delivering high-quality work and exceeding expectations. A strong\n' +
-      'team leader and mentor with a proven ability to guide and motivate others to achieve shared goals. Seeking a challenging and rewarding Software Engineer\n' +
-      'position where I can leverage my skills and experience to contribute to the success of a dynamic and innovative organization.',
-  },
-];
+interface CvsContentProps {
+  isAdmin?: boolean;
+  userId?: string;
+}
 
-export function CvsContent() {
+export function CvsContent({ isAdmin = false, userId }: CvsContentProps) {
   const { t } = useTranslation();
 
   const [search, setSearch] = useState('');
-  const sortBy: SortField = 'name';
+  const [sortBy, setSortBy] = useState<SortField>('name');
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
-  const [, setIsCreateModalOpen] = useState(false);
+  const [allCvs, setAllCvs] = useState<ApiCv[]>([]);
+  const [loadError, setLoadError] = useState(false);
+
+  const { data, loading, error, fetchMore, refetch } = useQuery(CVS_QUERY, {
+    variables: {
+      params: {
+        page: 1,
+        limit: BACKEND_PAGE_SIZE,
+      },
+    },
+  });
+
+  const [createCv, { loading: isCreating }] = useMutation(CREATE_CV_MUTATION);
+
+  useEffect(() => {
+    if (!data) {
+      return;
+    }
+
+    const loadAllCvs = async () => {
+      try {
+        setLoadError(false);
+
+        const firstPageCvs = data.cvs.items;
+        const totalBackendPages = data.cvs.total_pages;
+
+        if (totalBackendPages <= 1) {
+          setAllCvs(firstPageCvs);
+          return;
+        }
+
+        const pagesToLoad = Array.from(
+          { length: totalBackendPages - 1 },
+          (_, index) => index + 2,
+        );
+
+        const responses = await Promise.all(
+          pagesToLoad.map((page) =>
+            fetchMore({
+              variables: {
+                params: {
+                  page,
+                  limit: BACKEND_PAGE_SIZE,
+                },
+              },
+            }),
+          ),
+        );
+
+        const remainingCvs = responses.flatMap(
+          (response) => response.data.cvs.items,
+        );
+
+        setAllCvs([...firstPageCvs, ...remainingCvs]);
+      } catch {
+        setLoadError(true);
+      }
+    };
+
+    void loadAllCvs();
+  }, [data, fetchMore]);
+
+  const handleCreateCv = async (formData: {
+    name: string;
+    education: string;
+    description: string;
+  }) => {
+    try {
+      await createCv({
+        variables: {
+          cv: {
+            name: formData.name,
+            education: formData.education || undefined,
+            description: formData.description,
+            userId: userId || undefined,
+          },
+        },
+      });
+
+      await refetch();
+    } catch (err) {
+      console.error('Failed to create CV:', err);
+    }
+  };
+
+  const cvs: Cv[] = allCvs.map((cv) => ({
+    id: cv.id,
+    name: cv.name,
+    education: cv.education ?? '',
+    employee: cv.user?.email ?? '',
+    description: cv.description,
+  }));
 
   const normalizedSearch = search.trim().toLowerCase();
 
-  const filteredCvs = MOCK_CVS.filter((cv) => {
+  const filteredCvs = cvs.filter((cv) => {
     return (
       cv.name.toLowerCase().includes(normalizedSearch) ||
       cv.education.toLowerCase().includes(normalizedSearch) ||
@@ -76,13 +151,35 @@ export function CvsContent() {
   const startIndex = (currentPage - 1) * pageSize;
   const paginatedCvs = sortedCvs.slice(startIndex, startIndex + pageSize);
 
-  const handleSort = () => {
-    setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+  const handleSort = (field: SortField) => {
+    if (sortBy === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+      setCurrentPage(1);
+      return;
+    }
+
+    setSortBy(field);
+    setSortDirection('asc');
     setCurrentPage(1);
   };
 
+  const handleRetry = async () => {
+    setLoadError(false);
+
+    try {
+      await refetch();
+    } catch {
+      setLoadError(true);
+    }
+  };
+
+  const hasError = Boolean(error) || loadError;
+  const isLoading =
+    loading || isCreating || Boolean(data && allCvs.length < data.cvs.total);
+
   return (
     <div className="flex h-[calc(100dvh-3.5rem)] min-h-0 flex-col overflow-hidden">
+      {!hasError && isLoading && <LoadingOverlay />}
       <div className="mx-6 mt-[7px] flex items-center justify-between shrink-0">
         <SearchInput
           value={search}
@@ -97,7 +194,6 @@ export function CvsContent() {
           trigger={
             <Button
               type="button"
-              onClick={() => setIsCreateModalOpen(true)}
               className="flex items-center gap-2 uppercase font-medium text-[14px]"
               variant="primaryV2"
             >
@@ -105,35 +201,48 @@ export function CvsContent() {
               {t('cvs.createCv', 'CREATE CV')}
             </Button>
           }
-          onSubmit={(data) => {
-            // mock submit
-            console.log('New CV Data:', data);
+          onSubmit={(formData) => {
+            void handleCreateCv(formData);
           }}
         />
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col px-6 pt-4">
-        <div className="min-h-0 flex-1 overflow-y-auto">
-          <CvsTable
-            cvs={paginatedCvs}
-            sortBy={sortBy}
-            sortDirection={sortDirection}
-            onSort={handleSort}
-          />
-        </div>
+        {hasError ? (
+          <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4">
+            <p className="text-base text-foreground">
+              {t('cvs.loadError', 'Failed to load CVs')}
+            </p>
+            <Button type="button" onClick={() => void handleRetry()}>
+              {t('retry', 'Retry')}
+            </Button>
+          </div>
+        ) : (
+          <>
+            <div className="min-h-0 flex-1 overflow-y-auto">
+              <CvsTable
+                cvs={paginatedCvs}
+                sortBy={sortBy}
+                sortDirection={sortDirection}
+                onSort={handleSort}
+                isAdmin={isAdmin}
+              />
+            </div>
 
-        <div className="shrink-0 bg-background pb-4">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            pageSize={pageSize}
-            onPageChange={setCurrentPage}
-            onPageSizeChange={(size) => {
-              setPageSize(size);
-              setCurrentPage(1);
-            }}
-          />
-        </div>
+            <div className="shrink-0 bg-background pb-4">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                pageSize={pageSize}
+                onPageChange={setCurrentPage}
+                onPageSizeChange={(size) => {
+                  setPageSize(size);
+                  setCurrentPage(1);
+                }}
+              />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

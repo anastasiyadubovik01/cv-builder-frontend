@@ -14,6 +14,7 @@ type CvsTableProps = {
   sortBy: SortField;
   sortDirection: SortDirection;
   onSort: (field: SortField) => void;
+  isAdmin?: boolean;
 };
 
 export function CvsTable({
@@ -21,24 +22,29 @@ export function CvsTable({
   sortBy,
   sortDirection,
   onSort,
+  isAdmin = false,
 }: CvsTableProps) {
   const { t } = useTranslation();
+
+  const emptyStateMessage = isAdmin
+    ? t('cvs.emptyState.admin', 'No CVs found')
+    : t('cvs.emptyState.employee', 'You have no CVs yet');
 
   const columns: DataTableColumn<Cv, SortField>[] = [
     {
       id: 'name',
       sortKey: 'name',
-      header: t('cvs.table.name', 'Name'),
+      header: t('cvs.name', 'Name'),
       render: (cv) => cv.name,
     },
     {
       id: 'education',
-      header: t('cvs.table.education', 'Education'),
+      header: t('cvs.education', 'Education'),
       render: (cv) => cv.education,
     },
     {
       id: 'employee',
-      header: t('cvs.table.employee', 'Employee'),
+      header: t('cvs.employee', 'Employee'),
       render: (cv) => cv.employee,
     },
     {
@@ -67,15 +73,17 @@ export function CvsTable({
       sortBy={sortBy}
       sortDirection={sortDirection}
       onSort={onSort}
-      emptyState={t('cvs.noResults', 'No CVs found')}
-      renderSubRow={(cv) => (
-        <p
-          className="text-[16px] font-regular leading-relaxed"
-          style={{ color: 'var(--users-foreground)', opacity: 0.5 }}
-        >
-          {cv.description}
-        </p>
-      )}
+      emptyState={emptyStateMessage}
+      renderSubRow={(cv) =>
+        cv.description ? (
+          <p
+            className="text-[16px] font-regular leading-relaxed"
+            style={{ color: 'var(--users-foreground)', opacity: 0.5 }}
+          >
+            {cv.description}
+          </p>
+        ) : null
+      }
     />
   );
 }
