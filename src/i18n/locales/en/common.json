@@ -174,7 +174,20 @@
       "admin": "No CVs found",
       "employee": "You have no CVs yet"
     },
-    "noResults": "No CVs found"
+    "noResults": "No CVs found",
+    "validation": {
+      "name": {
+        "required": "Name is required",
+        "maxLength": "Name must be 255 characters or less"
+      },
+      "education": {
+        "required": "Education is required",
+        "maxLength": "Education must be 255 characters or less"
+      },
+      "description": {
+        "required": "Description is required"
+      }
+    }
   },
 
   "dialogs": {

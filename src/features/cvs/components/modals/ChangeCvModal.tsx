@@ -1,12 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-
+import React from 'react';
 import { ChangeDialog } from '@/components/dialogs/ChangeDialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import {
+import { useCreateCvForm } from '@/features/cvs/hooks/useCreateCvForm';
+import type {
   createActionTitles,
   updateActionTitles,
 } from '@/components/dialogs/types';
@@ -14,6 +13,8 @@ import {
 export interface ChangeCvModalProps {
   type: createActionTitles | updateActionTitles;
   trigger: React.ReactNode;
+  userId?: string;
+  onSuccess?: () => void;
   onSubmit?: (data: {
     name: string;
     education: string;
@@ -21,18 +22,40 @@ export interface ChangeCvModalProps {
   }) => void;
 }
 
-export function ChangeCvModal({ type, trigger, onSubmit }: ChangeCvModalProps) {
-  const { t } = useTranslation();
+export function ChangeCvModal({
+  type,
+  trigger,
+  userId,
+  onSuccess,
+  onSubmit,
+}: ChangeCvModalProps) {
+  const {
+    formData,
+    errors,
+    validateForm,
+    handleChange,
+    handleSubmit,
+    resetForm,
+    t,
+  } = useCreateCvForm({
+    userId,
+    onSuccess: () => {
+      onSuccess?.();
+    },
+  });
 
-  const [name, setName] = useState('');
-  const [education, setEducation] = useState('');
-  const [description, setDescription] = useState('');
+  const handleConfirm = async (): Promise<boolean> => {
+    if (!validateForm()) {
+      return false;
+    }
 
-  const handleConfirm = () => {
-    onSubmit?.({ name, education, description });
-    setName('');
-    setEducation('');
-    setDescription('');
+    if (onSubmit) {
+      onSubmit(formData);
+      resetForm();
+      return true;
+    }
+
+    return await handleSubmit();
   };
 
   return (
@@ -45,22 +68,35 @@ export function ChangeCvModal({ type, trigger, onSubmit }: ChangeCvModalProps) {
     >
       <div className="flex flex-col gap-9">
         <Input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={formData.name}
+          onChange={handleChange('name')}
           placeholder={t('cvs.name', 'Name')}
           required
+          error={errors.name ? t(errors.name, 'Name is required') : undefined}
         />
 
         <Input
-          value={education}
-          onChange={(e) => setEducation(e.target.value)}
+          value={formData.education}
+          onChange={handleChange('education')}
           placeholder={t('cvs.education', 'Education')}
+          required
+          error={
+            errors.education
+              ? t(errors.education, 'Education is required')
+              : undefined
+          }
         />
 
         <Textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          value={formData.description}
+          onChange={handleChange('description')}
           placeholder={t('cvs.description', 'Description')}
+          required
+          error={
+            errors.description
+              ? t(errors.description, 'Description is required')
+              : undefined
+          }
         />
       </div>
     </ChangeDialog>

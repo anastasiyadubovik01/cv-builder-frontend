@@ -40,7 +40,8 @@ export function useValidatedForm<T extends Record<string, string>>({
   };
 
   const handleChange =
-    (field: keyof T) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    (field: keyof T) =>
+    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const value = event.target.value;
 
       setFormData((prev) => ({

@@ -1,10 +1,10 @@
 import {
   ChangeCvModal,
-  ChangeCvModalProps,
+  type ChangeCvModalProps,
 } from '@/features/cvs/components/modals/ChangeCvModal';
 
 type UpdateCvModalProps = Omit<ChangeCvModalProps, 'type'>;
 
-export function UpdateCvModal({ trigger, onSubmit }: UpdateCvModalProps) {
-  return <ChangeCvModal type="Update" trigger={trigger} onSubmit={onSubmit} />;
+export function UpdateCvModal({ ...props }: UpdateCvModalProps) {
+  return <ChangeCvModal {...props} type="Update" />;
 }
