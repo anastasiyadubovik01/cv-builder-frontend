@@ -240,6 +240,11 @@
       "description": {
         "required": "Description is required"
       }
+    },
+    "notifications": {
+      "createSuccess": "CV has been successfully created!",
+      "updateSuccess": "CV has been successfully updated!",
+      "deleteSuccess": "The CV has been successfully deleted!"
     }
   },
 

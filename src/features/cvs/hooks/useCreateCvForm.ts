@@ -4,6 +4,7 @@ import { useMutation } from '@apollo/client/react';
 import { CREATE_CV_MUTATION } from '@/api/cvs';
 import { type CreateCvFormValues, createCvSchema } from '@/lib/validations/cv';
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
+import { toast } from 'sonner';
 
 const INITIAL_VALUES: CreateCvFormValues = {
   name: '',
@@ -55,6 +56,14 @@ export function useCreateCvForm({
 
       setFormData(INITIAL_VALUES);
       clearErrors();
+
+      toast.success(
+        t(
+          'cvs.notifications.createSuccess',
+          'CV has been successfully created',
+        ),
+      );
+
       onSuccess?.();
       return true;
     } catch (err) {

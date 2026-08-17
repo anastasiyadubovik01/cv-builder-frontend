@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
-
+import { toast } from 'sonner';
 import { UPDATE_CV_MUTATION } from '@/api/cvs';
 import { createCvSchema, type CreateCvFormValues } from '@/lib/validations/cv';
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
@@ -52,6 +52,11 @@ export function useUpdateCvForm({
       });
 
       clearErrors();
+
+      toast.success(
+        t('cvs.notifications.updateSuccess', 'CV was successfully updated!'),
+      );
+
       onSuccess?.();
       return true;
     } catch (err) {
