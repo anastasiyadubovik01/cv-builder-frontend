@@ -105,6 +105,12 @@ export function CvsTable({
       {editingCv && (
         <UpdateCvModal
           cvId={editingCv.id}
+          open={Boolean(editingCv)}
+          onOpenChange={(open) => {
+            if (!open) {
+              setEditingCv(null);
+            }
+          }}
           initialValues={{
             name: editingCv.name,
             education: editingCv.education,
@@ -114,7 +120,6 @@ export function CvsTable({
             onRefresh?.();
             setEditingCv(null);
           }}
-          trigger={<span className="hidden" />} // not sure
         />
       )}
     </>

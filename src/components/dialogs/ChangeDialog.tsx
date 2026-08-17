@@ -29,6 +29,8 @@ interface ChangeDialogProps {
   onConfirm: () => boolean | Promise<boolean>;
   trigger?: React.ReactNode;
   t: (key: string) => string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 export function ChangeDialog({
@@ -38,13 +40,26 @@ export function ChangeDialog({
   onConfirm,
   trigger,
   t,
+  open: externalOpen,
+  onOpenChange: externalOnOpenChange,
 }: ChangeDialogProps) {
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+
+  const isControlled = externalOpen !== undefined;
+  const isOpen = isControlled ? externalOpen : internalOpen;
+
+  const handleOpenChange = (newOpen: boolean) => {
+    if (isControlled) {
+      externalOnOpenChange?.(newOpen);
+    } else {
+      setInternalOpen(newOpen);
+    }
+  };
 
   const handleConfirm = async () => {
     const isSuccess = await onConfirm();
     if (isSuccess) {
-      setOpen(false);
+      handleOpenChange(false);
     }
   };
 
@@ -52,13 +67,15 @@ export function ChangeDialog({
   const translatedAction = getActionTranslation(actionTitle, t);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        render={trigger ? <div className="inline-block" /> : undefined}
-        nativeButton={false}
-      >
-        {trigger}
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      {trigger && (
+        <DialogTrigger
+          render={<div className="inline-block" />}
+          nativeButton={false}
+        >
+          {trigger}
+        </DialogTrigger>
+      )}
       <DialogContent>
         <DialogHeader>
           <DialogTitle>

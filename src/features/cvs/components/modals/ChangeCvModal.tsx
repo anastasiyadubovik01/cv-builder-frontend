@@ -14,10 +14,12 @@ import type { CreateCvFormValues } from '@/lib/validations/cv';
 
 export interface ChangeCvModalProps {
   type: createActionTitles | updateActionTitles;
-  trigger: React.ReactNode;
+  trigger?: React.ReactNode;
   cvId?: string;
   userId?: string;
   initialValues?: CreateCvFormValues;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   onSuccess?: () => void;
   onSubmit?: (data: CreateCvFormValues) => void;
 }
@@ -28,6 +30,8 @@ export function ChangeCvModal({
   cvId,
   userId,
   initialValues,
+  open,
+  onOpenChange,
   onSuccess,
   onSubmit,
 }: ChangeCvModalProps) {
@@ -81,6 +85,8 @@ export function ChangeCvModal({
       onConfirm={handleConfirm}
       trigger={trigger}
       t={t}
+      open={open}
+      onOpenChange={onOpenChange}
     >
       <div className="flex flex-col gap-9">
         <Input
