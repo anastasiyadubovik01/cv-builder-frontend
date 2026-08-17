@@ -170,6 +170,10 @@
     "search": "Search",
     "createCv": "Create CV",
     "loadError": "Failed to load CVs",
+    "emptyState": {
+      "admin": "No CVs found",
+      "employee": "You have no CVs yet"
+    },
     "noResults": "No CVs found"
   },
 

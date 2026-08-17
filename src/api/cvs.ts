@@ -53,3 +53,37 @@ export const CVS_QUERY: TypedDocumentNode<CvsData, CvsVariables> = gql`
     }
   }
 `;
+
+export type CreateCvInput = {
+  name: string;
+  education?: string;
+  description: string;
+  userId?: string;
+};
+
+type CreateCvData = {
+  createCv: ApiCv;
+};
+
+type CreateCvVariables = {
+  cv: CreateCvInput;
+};
+
+export const CREATE_CV_MUTATION: TypedDocumentNode<
+  CreateCvData,
+  CreateCvVariables
+> = gql`
+  mutation CreateCv($cv: CreateCvInput!) {
+    createCv(cv: $cv) {
+      id
+      created_at
+      name
+      education
+      description
+      user {
+        id
+        email
+      }
+    }
+  }
+`;

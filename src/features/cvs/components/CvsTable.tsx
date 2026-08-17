@@ -14,6 +14,7 @@ type CvsTableProps = {
   sortBy: SortField;
   sortDirection: SortDirection;
   onSort: (field: SortField) => void;
+  isAdmin?: boolean;
 };
 
 export function CvsTable({
@@ -21,8 +22,13 @@ export function CvsTable({
   sortBy,
   sortDirection,
   onSort,
+  isAdmin = false,
 }: CvsTableProps) {
   const { t } = useTranslation();
+
+  const emptyStateMessage = isAdmin
+    ? t('cvs.emptyState.admin', 'No CVs found')
+    : t('cvs.emptyState.employee', 'You have no CVs yet');
 
   const columns: DataTableColumn<Cv, SortField>[] = [
     {
@@ -67,7 +73,7 @@ export function CvsTable({
       sortBy={sortBy}
       sortDirection={sortDirection}
       onSort={onSort}
-      emptyState={t('cvs.noResults', 'No CVs found')} // add role
+      emptyState={emptyStateMessage}
       renderSubRow={(cv) =>
         cv.description ? (
           <p

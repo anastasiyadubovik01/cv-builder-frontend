@@ -1,10 +1,20 @@
+import { cookies } from 'next/headers';
+import { getT } from 'next-i18next/server';
+
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { CvsContent } from '@/features/cvs/components/CvsContent';
-
-import { getT } from 'next-i18next/server';
+import { getRoleFromJwt, getUserIdFromJwt } from '@/lib/helpers/jwt';
 
 export default async function CvsPage() {
   const { t } = await getT();
+
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('access_token')?.value;
+
+  const currentUserId = accessToken ? getUserIdFromJwt(accessToken) : null;
+  const role = accessToken ? getRoleFromJwt(accessToken) : null;
+
+  const isAdmin = role === 'Admin';
 
   return (
     <div className="min-h-screen">
@@ -14,7 +24,7 @@ export default async function CvsPage() {
         </div>
       </div>
 
-      <CvsContent />
+      <CvsContent isAdmin={isAdmin} userId={currentUserId ?? undefined} />
     </div>
   );
 }
