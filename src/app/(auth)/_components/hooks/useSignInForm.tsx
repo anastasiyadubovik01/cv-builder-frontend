@@ -5,7 +5,7 @@ import { LOGIN_MUTATION } from '@/api/auth';
 import { setAuthCookies } from '@/app/actions/auth';
 import { handleFormError } from '@/lib/error/errorHandler';
 import { SignInFormValues, signInSchema } from '@/lib/validations/auth';
-import { useValidatedForm } from '@/app/(auth)/_components/hooks/useValidatedForm';
+import { useValidatedForm } from '@/components/hooks/useValidatedForm';
 
 const INITIAL_VALUES: SignInFormValues = {
   email: '',

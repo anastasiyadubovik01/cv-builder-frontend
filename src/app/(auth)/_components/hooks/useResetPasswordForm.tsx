@@ -10,7 +10,7 @@ import {
   resetPasswordSchema,
 } from '@/lib/validations/auth';
 import { getEmailFromJwt } from '@/lib/helpers/jwt';
-import { useValidatedForm } from '@/app/(auth)/_components/hooks/useValidatedForm';
+import { useValidatedForm } from '@/components/hooks/useValidatedForm';
 
 const INITIAL_VALUES: ResetPasswordFormValues = {
   newPassword: '',

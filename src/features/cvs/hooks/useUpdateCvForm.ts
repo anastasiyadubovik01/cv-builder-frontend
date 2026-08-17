@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client/react';
 
 import { UPDATE_CV_MUTATION } from '@/api/cvs';
 import { createCvSchema, type CreateCvFormValues } from '@/lib/validations/cv';
-import { useValidatedForm } from '@/app/(auth)/_components/hooks/useValidatedForm';
+import { useValidatedForm } from '@/components/hooks/useValidatedForm';
 
 type UseUpdateCvFormOptions = {
   cvId: string;

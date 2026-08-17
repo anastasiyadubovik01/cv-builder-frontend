@@ -8,7 +8,7 @@ import {
   ForgotPasswordFormValues,
   forgotPasswordSchema,
 } from '@/lib/validations/auth';
-import { useValidatedForm } from '@/app/(auth)/_components/hooks/useValidatedForm';
+import { useValidatedForm } from '@/components/hooks/useValidatedForm';
 
 const INITIAL_VALUES: ForgotPasswordFormValues = {
   email: '',
