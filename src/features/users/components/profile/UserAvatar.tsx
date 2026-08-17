@@ -9,6 +9,7 @@ import { UPLOAD_AVATAR_MUTATION } from '@/api/profile';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { LoadingOverlay } from '@/components/ui/loading-overlay';
 import { UploadIcon } from '@/components/icons/upload-icon';
+import { fileToBase64 } from '@/lib/helpers/file-to-base64';
 
 const MAX_FILE_SIZE = 500_000;
 
@@ -22,24 +23,6 @@ type UserAvatarProps = {
   canEdit: boolean;
   onUpdated: () => Promise<unknown>;
 };
-
-function fileToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        resolve(reader.result);
-      } else {
-        reject(new Error('Failed to read file'));
-      }
-    };
-
-    reader.onerror = () => reject(reader.error);
-
-    reader.readAsDataURL(file);
-  });
-}
 
 export function UserAvatar({
   userId,
