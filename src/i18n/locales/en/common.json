@@ -222,12 +222,20 @@
 
     "search": "Search",
     "createCv": "Create CV",
+    "notFound": "CV not found",
     "loadError": "Failed to load CVs",
+    "detailsLoadError": "Failed to load CV details",
     "emptyState": {
       "admin": "No CVs found",
       "employee": "You have no CVs yet"
     },
     "noResults": "No CVs found",
+    "tabs": {
+      "details": "Details",
+      "skills": "Skills",
+      "projects": "Projects",
+      "preview": "Preview"
+    },
     "validation": {
       "name": {
         "required": "Name is required",
