@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
-
+import { handleFormError } from '@/lib/error/errorHandler';
 import { CREATE_CV_MUTATION } from '@/api/cvs';
 import { type CreateCvFormValues, createCvSchema } from '@/lib/validations/cv';
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
@@ -67,7 +67,10 @@ export function useCreateCvForm({
       onSuccess?.();
       return true;
     } catch (err) {
-      console.error('Failed to create CV:', err);
+      handleFormError(err, {
+        t,
+        context: 'Create CV',
+      });
       return false;
     }
   };

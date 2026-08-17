@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DELETE_CV_MUTATION } from '@/api/cvs';
 import { toast } from '@/components/ui/sonner';
+import { handleFormError } from '@/lib/error/errorHandler';
 
 type DeleteCvData = {
   deleteCv: {
@@ -47,7 +48,10 @@ export function useDeleteCv() {
       }
       return isSuccess;
     } catch (err) {
-      console.error('Failed to delete CV:', err);
+      handleFormError(err, {
+        t,
+        context: 'Delete CV',
+      });
       return false;
     }
   };

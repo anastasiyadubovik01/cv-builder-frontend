@@ -4,6 +4,7 @@ import { UPDATE_CV_MUTATION } from '@/api/cvs';
 import { createCvSchema, type CreateCvFormValues } from '@/lib/validations/cv';
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
 import { toast } from '@/components/ui/sonner';
+import { handleFormError } from '@/lib/error/errorHandler';
 
 type UseUpdateCvFormOptions = {
   cvId: string;
@@ -60,7 +61,10 @@ export function useUpdateCvForm({
       onSuccess?.();
       return true;
     } catch (err) {
-      console.error('Failed to update CV:', err);
+      handleFormError(err, {
+        t,
+        context: 'Update CV',
+      });
       return false;
     }
   };
