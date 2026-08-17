@@ -2,9 +2,11 @@
 
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 
 import { ChevronLeftIcon } from '@/components/icons/chevron-left-icon';
 import { DataTable, type DataTableColumn } from '@/components/ui/data-table';
+import { RowActionsMenu } from '@/components/ui/row-actions-menu';
 
 import type { SortDirection, SortField, User } from '@/features/users/types';
 
@@ -13,6 +15,7 @@ type UsersTableProps = {
   sortBy: SortField;
   sortDirection: SortDirection;
   onSort: (field: SortField) => void;
+  isAdmin: boolean;
 };
 
 export function UsersTable({
@@ -20,8 +23,10 @@ export function UsersTable({
   sortBy,
   sortDirection,
   onSort,
+  isAdmin,
 }: UsersTableProps) {
   const { t } = useTranslation();
+  const [openMenuUserId, setOpenMenuUserId] = useState<string | null>(null);
 
   const columns: DataTableColumn<User, SortField>[] = [
     {
@@ -67,6 +72,7 @@ export function UsersTable({
       id: 'department',
       sortKey: 'department',
       header: t('users.table.department'),
+      widthClassName: 'w-[220px]',
       render: (user) => user.department,
     },
     {
@@ -80,16 +86,44 @@ export function UsersTable({
     {
       id: 'actions',
       header: '',
-      widthClassName: 'w-10',
-      render: (user) => (
-        <Link
-          href={`/users/${user.id}`}
-          aria-label={`Open ${user.firstName} ${user.lastName}`}
-          className="flex size-10 items-center justify-center text-[var(--users-arrow)]"
-        >
-          <ChevronLeftIcon className="size-5 rotate-180" />
-        </Link>
-      ),
+      widthClassName: 'w-14',
+      render: (user) => {
+        if (!isAdmin) {
+          return (
+            <Link
+              href={`/users/${user.id}`}
+              aria-label={`Open ${user.firstName} ${user.lastName}`}
+              className="flex size-10 items-center justify-center text-[var(--users-arrow)]"
+            >
+              <ChevronLeftIcon className="size-5 rotate-180" />
+            </Link>
+          );
+        }
+
+        const isOpen = openMenuUserId === user.id;
+
+        return (
+          <RowActionsMenu
+            open={isOpen}
+            onOpenChange={(open) => setOpenMenuUserId(open ? user.id : null)}
+            ariaLabel={`Actions for ${user.firstName} ${user.lastName}`}
+            actions={[
+              {
+                label: t('dialogs.actions.view'),
+                href: `/users/${user.id}`,
+              },
+              {
+                label: t('dialogs.actions.update'),
+                onClick: () => {},
+              },
+              {
+                label: t('dialogs.actions.delete'),
+                onClick: () => {},
+              },
+            ]}
+          />
+        );
+      },
     },
   ];
 

@@ -136,7 +136,8 @@
         "profile": "Profile",
         "skills": "Skills",
         "languages": "Languages",
-        "cvs": "CVs"
+        "cvs": "CVs",
+        "loadError": "Failed to load profile information"
       },
       "avatar": {
         "upload": "Upload avatar image",
@@ -179,7 +180,8 @@
       "add": "Add",
       "update": "Update",
       "delete": "Delete",
-      "remove": "Remove"
+      "remove": "Remove",
+      "view": "View"
     },
     "itemTypes": {
       "user": "user",
