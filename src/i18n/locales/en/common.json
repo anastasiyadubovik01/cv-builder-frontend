@@ -136,8 +136,17 @@
         "profile": "Profile",
         "skills": "Skills",
         "languages": "Languages",
-        "cvs": "CVs",
-        "loadError": "Failed to load profile information"
+        "cvs": "CVs"
+      },
+
+      "loadError": "Failed to load profile information",
+      "notAssigned": "Not assigned",
+
+      "validation": {
+        "firstNameRequired": "First name is required",
+        "lastNameRequired": "Last name is required",
+        "departmentRequired": "Department is required",
+        "positionRequired": "Position is required"
       },
       "avatar": {
         "upload": "Upload avatar image",

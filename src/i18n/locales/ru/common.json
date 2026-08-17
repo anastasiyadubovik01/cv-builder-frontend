@@ -135,8 +135,17 @@
         "profile": "Профиль",
         "skills": "Навыки",
         "languages": "Языки",
-        "cvs": "Резюме",
-        "loadError": "Не удалось загрузить информацию профиля"
+        "cvs": "Резюме"
+      },
+
+      "loadError": "Не удалось загрузить информацию профиля",
+      "notAssigned": "Не назначено",
+
+      "validation": {
+        "firstNameRequired": "Имя обязательно",
+        "lastNameRequired": "Фамилия обязательна",
+        "departmentRequired": "Отдел обязателен",
+        "positionRequired": "Должность обязательна"
       },
       "avatar": {
         "upload": "Загрузить изображение",

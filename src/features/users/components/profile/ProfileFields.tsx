@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -101,6 +101,26 @@ export function ProfileFields({
   const trimmedFirstName = currentFirstName.trim();
   const trimmedLastName = currentLastName.trim();
 
+  const firstNameError =
+    trimmedFirstName.length === 0
+      ? t('users.details.validation.firstNameRequired')
+      : null;
+
+  const lastNameError =
+    trimmedLastName.length === 0
+      ? t('users.details.validation.lastNameRequired')
+      : null;
+
+  const departmentError =
+    currentDepartmentId === ''
+      ? t('users.details.validation.departmentRequired')
+      : null;
+
+  const positionError =
+    currentPositionId === ''
+      ? t('users.details.validation.positionRequired')
+      : null;
+
   const namesChanged =
     trimmedFirstName !== firstName.trim() ||
     trimmedLastName !== lastName.trim();
@@ -111,12 +131,12 @@ export function ProfileFields({
   const isChanged = namesChanged || organizationChanged;
 
   const isValid =
-    trimmedFirstName.length > 0 &&
+    !firstNameError &&
+    !lastNameError &&
+    !departmentError &&
+    !positionError &&
     trimmedFirstName.length <= 100 &&
-    trimmedLastName.length > 0 &&
-    trimmedLastName.length <= 100 &&
-    currentDepartmentId !== '' &&
-    currentPositionId !== '';
+    trimmedLastName.length <= 100;
 
   const isUpdating = profileUpdating || userUpdating;
 
@@ -182,6 +202,12 @@ export function ProfileFields({
             maxLength={100}
             className="h-12 w-full disabled:opacity-100"
           />
+
+          {canEdit && firstNameError && (
+            <p className="ml-4 mt-1 text-sm text-destructive">
+              {firstNameError}
+            </p>
+          )}
         </div>
 
         <div>
@@ -197,6 +223,12 @@ export function ProfileFields({
             maxLength={100}
             className="h-12 w-full disabled:opacity-100"
           />
+
+          {canEdit && lastNameError && (
+            <p className="ml-4 mt-1 text-sm text-destructive">
+              {lastNameError}
+            </p>
+          )}
         </div>
 
         <div>
@@ -215,7 +247,9 @@ export function ProfileFields({
           >
             <SelectTrigger id="department" className="h-12 w-full">
               <SelectValue>
-                {selectedDepartment?.name ?? department}
+                {selectedDepartment?.name ||
+                  department ||
+                  t('users.details.notAssigned')}
               </SelectValue>
             </SelectTrigger>
 
@@ -227,6 +261,12 @@ export function ProfileFields({
               ))}
             </SelectContent>
           </Select>
+
+          {canEdit && departmentError && (
+            <p className="ml-4 mt-1 text-sm text-destructive">
+              {departmentError}
+            </p>
+          )}
         </div>
 
         <div>
@@ -244,7 +284,11 @@ export function ProfileFields({
             disabled={!canEdit}
           >
             <SelectTrigger id="position" className="h-12 w-full">
-              <SelectValue>{selectedPosition?.name ?? position}</SelectValue>
+              <SelectValue>
+                {selectedPosition?.name ||
+                  position ||
+                  t('users.details.notAssigned')}
+              </SelectValue>
             </SelectTrigger>
 
             <SelectContent>
@@ -255,6 +299,12 @@ export function ProfileFields({
               ))}
             </SelectContent>
           </Select>
+
+          {canEdit && positionError && (
+            <p className="ml-4 mt-1 text-sm text-destructive">
+              {positionError}
+            </p>
+          )}
         </div>
       </div>
 
