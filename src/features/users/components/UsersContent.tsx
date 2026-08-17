@@ -14,6 +14,8 @@ import {
   DEFAULT_PAGE_SIZE,
 } from '@/lib/constants/pagination';
 import { LoadingOverlay } from '@/components/ui/loading-overlay';
+import { getAccessToken } from '@/lib/auth/tokenUtils';
+import { getRoleFromJwt } from '@/lib/helpers/jwt';
 
 import type { ApiUser } from '@/api/users';
 import type { SortDirection, SortField, User } from '@/features/users/types';
@@ -28,6 +30,9 @@ export function UsersContent() {
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [allUsers, setAllUsers] = useState<ApiUser[]>([]);
   const [loadError, setLoadError] = useState(false);
+
+  const accessToken = getAccessToken();
+  const isAdmin = accessToken ? getRoleFromJwt(accessToken) === 'Admin' : false;
 
   const { data, loading, error, fetchMore, refetch, client } = useQuery(
     USERS_QUERY,
@@ -195,6 +200,7 @@ export function UsersContent() {
                 sortBy={sortBy}
                 sortDirection={sortDirection}
                 onSort={handleSort}
+                isAdmin={isAdmin}
               />
             </div>
 

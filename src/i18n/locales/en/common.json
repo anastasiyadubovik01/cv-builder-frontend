@@ -179,7 +179,8 @@
       "add": "Add",
       "update": "Update",
       "delete": "Delete",
-      "remove": "Remove"
+      "remove": "Remove",
+      "view": "View"
     },
     "itemTypes": {
       "user": "user",
