@@ -12,7 +12,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import {
   createActionTitles,
   itemType,
@@ -27,7 +26,7 @@ interface ChangeDialogProps {
   actionTitle: createActionTitles | updateActionTitles;
   itemType: itemType;
   children: React.ReactNode;
-  onConfirm: () => void;
+  onConfirm: () => boolean | Promise<boolean>;
   trigger?: React.ReactNode;
   t: (key: string) => string;
 }
@@ -42,9 +41,11 @@ export function ChangeDialog({
 }: ChangeDialogProps) {
   const [open, setOpen] = useState(false);
 
-  const handleConfirm = () => {
-    onConfirm();
-    setOpen(false);
+  const handleConfirm = async () => {
+    const isSuccess = await onConfirm();
+    if (isSuccess) {
+      setOpen(false);
+    }
   };
 
   const translatedItemType = getItemTypeTranslation(itemType, t);
