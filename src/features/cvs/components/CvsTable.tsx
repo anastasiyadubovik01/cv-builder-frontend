@@ -5,6 +5,7 @@ import { DataTable, type DataTableColumn } from '@/components/ui/data-table';
 import type { Cv, SortDirection, SortField } from '@/features/cvs/types';
 import { useState } from 'react';
 import { RowActionsMenu } from '@/components/ui/row-actions-menu';
+import { UpdateCvModal } from '@/features/cvs/components/modals/UpdateCvModal';
 
 type CvsTableProps = {
   cvs: Cv[];
@@ -12,6 +13,7 @@ type CvsTableProps = {
   sortDirection: SortDirection;
   onSort: (field: SortField) => void;
   isAdmin?: boolean;
+  onRefresh?: () => void;
 };
 
 export function CvsTable({
@@ -20,6 +22,7 @@ export function CvsTable({
   sortDirection,
   onSort,
   isAdmin = false,
+  onRefresh,
 }: CvsTableProps) {
   const { t } = useTranslation();
 
@@ -28,6 +31,7 @@ export function CvsTable({
     : t('cvs.emptyState.employee', 'You have no CVs yet');
 
   const [openMenuCvId, setOpenMenuCvId] = useState<string | null>(null);
+  const [editingCv, setEditingCv] = useState<Cv | null>(null);
 
   const columns: DataTableColumn<Cv, SortField>[] = [
     {
@@ -62,9 +66,7 @@ export function CvsTable({
             },
             {
               label: t('dialogs.actions.update', 'Update'),
-              onClick: () => {
-                // update CV
-              },
+              onClick: () => setEditingCv(cv),
             },
             {
               label: t('dialogs.actions.delete', 'Delete'),
@@ -79,24 +81,42 @@ export function CvsTable({
   ];
 
   return (
-    <DataTable
-      data={cvs}
-      columns={columns}
-      getRowKey={(cv) => cv.id}
-      sortBy={sortBy}
-      sortDirection={sortDirection}
-      onSort={onSort}
-      emptyState={emptyStateMessage}
-      renderSubRow={(cv) =>
-        cv.description ? (
-          <p
-            className="text-[16px] font-regular leading-relaxed"
-            style={{ color: 'var(--users-foreground)', opacity: 0.5 }}
-          >
-            {cv.description}
-          </p>
-        ) : null
-      }
-    />
+    <>
+      <DataTable
+        data={cvs}
+        columns={columns}
+        getRowKey={(cv) => cv.id}
+        sortBy={sortBy}
+        sortDirection={sortDirection}
+        onSort={onSort}
+        emptyState={emptyStateMessage}
+        renderSubRow={(cv) =>
+          cv.description ? (
+            <p
+              className="text-[16px] font-regular leading-relaxed"
+              style={{ color: 'var(--users-foreground)', opacity: 0.5 }}
+            >
+              {cv.description}
+            </p>
+          ) : null
+        }
+      />
+
+      {editingCv && (
+        <UpdateCvModal
+          cvId={editingCv.id}
+          initialValues={{
+            name: editingCv.name,
+            education: editingCv.education,
+            description: editingCv.description,
+          }}
+          onSuccess={() => {
+            onRefresh?.();
+            setEditingCv(null);
+          }}
+          trigger={<span className="hidden" />} // not sure
+        />
+      )}
+    </>
   );
 }

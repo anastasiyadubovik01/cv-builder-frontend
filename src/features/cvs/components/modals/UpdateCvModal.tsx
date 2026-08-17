@@ -5,6 +5,6 @@ import {
 
 type UpdateCvModalProps = Omit<ChangeCvModalProps, 'type'>;
 
-export function UpdateCvModal({ ...props }: UpdateCvModalProps) {
+export function UpdateCvModal(props: UpdateCvModalProps) {
   return <ChangeCvModal {...props} type="Update" />;
 }

@@ -87,3 +87,14 @@ export const CREATE_CV_MUTATION: TypedDocumentNode<
     }
   }
 `;
+
+export const UPDATE_CV_MUTATION = gql`
+  mutation UpdateCv($cv: UpdateCvInput!) {
+    updateCv(cv: $cv) {
+      id
+      name
+      education
+      description
+    }
+  }
+`;

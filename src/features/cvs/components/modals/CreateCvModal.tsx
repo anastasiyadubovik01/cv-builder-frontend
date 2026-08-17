@@ -5,6 +5,6 @@ import {
 
 type CreateCvModalProps = Omit<ChangeCvModalProps, 'type'>;
 
-export function CreateCvModal({ ...props }: CreateCvModalProps) {
+export function CreateCvModal(props: CreateCvModalProps) {
   return <ChangeCvModal {...props} type="Create" />;
 }
