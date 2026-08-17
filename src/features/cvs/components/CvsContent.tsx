@@ -2,19 +2,19 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery } from '@apollo/client/react';
-import { CREATE_CV_MUTATION, CVS_QUERY } from '@/api/cvs';
+import { useQuery } from '@apollo/client/react';
+import { CVS_QUERY } from '@/api/cvs';
+import { PlusIcon } from '@/components/icons/plus-icon';
+import { Button } from '@/components/ui/button';
+import { LoadingOverlay } from '@/components/ui/loading-overlay';
 import { SearchInput } from '@/components/ui/search-input';
 import { Pagination } from '@/components/ui/pagination';
 import { CvsTable } from '@/features/cvs/components/CvsTable';
+import { CreateCvModal } from '@/features/cvs/components/modals/CreateCvModal';
 import {
   BACKEND_PAGE_SIZE,
   DEFAULT_PAGE_SIZE,
 } from '@/lib/constants/pagination';
-import { Button } from '@/components/ui/button';
-import { PlusIcon } from '@/components/icons/plus-icon';
-import { CreateCvModal } from '@/features/cvs/components/modals/CreateCvModal';
-import { LoadingOverlay } from '@/components/ui/loading-overlay';
 import type { ApiCv } from '@/api/cvs';
 import type { Cv, SortDirection, SortField } from '@/features/cvs/types';
 
@@ -42,8 +42,6 @@ export function CvsContent({ isAdmin = false, userId }: CvsContentProps) {
       },
     },
   });
-
-  const [createCv, { loading: isCreating }] = useMutation(CREATE_CV_MUTATION);
 
   useEffect(() => {
     if (!data) {
@@ -92,29 +90,6 @@ export function CvsContent({ isAdmin = false, userId }: CvsContentProps) {
 
     void loadAllCvs();
   }, [data, fetchMore]);
-
-  const handleCreateCv = async (formData: {
-    name: string;
-    education: string;
-    description: string;
-  }) => {
-    try {
-      await createCv({
-        variables: {
-          cv: {
-            name: formData.name,
-            education: formData.education || undefined,
-            description: formData.description,
-            userId: userId || undefined,
-          },
-        },
-      });
-
-      await refetch();
-    } catch (err) {
-      console.error('Failed to create CV:', err);
-    }
-  };
 
   const cvs: Cv[] = allCvs.map((cv) => ({
     id: cv.id,
@@ -174,8 +149,7 @@ export function CvsContent({ isAdmin = false, userId }: CvsContentProps) {
   };
 
   const hasError = Boolean(error) || loadError;
-  const isLoading =
-    loading || isCreating || Boolean(data && allCvs.length < data.cvs.total);
+  const isLoading = loading || Boolean(data && allCvs.length < data.cvs.total);
 
   return (
     <div className="flex h-[calc(100dvh-3.5rem)] min-h-0 flex-col overflow-hidden">
@@ -191,6 +165,10 @@ export function CvsContent({ isAdmin = false, userId }: CvsContentProps) {
           className="bg-background"
         />
         <CreateCvModal
+          userId={userId}
+          onSuccess={() => {
+            void refetch();
+          }}
           trigger={
             <Button
               type="button"
@@ -201,9 +179,6 @@ export function CvsContent({ isAdmin = false, userId }: CvsContentProps) {
               {t('cvs.createCv', 'CREATE CV')}
             </Button>
           }
-          onSubmit={(formData) => {
-            void handleCreateCv(formData);
-          }}
         />
       </div>
 
@@ -226,6 +201,9 @@ export function CvsContent({ isAdmin = false, userId }: CvsContentProps) {
                 sortDirection={sortDirection}
                 onSort={handleSort}
                 isAdmin={isAdmin}
+                onRefresh={() => {
+                  void refetch();
+                }}
               />
             </div>
 
