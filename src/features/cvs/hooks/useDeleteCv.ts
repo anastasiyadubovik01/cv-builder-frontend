@@ -17,13 +17,14 @@ type DeleteCvVariables = {
   };
 };
 
-export function useDeleteCv() {
+type UseDeleteCvOptions = {
+  onSuccess?: () => void;
+};
+
+export function useDeleteCv(options: UseDeleteCvOptions = {}) {
   const { t } = useTranslation();
   const [deleteCv, { loading }] = useMutation<DeleteCvData, DeleteCvVariables>(
     DELETE_CV_MUTATION,
-    {
-      refetchQueries: ['Cvs'],
-    },
   );
 
   const handleDelete = async (cvId: string): Promise<boolean> => {
@@ -45,6 +46,7 @@ export function useDeleteCv() {
             'The CV was successfully deleted!',
           ),
         );
+        options.onSuccess?.();
       }
       return isSuccess;
     } catch (err) {
