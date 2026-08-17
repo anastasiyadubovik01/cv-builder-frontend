@@ -161,9 +161,15 @@
   },
 
   "cvs": {
-    "name": "Имя",
+    "name": "Название",
     "education": "Образование",
-    "description": "Описание"
+    "employee": "Сотрудник",
+    "description": "Описание",
+
+    "search": "Поиск",
+    "createCv": "Создать резюме",
+    "loadError": "Не удалось загрузить резюме",
+    "noResults": "Резюме не найдены"
   },
 
   "dialogs": {

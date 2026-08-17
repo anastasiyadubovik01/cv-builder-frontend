@@ -164,7 +164,13 @@
   "cvs": {
     "name": "Name",
     "education": "Education",
-    "description": "Description"
+    "employee": "Employee",
+    "description": "Description",
+
+    "search": "Search",
+    "createCv": "Create CV",
+    "loadError": "Failed to load CVs",
+    "noResults": "No CVs found"
   },
 
   "dialogs": {

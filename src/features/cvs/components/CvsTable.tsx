@@ -28,17 +28,17 @@ export function CvsTable({
     {
       id: 'name',
       sortKey: 'name',
-      header: t('cvs.table.name', 'Name'),
+      header: t('cvs.name', 'Name'),
       render: (cv) => cv.name,
     },
     {
       id: 'education',
-      header: t('cvs.table.education', 'Education'),
+      header: t('cvs.education', 'Education'),
       render: (cv) => cv.education,
     },
     {
       id: 'employee',
-      header: t('cvs.table.employee', 'Employee'),
+      header: t('cvs.employee', 'Employee'),
       render: (cv) => cv.employee,
     },
     {
@@ -68,14 +68,16 @@ export function CvsTable({
       sortDirection={sortDirection}
       onSort={onSort}
       emptyState={t('cvs.noResults', 'No CVs found')}
-      renderSubRow={(cv) => (
-        <p
-          className="text-[16px] font-regular leading-relaxed"
-          style={{ color: 'var(--users-foreground)', opacity: 0.5 }}
-        >
-          {cv.description}
-        </p>
-      )}
+      renderSubRow={(cv) =>
+        cv.description ? (
+          <p
+            className="text-[16px] font-regular leading-relaxed"
+            style={{ color: 'var(--users-foreground)', opacity: 0.5 }}
+          >
+            {cv.description}
+          </p>
+        ) : null
+      }
     />
   );
 }
