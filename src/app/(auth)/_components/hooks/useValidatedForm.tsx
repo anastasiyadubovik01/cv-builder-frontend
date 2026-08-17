@@ -39,23 +39,49 @@ export function useValidatedForm<T extends Record<string, string>>({
     return true;
   };
 
+  const setFieldValue = (field: keyof T, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+
+    if (errors[field]) {
+      setErrors((prev) => ({
+        ...prev,
+        [field]: undefined,
+      }));
+    }
+  };
+
   const handleChange =
     (field: keyof T) =>
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      const value = event.target.value;
+      setFieldValue(field, event.target.value);
+    };
 
-      setFormData((prev) => ({
+  const validateField = (field: keyof T): boolean => {
+    const result = schema.safeParse(formData);
+
+    if (result.success) {
+      setErrors((prev) => ({
         ...prev,
-        [field]: value,
+        [field]: undefined,
       }));
 
-      if (errors[field]) {
-        setErrors((prev) => ({
-          ...prev,
-          [field]: undefined,
-        }));
-      }
-    };
+      return true;
+    }
+
+    const issue = result.error.issues.find(
+      (item) => item.path[0] === String(field),
+    );
+
+    setErrors((prev) => ({
+      ...prev,
+      [field]: issue?.message,
+    }));
+
+    return !issue;
+  };
 
   const clearErrors = () => {
     setErrors({});
@@ -67,6 +93,8 @@ export function useValidatedForm<T extends Record<string, string>>({
     errors,
     setErrors,
     validateForm,
+    validateField,
+    setFieldValue,
     handleChange,
     clearErrors,
   };

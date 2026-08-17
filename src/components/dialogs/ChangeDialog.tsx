@@ -29,6 +29,8 @@ interface ChangeDialogProps {
   onConfirm: () => boolean | Promise<boolean>;
   trigger?: React.ReactNode;
   t: (key: string) => string;
+  confirmDisabled?: boolean;
+  size?: 'default' | 'sm' | 'wide';
 }
 
 export function ChangeDialog({
@@ -38,6 +40,8 @@ export function ChangeDialog({
   onConfirm,
   trigger,
   t,
+  confirmDisabled = false,
+  size = 'default',
 }: ChangeDialogProps) {
   const [open, setOpen] = useState(false);
 
@@ -59,7 +63,7 @@ export function ChangeDialog({
       >
         {trigger}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent size={size}>
         <DialogHeader>
           <DialogTitle>
             {translatedAction} {translatedItemType}
@@ -69,7 +73,10 @@ export function ChangeDialog({
         {children}
         <DialogFooter>
           <DialogCancel>{t('dialogs.common.cancel')}</DialogCancel>
-          <DialogAction onClick={handleConfirm}>
+          <DialogAction
+            onClick={() => void handleConfirm()}
+            disabled={confirmDisabled}
+          >
             {translatedAction}
           </DialogAction>
         </DialogFooter>

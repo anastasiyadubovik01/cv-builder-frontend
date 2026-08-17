@@ -8,19 +8,23 @@ import { USERS_QUERY } from '@/api/users';
 import { SearchInput } from '@/components/ui/search-input';
 import { Pagination } from '@/components/ui/pagination';
 import { Button } from '@/components/ui/button';
+import { PlusIcon } from '@/components/icons/plus-icon';
 import { UsersTable } from '@/features/users/components/UsersTable';
+import { CreateUserModal } from './CreateUserModal';
 import {
   BACKEND_PAGE_SIZE,
   DEFAULT_PAGE_SIZE,
 } from '@/lib/constants/pagination';
 import { LoadingOverlay } from '@/components/ui/loading-overlay';
-import { getAccessToken } from '@/lib/auth/tokenUtils';
-import { getRoleFromJwt } from '@/lib/helpers/jwt';
 
 import type { ApiUser } from '@/api/users';
 import type { SortDirection, SortField, User } from '@/features/users/types';
 
-export function UsersContent() {
+type UsersContentProps = {
+  isAdmin: boolean;
+};
+
+export function UsersContent({ isAdmin }: UsersContentProps) {
   const { t } = useTranslation();
 
   const [search, setSearch] = useState('');
@@ -30,9 +34,6 @@ export function UsersContent() {
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [allUsers, setAllUsers] = useState<ApiUser[]>([]);
   const [loadError, setLoadError] = useState(false);
-
-  const accessToken = getAccessToken();
-  const isAdmin = accessToken ? getRoleFromJwt(accessToken) === 'Admin' : false;
 
   const { data, loading, error, fetchMore, refetch, client } = useQuery(
     USERS_QUERY,
@@ -171,7 +172,7 @@ export function UsersContent() {
     <div className="flex h-[calc(100dvh-3.5rem)] min-h-0 flex-col overflow-hidden">
       {!hasError && isLoading && <LoadingOverlay />}
 
-      <div className="ml-6 mt-[7px] shrink-0">
+      <div className="mx-6 mt-[7px] flex shrink-0 items-center justify-between">
         <SearchInput
           value={search}
           onChange={(event) => {
@@ -181,6 +182,27 @@ export function UsersContent() {
           placeholder={t('users.search')}
           className="bg-background"
         />
+
+        {isAdmin && (
+          <CreateUserModal
+            onSuccess={async () => {
+              await refetch();
+            }}
+            trigger={
+              <Button
+                type="button"
+                variant="primaryV2"
+                className="w-10 border-transparent px-0 lg:w-auto lg:gap-3 lg:border-primary lg:px-5"
+              >
+                <PlusIcon className="size-6" />
+
+                <span className="hidden lg:inline">
+                  {t('users.create.button')}
+                </span>
+              </Button>
+            }
+          />
+        )}
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col px-5 pt-4">
