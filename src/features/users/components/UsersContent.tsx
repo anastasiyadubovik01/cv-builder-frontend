@@ -194,7 +194,7 @@ export function UsersContent() {
           </div>
         ) : (
           <>
-            <div className="min-h-0 flex-1 overflow-y-auto">
+            <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]">
               <UsersTable
                 users={paginatedUsers}
                 sortBy={sortBy}

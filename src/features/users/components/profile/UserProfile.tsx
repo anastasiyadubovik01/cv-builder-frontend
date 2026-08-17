@@ -18,7 +18,7 @@ type UserProfileProps = {
 };
 
 export function UserProfile({ userId, canEdit, isOwner }: UserProfileProps) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const { data, loading, error, refetch } = useQuery(USER_QUERY, {
     variables: {
@@ -34,11 +34,11 @@ export function UserProfile({ userId, canEdit, isOwner }: UserProfileProps) {
     return (
       <div className="flex flex-col items-center gap-4 pt-10 text-center">
         <p className="text-sm text-foreground">
-          Failed to load profile information
+          {t('users.details.loadError')}
         </p>
 
         <Button variant="secondary" type="button" onClick={() => refetch()}>
-          Retry
+          {t('retry')}
         </Button>
       </div>
     );
