@@ -1,7 +1,7 @@
 import {
   ChangeCvModal,
   ChangeCvModalProps,
-} from '@/features/cvs/components/ChangeCvModal';
+} from '@/features/cvs/components/modals/ChangeCvModal';
 
 type UpdateCvModalProps = Omit<ChangeCvModalProps, 'type'>;
 

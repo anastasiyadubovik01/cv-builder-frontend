@@ -67,7 +67,7 @@ export function CvsTable({
       sortBy={sortBy}
       sortDirection={sortDirection}
       onSort={onSort}
-      emptyState={t('cvs.noResults', 'No CVs found')}
+      emptyState={t('cvs.noResults', 'No CVs found')} // add role
       renderSubRow={(cv) =>
         cv.description ? (
           <p

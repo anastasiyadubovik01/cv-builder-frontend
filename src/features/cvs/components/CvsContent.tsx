@@ -13,7 +13,7 @@ import {
 } from '@/lib/constants/pagination';
 import { Button } from '@/components/ui/button';
 import { PlusIcon } from '@/components/icons/plus-icon';
-import { CreateCvModal } from '@/features/cvs/components/CreateCvModal';
+import { CreateCvModal } from '@/features/cvs/components/modals/CreateCvModal';
 import { LoadingOverlay } from '@/components/ui/loading-overlay';
 import type { ApiCv } from '@/api/cvs';
 import type { Cv, SortDirection, SortField } from '@/features/cvs/types';
