@@ -130,6 +130,34 @@
       "email": "Email",
       "department": "Department",
       "position": "Position"
+    },
+    "details": {
+      "tabs": {
+        "profile": "Profile",
+        "skills": "Skills",
+        "languages": "Languages",
+        "cvs": "CVs"
+      },
+      "avatar": {
+        "upload": "Upload avatar image",
+        "uploading": "Uploading...",
+        "hint": "png, jpg or gif no more than 0.5MB",
+        "invalidType": "Only PNG, JPG and GIF files are allowed",
+        "tooLarge": "Image must be no larger than 0.5 MB",
+        "uploadSuccess": "Avatar updated successfully",
+        "uploadError": "Failed to upload avatar"
+      },
+      "fields": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "department": "Department",
+        "position": "Position"
+      },
+      "memberSince": "A member since {{date}}",
+      "updateSuccess": "Success",
+      "updateSuccessDescription": "Profile updated successfully",
+      "updateError": "Error",
+      "updateErrorDescription": "Failed to update profile"
     }
   },
 
