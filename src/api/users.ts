@@ -265,3 +265,64 @@ export const USERS_QUERY: TypedDocumentNode<UsersData, UsersVariables> = gql`
     }
   }
 `;
+
+type CreateUserData = {
+  createUser: {
+    id: string;
+    email: string;
+    role: 'Employee' | 'Admin';
+    profile: {
+      first_name: string | null;
+      last_name: string | null;
+    };
+    department: {
+      id: string;
+      name: string;
+    } | null;
+    position: {
+      id: string;
+      name: string;
+    } | null;
+  };
+};
+
+type CreateUserVariables = {
+  user: {
+    auth: {
+      email: string;
+      password: string;
+    };
+    profile: {
+      first_name: string;
+      last_name: string;
+    };
+    departmentId: string;
+    positionId: string;
+    role: 'Employee' | 'Admin';
+  };
+};
+
+export const CREATE_USER_MUTATION: TypedDocumentNode<
+  CreateUserData,
+  CreateUserVariables
+> = gql`
+  mutation CreateUser($user: CreateUserInput!) {
+    createUser(user: $user) {
+      id
+      email
+      role
+      profile {
+        first_name
+        last_name
+      }
+      department {
+        id
+        name
+      }
+      position {
+        id
+        name
+      }
+    }
+  }
+`;

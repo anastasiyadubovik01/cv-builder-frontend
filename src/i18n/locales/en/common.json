@@ -136,8 +136,19 @@
         "profile": "Profile",
         "skills": "Skills",
         "languages": "Languages",
-        "cvs": "CVs",
-        "loadError": "Failed to load profile information"
+        "cvs": "CVs"
+      },
+
+      "loadError": "Failed to load profile information",
+      "notAssigned": "Not assigned",
+
+      "validation": {
+        "firstNameRequired": "First name is required",
+        "lastNameRequired": "Last name is required",
+        "departmentRequired": "Department is required",
+        "positionRequired": "Position is required",
+        "firstNameMaxLength": "First name must be 100 characters or less",
+        "lastNameMaxLength": "Last name must be 100 characters or less"
       },
       "avatar": {
         "upload": "Upload avatar image",
@@ -159,6 +170,47 @@
       "updateSuccessDescription": "Profile updated successfully",
       "updateError": "Error",
       "updateErrorDescription": "Failed to update profile"
+    },
+    "create": {
+      "button": "Create user",
+      "email": "Email",
+      "password": "Password",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "department": "Department",
+      "position": "Position",
+      "role": "Role",
+      "success": "User created successfully",
+      "error": "Failed to create user"
+    },
+    "roles": {
+      "employee": "Employee",
+      "admin": "Admin"
+    },
+    "validation": {
+      "email": {
+        "required": "Email is required",
+        "invalid": "Invalid email address"
+      },
+      "password": {
+        "required": "Password is required",
+        "minLength": "Minimum 6 characters"
+      },
+      "firstName": {
+        "required": "First name is required"
+      },
+      "lastName": {
+        "required": "Last name is required"
+      },
+      "department": {
+        "required": "Department is required"
+      },
+      "position": {
+        "required": "Position is required"
+      },
+      "role": {
+        "required": "Role is required"
+      }
     }
   },
 
