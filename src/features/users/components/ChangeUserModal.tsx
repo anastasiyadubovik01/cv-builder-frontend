@@ -17,7 +17,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import type { CreateUserFormValues } from '@/lib/validations/user';
-import { Label } from '@/components/ui/label';
 
 type SelectOption = {
   value: string;
@@ -28,6 +27,8 @@ type NamedEntity = {
   id: string;
   name: string;
 };
+
+const PASSWORD_MASK = '************';
 
 export type ChangeUserModalProps = {
   type: createActionTitles | updateActionTitles;
@@ -117,7 +118,7 @@ export function ChangeUserModal({
         />
 
         <PasswordInput
-          value={authDisabled ? '************' : formData.password}
+          value={authDisabled ? PASSWORD_MASK : formData.password}
           onChange={handleChange('password')}
           onBlur={() => validateField('password')}
           placeholder={t('users.create.password')}
@@ -141,10 +142,7 @@ export function ChangeUserModal({
           error={errors.lastName ? t(errors.lastName) : undefined}
         />
 
-        <div className="relative">
-          <Label className="absolute -top-4 left-2.5 px-1 text-xs">
-            {t('users.create.department')}
-          </Label>
+        <div>
           <Select
             items={departmentItems}
             value={formData.departmentId}
@@ -155,6 +153,7 @@ export function ChangeUserModal({
             }}
           >
             <SelectTrigger
+              label={t('users.create.department')}
               className="border-[#AEAEAE] bg-secondary"
               aria-label={t('users.create.department')}
               aria-invalid={Boolean(errors.departmentId)}
@@ -178,10 +177,8 @@ export function ChangeUserModal({
             </p>
           )}
         </div>
-        <div className="relative">
-          <Label className="absolute -top-4 left-2.5 px-1 text-xs">
-            {t('users.create.position')}
-          </Label>
+
+        <div>
           <Select
             items={positionItems}
             value={formData.positionId}
@@ -192,6 +189,7 @@ export function ChangeUserModal({
             }}
           >
             <SelectTrigger
+              label={t('users.create.position')}
               className="border-[#AEAEAE] bg-secondary"
               aria-label={t('users.create.position')}
               aria-invalid={Boolean(errors.positionId)}
@@ -216,10 +214,7 @@ export function ChangeUserModal({
           )}
         </div>
 
-        <div className="relative">
-          <Label className="absolute -top-4 left-2.5 px-1 text-xs">
-            {t('users.create.role')}
-          </Label>
+        <div>
           <Select
             items={roleItems}
             value={formData.role}
@@ -230,6 +225,7 @@ export function ChangeUserModal({
             }}
           >
             <SelectTrigger
+              label={t('users.create.role')}
               className="border-[#AEAEAE] bg-secondary"
               aria-label={t('users.create.role')}
               aria-invalid={Boolean(errors.role)}

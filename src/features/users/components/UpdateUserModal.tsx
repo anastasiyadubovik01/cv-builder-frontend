@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/client/react';
 import { USER_QUERY, type ApiUserDetails } from '@/api/users';
 import { ChangeUserModal } from '@/features/users/components/ChangeUserModal';
 import { useUpdateUserForm } from '@/features/users/hooks/useUpdateUserForm';
+import type { UserRole } from '@/features/users/types';
 import type { UpdateUserFormValues } from '@/lib/validations/user';
 
 type UpdateUserModalProps = {
@@ -61,7 +62,7 @@ function UpdateUserForm({
     lastName: user.profile.last_name ?? '',
     departmentId: user.department?.id ?? '',
     positionId: user.position?.id ?? '',
-    role: user.role as 'Employee' | 'Admin',
+    role: user.role as UserRole,
   };
 
   const form = useUpdateUserForm({
