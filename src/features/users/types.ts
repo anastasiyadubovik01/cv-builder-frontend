@@ -11,3 +11,5 @@ export type User = {
 export type SortField = 'firstName' | 'lastName' | 'department' | 'position';
 
 export type SortDirection = 'asc' | 'desc';
+
+export type UserRole = 'Employee' | 'Admin';

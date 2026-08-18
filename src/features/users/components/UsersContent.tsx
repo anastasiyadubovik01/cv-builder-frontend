@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client/react';
 
@@ -9,13 +9,13 @@ import { SearchInput } from '@/components/ui/search-input';
 import { Pagination } from '@/components/ui/pagination';
 import { Button } from '@/components/ui/button';
 import { PlusIcon } from '@/components/icons/plus-icon';
+import { LoadingOverlay } from '@/components/ui/loading-overlay';
 import { UsersTable } from '@/features/users/components/UsersTable';
 import { CreateUserModal } from './CreateUserModal';
 import {
   BACKEND_PAGE_SIZE,
   DEFAULT_PAGE_SIZE,
 } from '@/lib/constants/pagination';
-import { LoadingOverlay } from '@/components/ui/loading-overlay';
 
 import type { ApiUser } from '@/api/users';
 import type { SortDirection, SortField, User } from '@/features/users/types';
@@ -47,53 +47,77 @@ export function UsersContent({ isAdmin }: UsersContentProps) {
     },
   );
 
+  const loadAllUsers = useCallback(
+    async (sourceData: NonNullable<typeof data>): Promise<ApiUser[]> => {
+      const firstPageUsers = sourceData.users.items;
+      const totalBackendPages = sourceData.users.total_pages;
+
+      if (totalBackendPages <= 1) {
+        return firstPageUsers;
+      }
+
+      const pagesToLoad = Array.from(
+        { length: totalBackendPages - 1 },
+        (_, index) => index + 2,
+      );
+
+      const responses = await Promise.all(
+        pagesToLoad.map((page) =>
+          fetchMore({
+            variables: {
+              params: {
+                page,
+                limit: BACKEND_PAGE_SIZE,
+              },
+            },
+          }),
+        ),
+      );
+
+      const remainingUsers = responses.flatMap(
+        (response) => response.data.users.items,
+      );
+
+      return [...firstPageUsers, ...remainingUsers];
+    },
+    [fetchMore],
+  );
+
   useEffect(() => {
     if (!data) {
       return;
     }
 
-    const loadAllUsers = async () => {
+    const syncUsers = async () => {
       try {
+        const users = await loadAllUsers(data);
+
+        setAllUsers(users);
         setLoadError(false);
-
-        const firstPageUsers = data.users.items;
-        const totalBackendPages = data.users.total_pages;
-
-        if (totalBackendPages <= 1) {
-          setAllUsers(firstPageUsers);
-          return;
-        }
-
-        const pagesToLoad = Array.from(
-          { length: totalBackendPages - 1 },
-          (_, index) => index + 2,
-        );
-
-        const responses = await Promise.all(
-          pagesToLoad.map((page) =>
-            fetchMore({
-              variables: {
-                params: {
-                  page,
-                  limit: BACKEND_PAGE_SIZE,
-                },
-              },
-            }),
-          ),
-        );
-
-        const remainingUsers = responses.flatMap(
-          (response) => response.data.users.items,
-        );
-
-        setAllUsers([...firstPageUsers, ...remainingUsers]);
       } catch {
         setLoadError(true);
       }
     };
 
-    void loadAllUsers();
-  }, [data, fetchMore]);
+    void syncUsers();
+  }, [data, loadAllUsers]);
+
+  const handleRefresh = async (): Promise<void> => {
+    const result = await refetch();
+
+    if (!result.data) {
+      return;
+    }
+
+    try {
+      const users = await loadAllUsers(result.data);
+
+      setAllUsers(users);
+      setLoadError(false);
+    } catch {
+      setLoadError(true);
+    }
+  };
 
   const users: User[] = allUsers.map((user) => ({
     id: user.id,
@@ -151,7 +175,7 @@ export function UsersContent({ isAdmin }: UsersContentProps) {
     setLoadError(false);
 
     try {
-      await refetch();
+      await handleRefresh();
 
       void client
         .refetchQueries({
@@ -185,14 +209,12 @@ export function UsersContent({ isAdmin }: UsersContentProps) {
 
         {isAdmin && (
           <CreateUserModal
-            onSuccess={async () => {
-              await refetch();
-            }}
+            onSuccess={handleRefresh}
             trigger={
               <Button
                 type="button"
                 variant="primaryV2"
-                className="w-10 border-transparent px-0 lg:w-auto lg:gap-3 lg:border-primary lg:px-5"
+                className="w-10 border-transparent px-0 lg:w-auto lg:gap-3 lg:border-transparent lg:px-5 lg:hover:border-primary"
               >
                 <PlusIcon className="size-6" />
 
@@ -223,6 +245,7 @@ export function UsersContent({ isAdmin }: UsersContentProps) {
                 sortDirection={sortDirection}
                 onSort={handleSort}
                 isAdmin={isAdmin}
+                onRefresh={handleRefresh}
               />
             </div>
 

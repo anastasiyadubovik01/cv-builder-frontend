@@ -1,18 +1,16 @@
-import { useMutation, useQuery } from '@apollo/client/react';
+import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { toast } from '@/components/ui/sonner';
 import { handleFormError } from '@/lib/error/errorHandler';
 
-import {
-  CREATE_USER_MUTATION,
-  DEPARTMENTS_QUERY,
-  POSITIONS_QUERY,
-} from '@/api/users';
+import { CREATE_USER_MUTATION } from '@/api/users';
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
 import {
   createUserSchema,
   type CreateUserFormValues,
 } from '@/lib/validations/user';
+
+import { useUserCatalogs } from '@/features/users/hooks/useUserCatalogs';
 
 const INITIAL_VALUES: CreateUserFormValues = {
   email: '',
@@ -47,28 +45,9 @@ export function useCreateUserForm({
     schema: createUserSchema,
   });
 
-  const { data: departmentsData } = useQuery(DEPARTMENTS_QUERY, {
-    variables: {
-      params: {
-        page: 1,
-        limit: 100,
-      },
-    },
-  });
-
-  const { data: positionsData } = useQuery(POSITIONS_QUERY, {
-    variables: {
-      params: {
-        page: 1,
-        limit: 100,
-      },
-    },
-  });
-
   const [createUser, { loading }] = useMutation(CREATE_USER_MUTATION);
 
-  const departments = departmentsData?.departments.items ?? [];
-  const positions = positionsData?.positions.items ?? [];
+  const { departments, positions } = useUserCatalogs();
 
   const isValid = createUserSchema.safeParse(formData).success;
 

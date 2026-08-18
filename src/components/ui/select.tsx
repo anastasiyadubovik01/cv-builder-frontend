@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { Select as SelectPrimitive } from '@base-ui/react/select';
 import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+import { Label } from './label';
 
 import { cn } from '@/lib/utils';
 
@@ -28,62 +29,76 @@ function SelectValue({ className, ...props }: SelectPrimitive.Value.Props) {
   );
 }
 
+type SelectTriggerProps = SelectPrimitive.Trigger.Props & {
+  label?: string;
+};
+
 function SelectTrigger({
   className,
   children,
+  label,
   ...props
-}: SelectPrimitive.Trigger.Props) {
+}: SelectTriggerProps) {
   return (
-    <SelectPrimitive.Trigger
-      data-slot="select-trigger"
-      className={cn(
-        [
-          'group flex h-12 w-full items-center justify-between',
-          'rounded-none border border-[var(--select-border)]',
-          'bg-[var(--select-background)] px-3',
-          'text-[16px] leading-[23px] font-normal tracking-[0.15px]',
-          'text-[var(--select-foreground)]',
-          'outline-none transition-colors',
+    <div className="relative">
+      <SelectPrimitive.Trigger
+        data-slot="select-trigger"
+        className={cn(
+          [
+            'peer group flex h-12 w-full items-center justify-between',
+            'rounded-none border border-[var(--select-border)]',
+            'bg-[var(--select-background)] px-3',
+            'text-[16px] leading-[23px] font-normal tracking-[0.15px]',
+            'text-[var(--select-foreground)]',
+            'outline-none transition-colors',
 
-          // Placeholder
-          'data-placeholder:text-[var(--select-placeholder)]',
+            'data-placeholder:text-[var(--select-placeholder)]',
 
-          // Hover
-          'hover:border-[var(--select-border-hover)]',
+            'hover:border-[var(--select-border-hover)]',
 
-          // Active / Open
-          'data-[popup-open]:border-[var(--select-border-active)]',
+            'data-[popup-open]:border-[var(--select-border-active)]',
 
-          // Invalid
-          'aria-invalid:border-[var(--select-invalid)], aria-invalid:border-[var(--select-invalid)]',
-          'aria-invalid:bg-[var(--select-invalid-background)]',
+            'aria-invalid:border-[var(--select-invalid)]',
+            'aria-invalid:bg-[var(--select-invalid-background)]',
 
-          // Disabled
-          'data-[disabled]:cursor-not-allowed',
-          'data-[disabled]:border-[var(--select-disabled-border)]',
-          'data-[disabled]:bg-[var(--select-disabled-background)]',
-          'data-[disabled]:text-[var(--select-disabled-foreground)]',
-          'data-[disabled]:hover:border-[var(--select-disabled-border)]',
-        ],
-        className,
+            'data-[disabled]:cursor-not-allowed',
+            'data-[disabled]:border-[var(--select-disabled-border)]',
+            'data-[disabled]:bg-[var(--select-disabled-background)]',
+            'data-[disabled]:text-[var(--select-disabled-foreground)]',
+            'data-[disabled]:hover:border-[var(--select-disabled-border)]',
+          ],
+          className,
+        )}
+        {...props}
+      >
+        {children}
+
+        <SelectPrimitive.Icon
+          render={
+            <ChevronDownIcon
+              className={cn(
+                'size-6 shrink-0 text-[var(--select-icon)] transition-transform',
+                'group-data-[popup-open]:rotate-180',
+                'group-aria-invalid:text-[var(--select-invalid)]',
+                'group-data-[disabled]:text-[var(--select-disabled-foreground)]',
+              )}
+            />
+          }
+        />
+      </SelectPrimitive.Trigger>
+
+      {label && (
+        <Label
+          className={cn(
+            'pointer-events-none absolute -top-4 left-2.5 px-1 text-xs',
+            'peer-data-[placeholder]:hidden',
+            'peer-aria-invalid:block peer-aria-invalid:text-destructive',
+          )}
+        >
+          {label}
+        </Label>
       )}
-      {...props}
-    >
-      {children}
-
-      <SelectPrimitive.Icon
-        render={
-          <ChevronDownIcon
-            className={cn(
-              'size-6 shrink-0 text-[var(--select-icon)] transition-transform',
-              'group-data-[popup-open]:rotate-180',
-              'group-aria-invalid:text-[var(--select-invalid)]',
-              'group-data-[disabled]:text-[var(--select-disabled-foreground)]',
-            )}
-          />
-        }
-      />
-    </SelectPrimitive.Trigger>
+    </div>
   );
 }
 
