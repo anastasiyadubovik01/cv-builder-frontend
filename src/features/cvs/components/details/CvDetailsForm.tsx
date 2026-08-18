@@ -1,15 +1,10 @@
 'use client';
 
-import { useTranslation } from 'react-i18next';
-import { useMutation } from '@apollo/client/react';
-import { toast } from '@/components/ui/sonner';
-import { UPDATE_CV_MUTATION } from '@/api/cvs';
-import { useValidatedForm } from '@/components/hooks/useValidatedForm';
+import { useUpdateCvForm } from '@/features/cvs/hooks/useUpdateCvForm';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { createCvSchema, type CreateCvFormValues } from '@/lib/validations/cv';
-import { handleFormError } from '@/lib/error/errorHandler';
+import { createCvSchema } from '@/lib/validations/cv';
 
 type CvDetailsFormProps = {
   cvId: string;
@@ -28,19 +23,24 @@ export function CvDetailsForm({
   canEdit,
   onUpdated,
 }: CvDetailsFormProps) {
-  const { t } = useTranslation();
-
-  const { formData, errors, validateForm, handleChange } =
-    useValidatedForm<CreateCvFormValues>({
-      initialValues: {
-        name,
-        education,
-        description,
-      },
-      schema: createCvSchema,
-    });
-
-  const [updateCv, { loading: isUpdating }] = useMutation(UPDATE_CV_MUTATION);
+  const {
+    formData,
+    errors,
+    loading: isUpdating,
+    handleChange,
+    handleSubmit,
+    t,
+  } = useUpdateCvForm({
+    cvId,
+    initialValues: {
+      name,
+      education,
+      description,
+    },
+    onSuccess: () => {
+      void onUpdated();
+    },
+  });
 
   const trimmedName = formData.name.trim();
   const trimmedEducation = formData.education.trim();
@@ -55,31 +55,7 @@ export function CvDetailsForm({
 
   const handleUpdate = async () => {
     if (!canEdit || !isChanged || isUpdating) return;
-    if (!validateForm()) return;
-
-    try {
-      await updateCv({
-        variables: {
-          cv: {
-            cvId,
-            name: trimmedName,
-            education: trimmedEducation,
-            description: trimmedDescription,
-          },
-        },
-      });
-
-      await onUpdated();
-
-      toast.success(
-        t('cvs.notifications.updateSuccess', 'CV was successfully updated!'),
-      );
-    } catch (err) {
-      handleFormError(err, {
-        t,
-        context: 'Update CV',
-      });
-    }
+    await handleSubmit();
   };
 
   return (
