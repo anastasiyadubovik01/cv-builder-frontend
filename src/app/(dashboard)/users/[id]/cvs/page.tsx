@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import { notFound } from 'next/navigation';
 
 import { CvsContent } from '@/features/cvs/components/CvsContent';
 import { getRoleFromJwt } from '@/lib/helpers/jwt';
@@ -17,6 +18,10 @@ export default async function UserCvsPage({ params }: UserCvsPageProps) {
 
   const role = accessToken ? getRoleFromJwt(accessToken) : null;
   const isAdmin = role === 'Admin';
+
+  if (!isAdmin) {
+    notFound();
+  }
 
   return (
     <div className="pt-4">
