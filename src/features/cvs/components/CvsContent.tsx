@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client/react';
 import { CVS_QUERY } from '@/api/cvs';
@@ -21,9 +21,14 @@ import type { Cv, SortDirection, SortField } from '@/features/cvs/types';
 interface CvsContentProps {
   isAdmin?: boolean;
   userId?: string;
+  currentUserId?: string;
 }
 
-export function CvsContent({ isAdmin = false, userId }: CvsContentProps) {
+export function CvsContent({
+  isAdmin = false,
+  userId,
+  currentUserId,
+}: CvsContentProps) {
   const { t } = useTranslation();
 
   const [search, setSearch] = useState('');
@@ -34,6 +39,8 @@ export function CvsContent({ isAdmin = false, userId }: CvsContentProps) {
   const [allCvs, setAllCvs] = useState<ApiCv[]>([]);
   const [loadError, setLoadError] = useState(false);
 
+  const targetUserId = userId || currentUserId;
+
   const { data, loading, error, fetchMore, refetch } = useQuery(CVS_QUERY, {
     variables: {
       params: {
@@ -41,55 +48,73 @@ export function CvsContent({ isAdmin = false, userId }: CvsContentProps) {
         limit: BACKEND_PAGE_SIZE,
       },
     },
+    fetchPolicy: 'cache-and-network',
   });
 
-  useEffect(() => {
-    if (!data) {
-      return;
-    }
+  const loadAllCvs = useCallback(
+    async (sourceData: NonNullable<typeof data>): Promise<ApiCv[]> => {
+      const firstPageCvs = sourceData.cvs.items;
+      const totalBackendPages = sourceData.cvs.total_pages;
 
-    const loadAllCvs = async () => {
-      try {
-        setLoadError(false);
+      if (totalBackendPages <= 1) {
+        return firstPageCvs;
+      }
 
-        const firstPageCvs = data.cvs.items;
-        const totalBackendPages = data.cvs.total_pages;
+      const pagesToLoad = Array.from(
+        { length: totalBackendPages - 1 },
+        (_, index) => index + 2,
+      );
 
-        if (totalBackendPages <= 1) {
-          setAllCvs(firstPageCvs);
-          return;
-        }
-
-        const pagesToLoad = Array.from(
-          { length: totalBackendPages - 1 },
-          (_, index) => index + 2,
-        );
-
-        const responses = await Promise.all(
-          pagesToLoad.map((page) =>
-            fetchMore({
-              variables: {
-                params: {
-                  page,
-                  limit: BACKEND_PAGE_SIZE,
-                },
+      const responses = await Promise.all(
+        pagesToLoad.map((page) =>
+          fetchMore({
+            variables: {
+              params: {
+                page,
+                limit: BACKEND_PAGE_SIZE,
               },
-            }),
-          ),
-        );
+            },
+          }),
+        ),
+      );
 
-        const remainingCvs = responses.flatMap(
-          (response) => response.data.cvs.items,
-        );
+      const remainingCvs = responses.flatMap(
+        (response) => response.data.cvs.items,
+      );
 
-        setAllCvs([...firstPageCvs, ...remainingCvs]);
+      return [...firstPageCvs, ...remainingCvs];
+    },
+    [fetchMore],
+  );
+
+  useEffect(() => {
+    if (!data) return;
+
+    const syncCvs = async () => {
+      try {
+        const cvs = await loadAllCvs(data);
+        setAllCvs(cvs);
+        setLoadError(false);
       } catch {
         setLoadError(true);
       }
     };
 
-    void loadAllCvs();
-  }, [data, fetchMore]);
+    void syncCvs();
+  }, [data, loadAllCvs]);
+
+  const handleRefresh = async (): Promise<void> => {
+    try {
+      const result = await refetch();
+      if (!result.data) return;
+
+      const cvs = await loadAllCvs(result.data);
+      setAllCvs(cvs);
+      setLoadError(false);
+    } catch {
+      setLoadError(true);
+    }
+  };
 
   const userFilteredApiCvs = userId
     ? allCvs.filter((cv) => cv.user?.id === userId)
@@ -142,16 +167,6 @@ export function CvsContent({ isAdmin = false, userId }: CvsContentProps) {
     setCurrentPage(1);
   };
 
-  const handleRetry = async () => {
-    setLoadError(false);
-
-    try {
-      await refetch();
-    } catch {
-      setLoadError(true);
-    }
-  };
-
   const hasError = Boolean(error) || loadError;
   const isLoading = loading || Boolean(data && allCvs.length < data.cvs.total);
 
@@ -169,10 +184,8 @@ export function CvsContent({ isAdmin = false, userId }: CvsContentProps) {
           className="bg-background"
         />
         <CreateCvModal
-          userId={userId}
-          onSuccess={() => {
-            void refetch();
-          }}
+          userId={targetUserId}
+          onSuccess={handleRefresh}
           trigger={
             <Button
               type="button"
@@ -192,7 +205,7 @@ export function CvsContent({ isAdmin = false, userId }: CvsContentProps) {
             <p className="text-base text-foreground">
               {t('cvs.loadError', 'Failed to load CVs')}
             </p>
-            <Button type="button" onClick={() => void handleRetry()}>
+            <Button type="button" onClick={() => void handleRefresh()}>
               {t('retry', 'Retry')}
             </Button>
           </div>
@@ -205,9 +218,7 @@ export function CvsContent({ isAdmin = false, userId }: CvsContentProps) {
                 sortDirection={sortDirection}
                 onSort={handleSort}
                 isAdmin={isAdmin}
-                onRefresh={() => {
-                  void refetch();
-                }}
+                onRefresh={handleRefresh}
               />
             </div>
 

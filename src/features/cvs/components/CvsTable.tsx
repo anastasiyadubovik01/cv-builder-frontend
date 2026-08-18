@@ -16,7 +16,7 @@ type CvsTableProps = {
   sortDirection: SortDirection;
   onSort: (field: SortField) => void;
   isAdmin?: boolean;
-  onRefresh?: () => void;
+  onRefresh?: () => Promise<void>;
 };
 
 export function CvsTable({
@@ -118,8 +118,8 @@ export function CvsTable({
             education: editingCv.education,
             description: editingCv.description,
           }}
-          onSuccess={() => {
-            onRefresh?.();
+          onSuccess={async () => {
+            await onRefresh?.();
             setEditingCv(null);
           }}
         />
@@ -135,8 +135,8 @@ export function CvsTable({
               setDeletingCv(null);
             }
           }}
-          onSuccess={() => {
-            onRefresh?.();
+          onSuccess={async () => {
+            await onRefresh?.();
             setDeletingCv(null);
           }}
         />
