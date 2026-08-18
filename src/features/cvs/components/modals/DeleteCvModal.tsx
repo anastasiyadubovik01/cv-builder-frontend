@@ -11,7 +11,7 @@ export interface DeleteCvModalProps extends Omit<
   'itemType' | 'onConfirm' | 't'
 > {
   cvId: string;
-  onSuccess?: () => void;
+  onSuccess?: () => void | Promise<void>;
 }
 
 export function DeleteCvModal({
@@ -25,7 +25,7 @@ export function DeleteCvModal({
   const handleConfirm = async (): Promise<boolean> => {
     const success = await handleDelete(cvId);
     if (success) {
-      onSuccess?.();
+      await onSuccess?.();
     }
     return success;
   };

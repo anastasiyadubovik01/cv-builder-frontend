@@ -9,7 +9,7 @@ import { handleFormError } from '@/lib/error/errorHandler';
 type UseUpdateCvFormOptions = {
   cvId: string;
   initialValues: CreateCvFormValues;
-  onSuccess?: () => void;
+  onSuccess?: () => void | Promise<void>;
 };
 
 export function useUpdateCvForm({
@@ -56,7 +56,7 @@ export function useUpdateCvForm({
         t('cvs.notifications.updateSuccess', 'CV was successfully updated!'),
       );
 
-      onSuccess?.();
+      await onSuccess?.();
       return true;
     } catch (err) {
       handleFormError(err, {

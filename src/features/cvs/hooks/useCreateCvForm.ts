@@ -14,7 +14,7 @@ const INITIAL_VALUES: CreateCvFormValues = {
 
 type UseCreateCvFormOptions = {
   userId?: string;
-  onSuccess?: () => void;
+  onSuccess?: () => void | Promise<void>;
 };
 
 export function useCreateCvForm({
@@ -64,7 +64,7 @@ export function useCreateCvForm({
         ),
       );
 
-      onSuccess?.();
+      await onSuccess?.();
       return true;
     } catch (err) {
       handleFormError(err, {

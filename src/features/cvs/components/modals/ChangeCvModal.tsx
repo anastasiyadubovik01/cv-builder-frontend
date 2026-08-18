@@ -1,11 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { ChangeEvent } from 'react';
+import type { TFunction } from 'i18next';
 import { ChangeDialog } from '@/components/dialogs/ChangeDialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { useCreateCvForm } from '@/features/cvs/hooks/useCreateCvForm';
-import { useUpdateCvForm } from '@/features/cvs/hooks/useUpdateCvForm';
 import type {
   createActionTitles,
   updateActionTitles,
@@ -15,74 +14,36 @@ import type { CreateCvFormValues } from '@/lib/validations/cv';
 export interface ChangeCvModalProps {
   type: createActionTitles | updateActionTitles;
   trigger?: React.ReactNode;
-  cvId?: string;
-  userId?: string;
-  initialValues?: CreateCvFormValues;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-  onSuccess?: () => void;
-  onSubmit?: (data: CreateCvFormValues) => void;
+  formData: CreateCvFormValues;
+  errors: Partial<Record<keyof CreateCvFormValues, string>>;
+  loading: boolean;
+  handleChange: (
+    field: keyof CreateCvFormValues,
+  ) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleSubmit: () => Promise<boolean>;
+  t: TFunction;
 }
 
 export function ChangeCvModal({
   type,
   trigger,
-  cvId,
-  userId,
-  initialValues,
   open,
   onOpenChange,
-  onSuccess,
-  onSubmit,
+  formData,
+  errors,
+  loading,
+  handleChange,
+  handleSubmit,
+  t,
 }: ChangeCvModalProps) {
-  const isUpdate = type === 'Update';
-
-  const defaultInitialValues: CreateCvFormValues = initialValues || {
-    name: '',
-    education: '',
-    description: '',
-  };
-
-  const createForm = useCreateCvForm({
-    userId,
-    onSuccess,
-  });
-
-  const updateForm = useUpdateCvForm({
-    cvId: cvId || '',
-    initialValues: defaultInitialValues,
-    onSuccess,
-  });
-
-  const {
-    formData,
-    errors,
-    validateForm,
-    handleChange,
-    handleSubmit,
-    resetForm,
-    t,
-  } = isUpdate ? updateForm : createForm;
-
-  const handleConfirm = async (): Promise<boolean> => {
-    if (!validateForm()) {
-      return false;
-    }
-
-    if (onSubmit) {
-      onSubmit(formData);
-      resetForm();
-      return true;
-    }
-
-    return await handleSubmit();
-  };
-
   return (
     <ChangeDialog
       actionTitle={type}
       itemType="CV"
-      onConfirm={handleConfirm}
+      onConfirm={handleSubmit}
+      confirmDisabled={loading}
       trigger={trigger}
       t={t}
       open={open}
