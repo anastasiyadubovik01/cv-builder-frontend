@@ -217,6 +217,26 @@
     },
     "notifications": {
       "deleteSuccess": "User successfully deleted"
+    },
+    "skills": {
+      "skill": "Skill",
+      "mastery": "Skill mastery",
+      "add": "Add skill",
+      "remove": "Remove skills",
+      "empty": "No skills here",
+      "loadError": "Failed to load skills",
+      "uncategorized": "Other",
+      "addSuccess": "Skill added successfully",
+      "validation": {
+        "skillRequired": "Skill is required",
+        "masteryRequired": "Skill mastery is required"
+      },
+      "removeSelected": "Remove ({{count}})",
+      "removeSuccess": "Skills removed successfully",
+      "removeDialog": {
+        "title": "Remove skills",
+        "description": "Are you sure you want to remove {{count}} skills?"
+      }
     }
   },
 

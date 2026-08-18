@@ -216,6 +216,26 @@
     },
     "notifications": {
       "deleteSuccess": "Пользователь успешно удалён"
+    },
+    "skills": {
+      "skill": "Навык",
+      "mastery": "Уровень навыка",
+      "add": "Добавить навык",
+      "remove": "Удалить навыки",
+      "empty": "Навыки пока не добавлены",
+      "loadError": "Не удалось загрузить навыки",
+      "uncategorized": "Другое",
+      "addSuccess": "Навык успешно добавлен",
+      "validation": {
+        "skillRequired": "Выберите навык",
+        "masteryRequired": "Выберите уровень навыка"
+      },
+      "removeSelected": "Удалить ({{count}})",
+      "removeSuccess": "Навыки успешно удалены",
+      "removeDialog": {
+        "title": "Удалить навыки",
+        "description": "Вы уверены, что хотите удалить {{count}} навык(ов)?"
+      }
     }
   },
 
