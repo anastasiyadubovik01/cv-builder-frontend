@@ -262,6 +262,17 @@
     }
   },
 
+  "projects": {
+    "title": "Projects",
+    "name": "Name",
+    "domain": "Domain",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+
+    "emptyState": "No projects found",
+    "createProject": "Create project"
+  },
+
   "dialogs": {
     "delete": {
       "title": "Delete ",

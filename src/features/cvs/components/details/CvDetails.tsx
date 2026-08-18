@@ -44,7 +44,7 @@ export function CvDetails({ cvId, currentUserId, isAdmin }: CvDetailsProps) {
     return (
       <div className="flex flex-col items-center pt-10 text-center">
         <p className="text-sm text-muted-foreground">
-          {t('cvs.details.notFound', 'CV not found')}
+          {t('cvs.notFound', 'CV not found')}
         </p>
       </div>
     );

@@ -261,6 +261,16 @@
     }
   },
 
+  "projects": {
+    "title": "Проекты",
+    "name": "Название",
+    "domain": "Область",
+    "startDate": "Дата начала",
+    "endDate": "Дата окончания",
+    "emptyState": "Проекты не найдены",
+    "createProject": "Создать проект"
+  },
+
   "dialogs": {
     "delete": {
       "title": "Удалить ",
