@@ -238,6 +238,28 @@
         "description": "Are you sure you want to remove {{count}} skills?"
       },
       "updateSuccess": "Skill updated successfully"
+    },
+    "languages": {
+      "language": "Language",
+      "proficiency": "Language proficiency",
+      "add": "Add language",
+      "addSuccess": "Language added successfully",
+      "validation": {
+        "languageRequired": "Language is required",
+        "proficiencyRequired": "Language proficiency is required"
+      },
+      "current": "Current languages",
+      "empty": "No languages here",
+      "loadError": "Failed to load languages",
+      "updateSuccess": "Language updated successfully",
+      "remove": "Remove languages",
+      "removeSelected": "Remove ({{count}})",
+      "removeSuccess": "Languages removed successfully",
+      "removeDialog": {
+        "title": "Remove languages",
+        "description_one": "Are you sure you want to remove {{count}} language?",
+        "description_other": "Are you sure you want to remove {{count}} languages?"
+      }
     }
   },
 

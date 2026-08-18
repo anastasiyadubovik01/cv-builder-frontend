@@ -237,6 +237,30 @@
         "description": "Вы уверены, что хотите удалить {{count}} навык(ов)?"
       },
       "updateSuccess": "Навык успешно обновлён"
+    },
+    "languages": {
+      "language": "Язык",
+      "proficiency": "Уровень владения языком",
+      "add": "Добавить язык",
+      "addSuccess": "Язык успешно добавлен",
+      "validation": {
+        "languageRequired": "Выберите язык",
+        "proficiencyRequired": "Выберите уровень владения языком"
+      },
+      "current": "Текущие языки",
+      "empty": "Языки пока не добавлены",
+      "loadError": "Не удалось загрузить языки",
+      "updateSuccess": "Язык успешно обновлён",
+      "remove": "Удалить языки",
+      "removeSelected": "Удалить ({{count}})",
+      "removeSuccess": "Языки успешно удалены",
+      "removeDialog": {
+        "title": "Удалить языки",
+        "description_one": "Вы уверены, что хотите удалить {{count}} язык?",
+        "description_few": "Вы уверены, что хотите удалить {{count}} языка?",
+        "description_many": "Вы уверены, что хотите удалить {{count}} языков?",
+        "description_other": "Вы уверены, что хотите удалить {{count}} языка?"
+      }
     }
   },
 
