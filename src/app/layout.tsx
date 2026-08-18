@@ -29,7 +29,7 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
   const resources = getResources(i18n);
 
   return (
-    <html lang={lng} className="dark">
+    <html lang={lng}>
       <body className={roboto.className}>
         <I18nProvider language={lng} resources={resources}>
           <DeviceGuard>

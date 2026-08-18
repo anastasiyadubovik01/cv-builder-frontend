@@ -16,6 +16,7 @@ import { LoadingOverlay } from '@/components/ui/loading-overlay';
 import { AddUserSkillModal } from '@/features/skills/components/AddUserSkillModal';
 import { RemoveUserSkillsModal } from '@/features/skills/components/RemoveUserSkillsModal';
 import { SkillMasteryProgress } from '@/features/skills/components/SkillMasteryProgress';
+import { UpdateUserSkillModal } from '@/features/skills/components/UpdateUserSkillModal';
 
 type UserSkillsContentProps = {
   userId: string;
@@ -31,6 +32,7 @@ export function UserSkillsContent({
   const [isRemoveMode, setIsRemoveMode] = useState(false);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [removeDialogOpen, setRemoveDialogOpen] = useState(false);
+  const [editingSkill, setEditingSkill] = useState<ProfileSkill | null>(null);
 
   const {
     data: userData,
@@ -73,6 +75,17 @@ export function UserSkillsContent({
         ? current.filter((name) => name !== skillName)
         : [...current, skillName],
     );
+  };
+
+  const handleSkillClick = (skill: ProfileSkill) => {
+    if (isRemoveMode) {
+      handleSkillSelection(skill.name);
+      return;
+    }
+
+    if (canManage) {
+      setEditingSkill(skill);
+    }
   };
 
   const handleCancelRemove = () => {
@@ -143,19 +156,17 @@ export function UserSkillsContent({
 
               <div className="grid grid-cols-1 gap-x-16 gap-y-6 md:grid-cols-2 lg:grid-cols-3">
                 {skills.map((skill) => {
-                  const isSelected = selectedSkills.includes(skill.name);
-
                   return (
                     <button
                       key={`${skill.name}-${skill.categoryId ?? ''}`}
                       type="button"
-                      disabled={!isRemoveMode}
-                      onClick={() => handleSkillSelection(skill.name)}
+                      disabled={!canManage}
+                      onClick={() => handleSkillClick(skill)}
                       className="flex items-center gap-4 text-left disabled:cursor-default"
                     >
                       <SkillMasteryProgress
                         mastery={skill.mastery}
-                        selected={isSelected}
+                        selected={selectedSkills.includes(skill.name)}
                       />
 
                       <span className="text-sm text-foreground">
@@ -222,6 +233,24 @@ export function UserSkillsContent({
             </>
           )}
         </div>
+      )}
+
+      {editingSkill && (
+        <UpdateUserSkillModal
+          userId={userId}
+          skill={editingSkill}
+          skills={availableSkills}
+          open={Boolean(editingSkill)}
+          onOpenChange={(open) => {
+            if (!open) {
+              setEditingSkill(null);
+            }
+          }}
+          onSuccess={async () => {
+            await refetch();
+            setEditingSkill(null);
+          }}
+        />
       )}
 
       <RemoveUserSkillsModal

@@ -236,7 +236,8 @@
       "removeDialog": {
         "title": "Remove skills",
         "description": "Are you sure you want to remove {{count}} skills?"
-      }
+      },
+      "updateSuccess": "Skill updated successfully"
     }
   },
 
