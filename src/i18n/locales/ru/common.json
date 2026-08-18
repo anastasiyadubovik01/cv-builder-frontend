@@ -227,12 +227,20 @@
 
     "search": "Поиск",
     "createCv": "Создать резюме",
+    "notFound": "Резюме не найдено",
     "loadError": "Не удалось загрузить резюме",
+    "detailsLoadError": "Не удалось загрузить детали резюме",
     "emptyState": {
       "admin": "Резюме не найдены",
       "employee": "У вас ещё нет резюме"
     },
     "noResults": "Резюме не найдены",
+    "tabs": {
+      "details": "Детали",
+      "skills": "Навыки",
+      "projects": "Проекты",
+      "preview": "Предпросмотр"
+    },
     "validation": {
       "name": {
         "required": "Название обязательно",

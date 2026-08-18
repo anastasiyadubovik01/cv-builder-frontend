@@ -91,7 +91,11 @@ export function CvsContent({ isAdmin = false, userId }: CvsContentProps) {
     void loadAllCvs();
   }, [data, fetchMore]);
 
-  const cvs: Cv[] = allCvs.map((cv) => ({
+  const userFilteredApiCvs = userId
+    ? allCvs.filter((cv) => cv.user?.id === userId)
+    : allCvs;
+
+  const cvs: Cv[] = userFilteredApiCvs.map((cv) => ({
     id: cv.id,
     name: cv.name,
     education: cv.education ?? '',
