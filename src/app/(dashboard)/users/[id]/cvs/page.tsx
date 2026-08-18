@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 
 import { CvsContent } from '@/features/cvs/components/CvsContent';
-import { getRoleFromJwt } from '@/lib/helpers/jwt';
+import { getRoleFromJwt, getUserIdFromJwt } from '@/lib/helpers/jwt';
 
 type UserCvsPageProps = {
   params: Promise<{
@@ -17,9 +17,12 @@ export default async function UserCvsPage({ params }: UserCvsPageProps) {
   const accessToken = cookieStore.get('access_token')?.value;
 
   const role = accessToken ? getRoleFromJwt(accessToken) : null;
-  const isAdmin = role === 'Admin';
+  const currentUserId = accessToken ? getUserIdFromJwt(accessToken) : null;
 
-  if (!isAdmin) {
+  const isAdmin = role === 'Admin';
+  const isOwner = currentUserId === id;
+
+  if (!isAdmin && !isOwner) {
     notFound();
   }
 
