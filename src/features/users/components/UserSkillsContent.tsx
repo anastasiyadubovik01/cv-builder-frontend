@@ -154,7 +154,7 @@ export function UserSkillsContent({
                 {category}
               </h2>
 
-              <div className="grid grid-cols-1 gap-x-16 gap-y-6 md:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-x-16 gap-y-6 pl-5 md:grid-cols-2 lg:grid-cols-3">
                 {skills.map((skill) => {
                   return (
                     <button
