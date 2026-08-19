@@ -271,6 +271,7 @@
     "environment": "Стек технологий",
     "search": "Поиск",
     "emptyState": "Проекты не найдены",
+    "present": "По настоящее время",
     "createProject": "Создать проект",
     "actions": {
       "create": "СОЗДАТЬ",

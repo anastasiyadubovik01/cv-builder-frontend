@@ -18,8 +18,6 @@ import { ProjectsTable } from './ProjectsTable';
 import type { Project, ProjectSortField, SortDirection } from '../types';
 import { CreateProjectModal } from '@/features/projects/components/modals/CreateProjectModal';
 
-const PRESENT_MARKER = 'Present';
-
 export function ProjectsContent() {
   const { t } = useTranslation();
 
@@ -114,7 +112,7 @@ export function ProjectsContent() {
     name: p.name,
     domain: p.domain,
     startDate: p.start_date,
-    endDate: p.end_date ?? PRESENT_MARKER,
+    endDate: p.end_date?.trim() ? p.end_date : t('projects.present', 'Present'),
     description: p.description,
     environmentSkills: p.environment,
   }));

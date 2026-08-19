@@ -13,7 +13,7 @@ export const createProjectSchema = z
       .min(1, 'projects.errors.domainRequired')
       .max(100, 'projects.errors.domainMaxLength'),
     startDate: z.string().trim().min(1, 'projects.errors.startDateRequired'),
-    endDate: z.string().trim().min(1, 'projects.errors.endDateRequired'),
+    endDate: z.string().trim(),
     description: z
       .string()
       .trim()

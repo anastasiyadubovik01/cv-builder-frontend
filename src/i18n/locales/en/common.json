@@ -272,6 +272,7 @@
     "environment": "Environment",
     "search": "Search",
     "emptyState": "No projects found",
+    "present": "Present",
     "createProject": "Create project",
     "actions": {
       "create": "CREATE",

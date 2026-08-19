@@ -92,7 +92,6 @@ export function ChangeProjectModal({
             value={formData.endDate}
             onChange={handleChange('endDate')}
             placeholder={t('projects.endDate', 'End Date')}
-            required
             error={
               errors.endDate
                 ? t(errors.endDate, 'End date is required')
