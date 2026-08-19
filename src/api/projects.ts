@@ -92,3 +92,40 @@ export const CREATE_PROJECT_MUTATION: TypedDocumentNode<
     }
   }
 `;
+
+export type UpdateProjectInput = {
+  projectId: string;
+  name: string;
+  domain: string;
+  start_date: string;
+  end_date?: string | null;
+  description: string;
+  environment: string[];
+};
+
+type UpdateProjectData = {
+  updateProject: ApiProject;
+};
+
+type UpdateProjectVariables = {
+  project: UpdateProjectInput;
+};
+
+export const UPDATE_PROJECT_MUTATION: TypedDocumentNode<
+  UpdateProjectData,
+  UpdateProjectVariables
+> = gql`
+  mutation UpdateProject($project: UpdateProjectInput!) {
+    updateProject(project: $project) {
+      id
+      created_at
+      name
+      internal_name
+      domain
+      start_date
+      end_date
+      description
+      environment
+    }
+  }
+`;

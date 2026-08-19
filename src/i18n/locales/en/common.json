@@ -290,7 +290,8 @@
       "descriptionMaxLength": "Description must not exceed 2000 characters"
     },
     "notifications": {
-      "createSuccess": "Project has been successfully created"
+      "createSuccess": "Project has been successfully created",
+      "updateSuccess": "Project has been successfully updated"
     }
   },
 
