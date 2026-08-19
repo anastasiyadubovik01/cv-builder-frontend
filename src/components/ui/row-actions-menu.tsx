@@ -32,6 +32,11 @@ export function RowActionsMenu({
           onOpenChange(false);
         }
       }}
+      onKeyDown={(event) => {
+        if (event.key === 'Escape') {
+          onOpenChange(false);
+        }
+      }}
     >
       <Button
         variant="icon"
@@ -47,7 +52,7 @@ export function RowActionsMenu({
       {open && (
         <div
           role="menu"
-          className="absolute right-4 top-8 z-30 w-[140px] overflow-hidden rounded-[12px] border border-[#AEAEAE] bg-[#E7E7E9] py-1 shadow-sm dark:border-[#626262] dark:bg-[#3A3A3C]"
+          className="absolute right-4 top-8 z-30 min-w-[180px] overflow-hidden rounded-[12px] border border-[#AEAEAE] bg-[#E7E7E9] py-1 shadow-sm dark:border-[#626262] dark:bg-[#3A3A3C]"
         >
           {actions.map((action) =>
             action.href ? (

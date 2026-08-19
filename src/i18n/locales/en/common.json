@@ -263,6 +263,28 @@
     }
   },
 
+  "skills": {
+    "admin": {
+      "search": "Search",
+      "create": "Create skill",
+      "name": "Name",
+      "type": "Type",
+      "category": "Category",
+      "empty": "No skills found",
+      "loadError": "Failed to load skills",
+      "validation": {
+        "nameRequired": "Skill is required",
+        "categoryRequired": "Category is required",
+        "duplicate": "Skill already exists"
+      },
+      "notifications": {
+        "createSuccess": "Skill created successfully",
+        "updateSuccess": "Skill updated successfully",
+        "deleteSuccess": "Skill deleted successfully"
+      }
+    }
+  },
+
   "cvs": {
     "name": "Name",
     "education": "Education",
@@ -318,7 +340,8 @@
       "update": "Update",
       "delete": "Delete",
       "remove": "Remove",
-      "view": "View"
+      "view": "View",
+      "edit": "Edit"
     },
     "itemTypes": {
       "user": "user",

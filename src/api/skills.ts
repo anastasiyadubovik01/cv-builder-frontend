@@ -1,10 +1,15 @@
 import { gql, type TypedDocumentNode } from '@apollo/client';
+
 import type { Mastery } from '@/features/skills/types';
 
 export type SkillCategory = {
   id: string;
   name: string;
   order: number;
+  parent: {
+    id: string;
+    name: string;
+  } | null;
 };
 
 export type ApiSkill = {
@@ -51,6 +56,10 @@ export const SKILLS_QUERY: TypedDocumentNode<SkillsData, SkillsVariables> = gql`
           id
           name
           order
+          parent {
+            id
+            name
+          }
         }
         category_name
         category_parent_name
@@ -186,6 +195,136 @@ export const DELETE_PROFILE_SKILL_MUTATION: TypedDocumentNode<
         categoryId
         mastery
       }
+    }
+  }
+`;
+
+export type AdminSkillCategory = {
+  id: string;
+  name: string;
+  order: number;
+  parent: {
+    id: string;
+    name: string;
+  } | null;
+  children: {
+    id: string;
+    name: string;
+    order: number;
+  }[];
+};
+
+type SkillCategoriesQueryData = {
+  skillCategories: AdminSkillCategory[];
+};
+
+export const SKILL_CATEGORIES_QUERY: TypedDocumentNode<SkillCategoriesQueryData> = gql`
+  query SkillCategories {
+    skillCategories {
+      id
+      name
+      order
+      parent {
+        id
+        name
+      }
+      children {
+        id
+        name
+        order
+      }
+    }
+  }
+`;
+
+type CreateSkillMutationData = {
+  createSkill: ApiSkill;
+};
+
+type CreateSkillMutationVariables = {
+  skill: {
+    name: string;
+    categoryId: string;
+  };
+};
+
+export const CREATE_SKILL_MUTATION: TypedDocumentNode<
+  CreateSkillMutationData,
+  CreateSkillMutationVariables
+> = gql`
+  mutation CreateSkill($skill: CreateSkillInput!) {
+    createSkill(skill: $skill) {
+      id
+      name
+      category_name
+      category_parent_name
+      category {
+        id
+        name
+        order
+        parent {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
+type UpdateSkillMutationData = {
+  updateSkill: ApiSkill;
+};
+
+type UpdateSkillMutationVariables = {
+  skill: {
+    skillId: string;
+    name: string;
+    categoryId: string;
+  };
+};
+
+export const UPDATE_SKILL_MUTATION: TypedDocumentNode<
+  UpdateSkillMutationData,
+  UpdateSkillMutationVariables
+> = gql`
+  mutation UpdateSkill($skill: UpdateSkillInput!) {
+    updateSkill(skill: $skill) {
+      id
+      name
+      category_name
+      category_parent_name
+      category {
+        id
+        name
+        order
+        parent {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
+type DeleteSkillMutationData = {
+  deleteSkill: {
+    affected: number;
+  };
+};
+
+type DeleteSkillMutationVariables = {
+  skill: {
+    skillId: string;
+  };
+};
+
+export const DELETE_SKILL_MUTATION: TypedDocumentNode<
+  DeleteSkillMutationData,
+  DeleteSkillMutationVariables
+> = gql`
+  mutation DeleteSkill($skill: DeleteSkillInput!) {
+    deleteSkill(skill: $skill) {
+      affected
     }
   }
 `;
