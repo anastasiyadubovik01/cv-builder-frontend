@@ -1,16 +1,6 @@
 'use client';
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogCloseButton,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+import { DeleteCountDialog } from '@/components/dialogs/DeleteCountDialog';
 import { useRemoveUserLanguages } from '@/features/languages/hooks/useRemoveUserLanguages';
 
 type RemoveUserLanguagesModalProps = {
@@ -33,42 +23,17 @@ export function RemoveUserLanguagesModal({
     onSuccess,
   });
 
-  const handleConfirm = async () => {
-    const success = await handleRemove(selectedLanguages);
-
-    if (success) {
-      onOpenChange(false);
-    }
-  };
-
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            {t('users.languages.removeDialog.title')}
-          </AlertDialogTitle>
-
-          <AlertDialogDescription className="font-regular text-foreground">
-            {t('users.languages.removeDialog.description', {
-              count: selectedLanguages.length,
-            })}
-          </AlertDialogDescription>
-
-          <AlertDialogCloseButton />
-        </AlertDialogHeader>
-
-        <AlertDialogFooter>
-          <AlertDialogCancel>{t('dialogs.common.cancel')}</AlertDialogCancel>
-
-          <AlertDialogAction
-            disabled={loading}
-            onClick={() => void handleConfirm()}
-          >
-            {t('dialogs.common.confirm')}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <DeleteCountDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      title={t('users.languages.removeDialog.title')}
+      description={t('users.languages.removeDialog.description', {
+        count: selectedLanguages.length,
+      })}
+      confirmDisabled={loading}
+      onConfirm={() => handleRemove(selectedLanguages)}
+      t={t}
+    />
   );
 }

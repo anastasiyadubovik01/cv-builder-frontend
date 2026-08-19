@@ -1,16 +1,6 @@
 'use client';
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogCloseButton,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+import { DeleteCountDialog } from '@/components/dialogs/DeleteCountDialog';
 import { useRemoveUserSkills } from '@/features/skills/hooks/useRemoveUserSkills';
 
 type RemoveUserSkillsModalProps = {
@@ -33,42 +23,17 @@ export function RemoveUserSkillsModal({
     onSuccess,
   });
 
-  const handleConfirm = async () => {
-    const success = await handleRemove(selectedSkills);
-
-    if (success) {
-      onOpenChange(false);
-    }
-  };
-
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            {t('users.skills.removeDialog.title')}
-          </AlertDialogTitle>
-
-          <AlertDialogDescription className="font-regular text-foreground">
-            {t('users.skills.removeDialog.description', {
-              count: selectedSkills.length,
-            })}
-          </AlertDialogDescription>
-
-          <AlertDialogCloseButton />
-        </AlertDialogHeader>
-
-        <AlertDialogFooter>
-          <AlertDialogCancel>{t('dialogs.common.cancel')}</AlertDialogCancel>
-
-          <AlertDialogAction
-            disabled={loading}
-            onClick={() => void handleConfirm()}
-          >
-            {t('dialogs.common.confirm')}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <DeleteCountDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      title={t('users.skills.removeDialog.title')}
+      description={t('users.skills.removeDialog.description', {
+        count: selectedSkills.length,
+      })}
+      confirmDisabled={loading}
+      onConfirm={() => handleRemove(selectedSkills)}
+      t={t}
+    />
   );
 }
