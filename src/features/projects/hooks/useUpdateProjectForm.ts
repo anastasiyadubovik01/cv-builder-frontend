@@ -1,4 +1,3 @@
-import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
 import { handleFormError } from '@/lib/error/errorHandler';
@@ -16,30 +15,33 @@ type UseUpdateProjectFormOptions = {
   onSuccess?: () => void | Promise<void>;
 };
 
+const getProjectInitialValues = (
+  proj: Project,
+  presentText: string,
+): CreateProjectInputValues => {
+  const isPresent = proj.endDate === 'Present' || proj.endDate === presentText;
+
+  return {
+    name: proj.name || '',
+    domain: proj.domain || '',
+    startDate: proj.startDate || '',
+    endDate: isPresent ? '' : proj.endDate || '',
+    description: proj.description || '',
+    environment: proj.environmentSkills
+      ? proj.environmentSkills.join(', ')
+      : '',
+  };
+};
+
 export function useUpdateProjectForm({
   project,
   onSuccess,
 }: UseUpdateProjectFormOptions) {
   const { t } = useTranslation();
 
-  const getInitialValues = useCallback(
-    (proj: Project): CreateProjectInputValues => {
-      const isPresent =
-        proj.endDate === 'Present' ||
-        proj.endDate === t('projects.present', 'Present');
-
-      return {
-        name: proj.name || '',
-        domain: proj.domain || '',
-        startDate: proj.startDate || '',
-        endDate: isPresent ? '' : proj.endDate || '',
-        description: proj.description || '',
-        environment: proj.environmentSkills
-          ? proj.environmentSkills.join(', ')
-          : '',
-      };
-    },
-    [t],
+  const initialValues = getProjectInitialValues(
+    project,
+    t('projects.present', 'Present'),
   );
 
   const {
@@ -50,14 +52,9 @@ export function useUpdateProjectForm({
     setFormData,
     clearErrors,
   } = useValidatedForm<CreateProjectInputValues>({
-    initialValues: getInitialValues(project),
+    initialValues,
     schema: createProjectSchema,
   });
-
-  useEffect(() => {
-    setFormData(getInitialValues(project));
-    clearErrors();
-  }, [project, getInitialValues, setFormData, clearErrors]);
 
   const [updateProject, { loading }] = useMutation(UPDATE_PROJECT_MUTATION);
 
@@ -107,7 +104,9 @@ export function useUpdateProjectForm({
   };
 
   const resetForm = () => {
-    setFormData(getInitialValues(project));
+    setFormData(
+      getProjectInitialValues(project, t('projects.present', 'Present')),
+    );
     clearErrors();
   };
 
