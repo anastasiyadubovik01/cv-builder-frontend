@@ -166,3 +166,81 @@ export const DELETE_PROFILE_LANGUAGE_MUTATION: TypedDocumentNode<
     }
   }
 `;
+
+type CreateLanguageMutationData = {
+  createLanguage: ApiLanguage;
+};
+
+type CreateLanguageMutationVariables = {
+  language: {
+    iso2: string;
+    name: string;
+    native_name: string;
+  };
+};
+
+export const CREATE_LANGUAGE_MUTATION: TypedDocumentNode<
+  CreateLanguageMutationData,
+  CreateLanguageMutationVariables
+> = gql`
+  mutation CreateLanguage($language: CreateLanguageInput!) {
+    createLanguage(language: $language) {
+      id
+      created_at
+      iso2
+      name
+      native_name
+    }
+  }
+`;
+
+type UpdateLanguageMutationData = {
+  updateLanguage: ApiLanguage;
+};
+
+type UpdateLanguageMutationVariables = {
+  language: {
+    languageId: string;
+    iso2: string;
+    name: string;
+    native_name: string;
+  };
+};
+
+export const UPDATE_LANGUAGE_MUTATION: TypedDocumentNode<
+  UpdateLanguageMutationData,
+  UpdateLanguageMutationVariables
+> = gql`
+  mutation UpdateLanguage($language: UpdateLanguageInput!) {
+    updateLanguage(language: $language) {
+      id
+      created_at
+      iso2
+      name
+      native_name
+    }
+  }
+`;
+
+type DeleteLanguageMutationData = {
+  deleteLanguage: {
+    affected: number;
+  };
+};
+
+type DeleteLanguageMutationVariables = {
+  language: {
+    languageId: string;
+  };
+};
+
+export const DELETE_LANGUAGE_MUTATION: TypedDocumentNode<
+  DeleteLanguageMutationData,
+  DeleteLanguageMutationVariables
+> = gql`
+  mutation DeleteLanguage($language: DeleteLanguageInput!) {
+    deleteLanguage(language: $language) {
+      affected
+    }
+  }
+`;
