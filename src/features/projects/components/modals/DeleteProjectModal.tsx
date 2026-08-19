@@ -21,14 +21,10 @@ export function DeleteProjectModal({
   onSuccess,
   ...props
 }: DeleteProjectModalProps) {
-  const { handleDelete, t } = useDeleteProject();
+  const { handleDelete, t } = useDeleteProject({ onSuccess });
 
   const handleConfirm = async (): Promise<boolean> => {
-    const success = await handleDelete(projectId);
-    if (success) {
-      await onSuccess?.();
-    }
-    return success;
+    return await handleDelete(projectId);
   };
 
   return (

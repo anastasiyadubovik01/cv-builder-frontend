@@ -149,7 +149,10 @@ export function ProjectsTable({
           onOpenChange={(open) => {
             if (!open) setDeletingProject(null);
           }}
-          onSuccess={onDeleteSuccess}
+          onSuccess={async () => {
+            setDeletingProject(null);
+            await onDeleteSuccess?.();
+          }}
         />
       )}
     </>
