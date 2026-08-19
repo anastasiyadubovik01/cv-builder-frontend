@@ -129,3 +129,28 @@ export const UPDATE_PROJECT_MUTATION: TypedDocumentNode<
     }
   }
 `;
+
+export type DeleteProjectInput = {
+  projectId: string;
+};
+
+type DeleteProjectData = {
+  deleteProject: {
+    affected: number;
+  };
+};
+
+type DeleteProjectVariables = {
+  project: DeleteProjectInput;
+};
+
+export const DELETE_PROJECT_MUTATION: TypedDocumentNode<
+  DeleteProjectData,
+  DeleteProjectVariables
+> = gql`
+  mutation DeleteProject($project: DeleteProjectInput!) {
+    deleteProject(project: $project) {
+      affected
+    }
+  }
+`;

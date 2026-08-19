@@ -272,6 +272,7 @@
     "environment": "Environment",
     "search": "Search",
     "emptyState": "No projects found",
+    "loadError": "Failed to load projects",
     "present": "Present",
     "createProject": "Create project",
     "actions": {
@@ -291,7 +292,8 @@
     },
     "notifications": {
       "createSuccess": "Project has been successfully created",
-      "updateSuccess": "Project has been successfully updated"
+      "updateSuccess": "Project has been successfully updated",
+      "deleteSuccess": "Project has been successfully deleted"
     }
   },
 

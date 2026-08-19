@@ -8,6 +8,7 @@ import { RowActionsMenu } from '@/components/ui/row-actions-menu';
 import { Badge } from '@/components/ui/badge';
 
 import { UpdateProjectModal } from './modals/UpdateProjectModal';
+import { DeleteProjectModal } from './modals/DeleteProjectModal';
 import type { Project, ProjectSortField, SortDirection } from '../types';
 
 type ProjectsTableProps = {
@@ -16,6 +17,7 @@ type ProjectsTableProps = {
   sortDirection: SortDirection;
   onSort: (field: ProjectSortField) => void;
   onUpdateSuccess?: () => void | Promise<void>;
+  onDeleteSuccess?: () => void | Promise<void>;
 };
 
 export function ProjectsTable({
@@ -24,12 +26,14 @@ export function ProjectsTable({
   sortDirection,
   onSort,
   onUpdateSuccess,
+  onDeleteSuccess,
 }: ProjectsTableProps) {
   const { t } = useTranslation();
   const [openMenuProjectId, setOpenMenuProjectId] = useState<string | null>(
     null,
   );
   const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [deletingProject, setDeletingProject] = useState<Project | null>(null);
 
   const columns: DataTableColumn<Project, ProjectSortField>[] = [
     {
@@ -80,7 +84,7 @@ export function ProjectsTable({
             {
               label: t('dialogs.actions.delete', 'Delete'),
               onClick: () => {
-                // delete
+                setDeletingProject(project);
               },
             },
           ]}
@@ -135,6 +139,17 @@ export function ProjectsTable({
             if (!open) setEditingProject(null);
           }}
           onSuccess={onUpdateSuccess}
+        />
+      )}
+      {deletingProject && (
+        <DeleteProjectModal
+          projectId={deletingProject.id}
+          name={deletingProject.name}
+          open={Boolean(deletingProject)}
+          onOpenChange={(open) => {
+            if (!open) setDeletingProject(null);
+          }}
+          onSuccess={onDeleteSuccess}
         />
       )}
     </>
