@@ -268,9 +268,29 @@
     "domain": "Domain",
     "startDate": "Start Date",
     "endDate": "End Date",
-
+    "description": "Description",
+    "environment": "Environment",
+    "search": "Search",
     "emptyState": "No projects found",
-    "createProject": "Create project"
+    "createProject": "Create project",
+    "actions": {
+      "create": "CREATE",
+      "cancel": "CANCEL"
+    },
+    "errors": {
+      "nameRequired": "Project name is required",
+      "nameMaxLength": "Project name must not exceed 100 characters",
+      "domainRequired": "Domain is required",
+      "domainMaxLength": "Domain must not exceed 100 characters",
+      "startDateRequired": "Start date is required",
+      "endDateRequired": "End date is required",
+      "endDateMustBeLater": "End date must be later than start date",
+      "descriptionRequired": "Description is required",
+      "descriptionMaxLength": "Description must not exceed 2000 characters"
+    },
+    "notifications": {
+      "createSuccess": "Project has been successfully created"
+    }
   },
 
   "dialogs": {

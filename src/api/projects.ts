@@ -56,3 +56,39 @@ export const PROJECTS_QUERY: TypedDocumentNode<
     }
   }
 `;
+
+export type CreateProjectInput = {
+  name: string;
+  domain: string;
+  start_date: string;
+  end_date?: string | null;
+  description: string;
+  environment: string[];
+};
+
+type CreateProjectData = {
+  createProject: ApiProject;
+};
+
+type CreateProjectVariables = {
+  project: CreateProjectInput;
+};
+
+export const CREATE_PROJECT_MUTATION: TypedDocumentNode<
+  CreateProjectData,
+  CreateProjectVariables
+> = gql`
+  mutation CreateProject($project: CreateProjectInput!) {
+    createProject(project: $project) {
+      id
+      created_at
+      name
+      internal_name
+      domain
+      start_date
+      end_date
+      description
+      environment
+    }
+  }
+`;

@@ -16,6 +16,7 @@ import {
 
 import { ProjectsTable } from './ProjectsTable';
 import type { Project, ProjectSortField, SortDirection } from '../types';
+import { CreateProjectModal } from '@/features/projects/components/modals/CreateProjectModal';
 
 const PRESENT_MARKER = 'Present';
 
@@ -176,17 +177,19 @@ export function ProjectsContent() {
           placeholder={t('projects.search', 'Search')}
           className="bg-background"
         />
-        <Button
-          type="button"
-          className="flex items-center gap-2 uppercase font-medium text-[14px]"
-          variant="primaryV2"
-          onClick={() => {
-            // create
-          }}
-        >
-          <PlusIcon className="size-6" />
-          {t('projects.createProject', 'Create project')}
-        </Button>
+        <CreateProjectModal
+          onSuccess={() => void handleRefresh()}
+          trigger={
+            <Button
+              type="button"
+              className="flex items-center gap-2 uppercase font-medium text-[14px]"
+              variant="primaryV2"
+            >
+              <PlusIcon className="size-6" />
+              {t('projects.createProject', 'Create project')}
+            </Button>
+          }
+        />
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col px-6 pt-4">

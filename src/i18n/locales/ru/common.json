@@ -267,8 +267,29 @@
     "domain": "Область",
     "startDate": "Дата начала",
     "endDate": "Дата окончания",
+    "description": "Описание",
+    "environment": "Стек технологий",
+    "search": "Поиск",
     "emptyState": "Проекты не найдены",
-    "createProject": "Создать проект"
+    "createProject": "Создать проект",
+    "actions": {
+      "create": "СОЗДАТЬ",
+      "cancel": "ОТМЕНА"
+    },
+    "errors": {
+      "nameRequired": "Название проекта обязательно",
+      "nameMaxLength": "Название проекта не должно превышать 100 символов",
+      "domainRequired": "Область обязательна",
+      "domainMaxLength": "Область не должна превышать 100 символов",
+      "startDateRequired": "Дата начала обязательна",
+      "endDateRequired": "Дата окончания обязательна",
+      "endDateMustBeLater": "Дата окончания должна быть позже даты начала",
+      "descriptionRequired": "Описание обязательно",
+      "descriptionMaxLength": "Описание не должно превышать 2000 символов"
+    },
+    "notifications": {
+      "createSuccess": "Проект успешно создан"
+    }
   },
 
   "dialogs": {
