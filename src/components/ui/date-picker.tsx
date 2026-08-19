@@ -16,7 +16,7 @@ import { CalendarIcon } from '@/components/icons/calendar-icon';
 interface DatePickerProps {
   value?: string;
   onChange: (dateString: string) => void;
-  placeholder?: string;
+  placeholder: string;
   error?: string;
   required?: boolean;
   className?: string;
@@ -25,7 +25,7 @@ interface DatePickerProps {
 export function DatePicker({
   value,
   onChange,
-  placeholder = 'Pick a date',
+  placeholder,
   error,
   required,
   className,
