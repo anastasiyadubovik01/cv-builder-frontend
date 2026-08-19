@@ -5,6 +5,7 @@ import type { TFunction } from 'i18next';
 import { ChangeDialog } from '@/components/dialogs/ChangeDialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { DatePicker } from '@/components/ui/date-picker';
 import type {
   createActionTitles,
   updateActionTitles,
@@ -38,6 +39,14 @@ export function ChangeProjectModal({
   handleSubmit,
   t,
 }: ChangeProjectModalProps) {
+  const handleDateSelect =
+    (field: keyof CreateProjectInputValues) => (dateString: string) => {
+      const fieldHandler = handleChange(field);
+      fieldHandler({
+        target: { value: dateString },
+      } as ChangeEvent<HTMLInputElement>);
+    };
+
   return (
     <ChangeDialog
       actionTitle={type}
@@ -75,10 +84,9 @@ export function ChangeProjectModal({
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Input
-            type="date"
+          <DatePicker
             value={formData.startDate}
-            onChange={handleChange('startDate')}
+            onChange={handleDateSelect('startDate')}
             placeholder={t('projects.startDate', 'Start Date')}
             required
             error={
@@ -87,10 +95,9 @@ export function ChangeProjectModal({
                 : undefined
             }
           />
-          <Input
-            type="date"
+          <DatePicker
             value={formData.endDate}
-            onChange={handleChange('endDate')}
+            onChange={handleDateSelect('endDate')}
             placeholder={t('projects.endDate', 'End Date')}
             error={
               errors.endDate
