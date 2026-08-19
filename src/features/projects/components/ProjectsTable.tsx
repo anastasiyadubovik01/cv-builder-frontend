@@ -72,10 +72,6 @@ export function ProjectsTable({
           ariaLabel={`Actions for ${project.name}`}
           actions={[
             {
-              label: t('dialogs.actions.view', 'View'),
-              href: `/projects/${project.id}`,
-            },
-            {
               label: t('dialogs.actions.update', 'Update'),
               onClick: () => {
                 setEditingProject(project);
