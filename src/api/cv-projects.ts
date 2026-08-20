@@ -38,6 +38,30 @@ export interface CvProjectsVars {
   cvId: string;
 }
 
+export interface UpdateCvProjectInput {
+  cvId: string;
+  projectId: string;
+  start_date: string;
+  end_date?: string | null;
+  roles: string[];
+  responsibilities: string[];
+}
+
+export interface UpdateCvProjectData {
+  updateCvProject: {
+    id: string;
+    created_at: string;
+    name: string;
+    education?: string | null;
+    description: string;
+    projects: ApiCvProject[];
+  };
+}
+
+export interface UpdateCvProjectVars {
+  project: UpdateCvProjectInput;
+}
+
 export const CV_PROJECTS_QUERY: TypedDocumentNode<
   CvProjectsData,
   CvProjectsVars
@@ -96,7 +120,10 @@ export const ADD_CV_PROJECT_MUTATION = gql`
   }
 `;
 
-export const UPDATE_CV_PROJECT_MUTATION = gql`
+export const UPDATE_CV_PROJECT_MUTATION: TypedDocumentNode<
+  UpdateCvProjectData,
+  UpdateCvProjectVars
+> = gql`
   mutation UpdateCvProject($project: UpdateCvProjectInput!) {
     updateCvProject(project: $project) {
       id

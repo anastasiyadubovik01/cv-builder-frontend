@@ -105,7 +105,7 @@ export function useAddCvProjectForm({
 
     const responsibilitiesArray = formData.responsibilities
       ? formData.responsibilities
-          .split(/[\n,]+/)
+          .split(',')
           .map((item) => item.trim())
           .filter(Boolean)
       : [];
@@ -117,7 +117,7 @@ export function useAddCvProjectForm({
             cvId,
             projectId: formData.projectId,
             start_date: formData.startDate.trim(),
-            end_date: formData.endDate.trim() || null,
+            end_date: formData.endDate?.trim() || null,
             roles: rolesArray,
             responsibilities: responsibilitiesArray,
           },

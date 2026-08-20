@@ -53,7 +53,7 @@ export type ChangeCvProjectModalProps = {
     value: string,
   ) => void;
   validateField: (field: keyof CreateCvProjectInputValues) => boolean;
-  handleProjectSelect: (projectId: string) => void;
+  handleProjectSelect?: (projectId: string) => void;
   handleSubmit: () => Promise<boolean>;
   t: TFunction;
 };
@@ -137,7 +137,7 @@ export function ChangeCvProjectModal({
               disabled={isUpdate}
               onValueChange={(value) => {
                 if (value) {
-                  handleProjectSelect(value);
+                  handleProjectSelect?.(value);
                 }
               }}
             >

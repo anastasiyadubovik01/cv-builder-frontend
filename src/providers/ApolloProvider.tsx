@@ -79,9 +79,23 @@ function makeClient() {
     return forward(operation);
   });
 
+  const cache = new InMemoryCache({
+    typePolicies: {
+      Cv: {
+        fields: {
+          projects: {
+            merge(_existing, incoming) {
+              return incoming;
+            },
+          },
+        },
+      },
+    },
+  });
+
   // GraphQL client
   return new ApolloClient({
-    cache: new InMemoryCache(),
+    cache: cache,
     link: errorLink.concat(authLink).concat(httpLink),
   });
 }

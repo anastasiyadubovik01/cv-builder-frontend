@@ -16,27 +16,7 @@ import type {
   CvProjectSortField,
   SortDirection,
 } from '@/features/cvs/types';
-import { CV_PROJECTS_QUERY } from '@/api/cv-projects';
-
-interface ApiCvProject {
-  id: string;
-  name: string;
-  domain: string;
-  responsibilities: string[];
-  start_date: string;
-  end_date: string | null;
-  description: string;
-  environment: string[];
-  roles: string[];
-  project?: {
-    name: string;
-    domain: string;
-    start_date: string;
-    end_date: string | null;
-    description: string;
-    environment: string[];
-  };
-}
+import { CV_PROJECTS_QUERY, type ApiCvProject } from '@/api/cv-projects';
 
 interface CvProjectsContentProps {
   cvId: string;
@@ -150,11 +130,14 @@ export function CvProjectsContent({ cvId }: CvProjectsContentProps) {
         ) : (
           <div className="min-h-0 flex-1 overflow-y-auto">
             <CvProjectsTable
+              cvId={cvId}
               projects={sortedProjects}
+              rawProjects={apiProjects}
               sortBy={sortBy}
               sortDirection={sortDirection}
               onSort={handleSort}
               hasSearchQuery={normalizedSearch.length > 0}
+              onRefetch={handleRefresh}
             />
           </div>
         )}
