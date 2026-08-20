@@ -189,11 +189,13 @@ export function CvsContent({
           trigger={
             <Button
               type="button"
-              className="flex items-center gap-2 uppercase font-medium text-[14px]"
+              className="w-10 border-transparent px-0 lg:w-auto lg:gap-3 lg:border-transparent lg:px-5 lg:hover:border-primary"
               variant="primaryV2"
             >
               <PlusIcon className="size-6" />
-              {t('cvs.createCv', 'CREATE CV')}
+              <span className="hidden lg:inline">
+                {t('cvs.createCv', 'CREATE CV')}
+              </span>
             </Button>
           }
         />

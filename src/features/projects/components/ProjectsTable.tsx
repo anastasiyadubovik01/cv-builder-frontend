@@ -1,0 +1,156 @@
+'use client';
+
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { DataTable, type DataTableColumn } from '@/components/ui/data-table';
+import { RowActionsMenu } from '@/components/ui/row-actions-menu';
+import { Badge } from '@/components/ui/badge';
+
+import { UpdateProjectModal } from './modals/UpdateProjectModal';
+import { DeleteProjectModal } from './modals/DeleteProjectModal';
+import type { Project, ProjectSortField, SortDirection } from '../types';
+
+type ProjectsTableProps = {
+  projects: Project[];
+  sortBy: ProjectSortField;
+  sortDirection: SortDirection;
+  onSort: (field: ProjectSortField) => void;
+  onUpdateSuccess?: () => void | Promise<void>;
+  onDeleteSuccess?: () => void | Promise<void>;
+};
+
+export function ProjectsTable({
+  projects,
+  sortBy,
+  sortDirection,
+  onSort,
+  onUpdateSuccess,
+  onDeleteSuccess,
+}: ProjectsTableProps) {
+  const { t } = useTranslation();
+  const [openMenuProjectId, setOpenMenuProjectId] = useState<string | null>(
+    null,
+  );
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [deletingProject, setDeletingProject] = useState<Project | null>(null);
+
+  const columns: DataTableColumn<Project, ProjectSortField>[] = [
+    {
+      id: 'name',
+      sortKey: 'name',
+      header: t('projects.name', 'Name'),
+      render: (project) => project.name,
+    },
+    {
+      id: 'domain',
+      header: t('projects.domain', 'Domain'),
+      render: (project) => project.domain,
+    },
+    {
+      id: 'startDate',
+      sortKey: 'startDate',
+      header: t('projects.startDate', 'Start Date'),
+      render: (project) => project.startDate,
+    },
+    {
+      id: 'endDate',
+      sortKey: 'endDate',
+      header: t('projects.endDate', 'End Date'),
+      render: (project) => project.endDate,
+    },
+    {
+      id: 'actions',
+      header: '',
+      widthClassName: 'w-10',
+      render: (project) => (
+        <RowActionsMenu
+          open={openMenuProjectId === project.id}
+          onOpenChange={(open) =>
+            setOpenMenuProjectId(open ? project.id : null)
+          }
+          ariaLabel={`Actions for ${project.name}`}
+          actions={[
+            {
+              label: t('dialogs.actions.update', 'Update'),
+              onClick: () => {
+                setEditingProject(project);
+              },
+            },
+            {
+              label: t('dialogs.actions.delete', 'Delete'),
+              onClick: () => {
+                setDeletingProject(project);
+              },
+            },
+          ]}
+        />
+      ),
+    },
+  ];
+
+  return (
+    <>
+      <DataTable
+        data={projects}
+        columns={columns}
+        getRowKey={(project) => project.id}
+        sortBy={sortBy}
+        sortDirection={sortDirection}
+        onSort={onSort}
+        emptyState={t('projects.emptyState', 'No projects found')}
+        renderSubRow={(project) => {
+          const hasDescription = Boolean(project.description);
+          const hasSkills = Boolean(project.environmentSkills?.length);
+
+          if (!hasDescription && !hasSkills) return null;
+
+          return (
+            <div className="flex flex-col gap-3 py-1">
+              {hasDescription && (
+                <p
+                  className="text-[16px] font-regular leading-relaxed"
+                  style={{ color: 'var(--users-foreground)', opacity: 0.5 }}
+                >
+                  {project.description}
+                </p>
+              )}
+
+              {hasSkills && (
+                <div className="flex flex-wrap items-center gap-2">
+                  {project.environmentSkills?.map((skill) => (
+                    <Badge key={skill}>{skill}</Badge>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        }}
+      />
+      {editingProject && (
+        <UpdateProjectModal
+          project={editingProject}
+          open={Boolean(editingProject)}
+          onOpenChange={(open) => {
+            if (!open) setEditingProject(null);
+          }}
+          onSuccess={onUpdateSuccess}
+        />
+      )}
+      {deletingProject && (
+        <DeleteProjectModal
+          projectId={deletingProject.id}
+          name={deletingProject.name}
+          open={Boolean(deletingProject)}
+          onOpenChange={(open) => {
+            if (!open) setDeletingProject(null);
+          }}
+          onSuccess={async () => {
+            setDeletingProject(null);
+            await onDeleteSuccess?.();
+          }}
+        />
+      )}
+    </>
+  );
+}

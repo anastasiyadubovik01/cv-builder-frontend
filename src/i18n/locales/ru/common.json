@@ -328,6 +328,41 @@
     }
   },
 
+  "projects": {
+    "title": "Проекты",
+    "name": "Название",
+    "domain": "Область",
+    "startDate": "Дата начала",
+    "endDate": "Дата окончания",
+    "description": "Описание",
+    "environment": "Стек технологий",
+    "search": "Поиск",
+    "emptyState": "Проекты не найдены",
+    "loadError": "Не удалось загрузить проекты",
+    "present": "По настоящее время",
+    "createProject": "Создать проект",
+    "actions": {
+      "create": "СОЗДАТЬ",
+      "cancel": "ОТМЕНА"
+    },
+    "errors": {
+      "nameRequired": "Название проекта обязательно",
+      "nameMaxLength": "Название проекта не должно превышать 100 символов",
+      "domainRequired": "Область обязательна",
+      "domainMaxLength": "Область не должна превышать 100 символов",
+      "startDateRequired": "Дата начала обязательна",
+      "endDateRequired": "Дата окончания обязательна",
+      "endDateMustBeLater": "Дата окончания должна быть позже даты начала",
+      "descriptionRequired": "Описание обязательно",
+      "descriptionMaxLength": "Описание не должно превышать 2000 символов"
+    },
+    "notifications": {
+      "createSuccess": "Проект успешно создан",
+      "updateSuccess": "Проект успешно обновлен",
+      "deleteSuccess": "Проект успешно удален"
+    }
+  },
+
   "dialogs": {
     "delete": {
       "title": "Удалить ",
