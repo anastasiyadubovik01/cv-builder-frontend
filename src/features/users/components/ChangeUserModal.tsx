@@ -155,6 +155,7 @@ export function ChangeUserModal({
             <SelectTrigger
               label={t('users.create.department')}
               className="border-[#AEAEAE] bg-secondary"
+              error={errors.departmentId ? t(errors.departmentId) : undefined}
               aria-label={t('users.create.department')}
               aria-invalid={Boolean(errors.departmentId)}
               onBlur={() => validateField('departmentId')}
@@ -170,12 +171,6 @@ export function ChangeUserModal({
               ))}
             </SelectContent>
           </Select>
-
-          {errors.departmentId && (
-            <p className="mt-1 ml-3 text-xs text-destructive">
-              {t(errors.departmentId)}
-            </p>
-          )}
         </div>
 
         <div>
@@ -191,6 +186,7 @@ export function ChangeUserModal({
             <SelectTrigger
               label={t('users.create.position')}
               className="border-[#AEAEAE] bg-secondary"
+              error={errors.positionId ? t(errors.positionId) : undefined}
               aria-label={t('users.create.position')}
               aria-invalid={Boolean(errors.positionId)}
               onBlur={() => validateField('positionId')}
@@ -206,12 +202,6 @@ export function ChangeUserModal({
               ))}
             </SelectContent>
           </Select>
-
-          {errors.positionId && (
-            <p className="mt-1 ml-3 text-xs text-destructive">
-              {t(errors.positionId)}
-            </p>
-          )}
         </div>
 
         <div>
@@ -227,6 +217,7 @@ export function ChangeUserModal({
             <SelectTrigger
               label={t('users.create.role')}
               className="border-[#AEAEAE] bg-secondary"
+              error={errors.role ? t(errors.role) : undefined}
               aria-label={t('users.create.role')}
               aria-invalid={Boolean(errors.role)}
               onBlur={() => validateField('role')}
@@ -242,12 +233,6 @@ export function ChangeUserModal({
               ))}
             </SelectContent>
           </Select>
-
-          {errors.role && (
-            <p className="mt-1 ml-3 text-xs text-destructive">
-              {t(errors.role)}
-            </p>
-          )}
         </div>
       </div>
     </ChangeDialog>
