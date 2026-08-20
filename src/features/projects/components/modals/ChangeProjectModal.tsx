@@ -7,13 +7,7 @@ import { ChangeDialog } from '@/components/dialogs/ChangeDialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { DatePicker } from '@/components/ui/date-picker';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { MultiSelect } from '@/components/ui/multi-select';
 import type {
   createActionTitles,
   updateActionTitles,
@@ -64,6 +58,17 @@ export function ChangeProjectModal({
     value: skill.name,
     label: skill.name,
   }));
+
+  const selectedSkills = formData.environment
+    ? formData.environment
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean)
+    : [];
+
+  const handleSkillsChange = (newSkills: string[]) => {
+    setFieldValue('environment', newSkills.join(', '));
+  };
 
   const handleDateSelect =
     (field: keyof CreateProjectInputValues) => (dateString: string) => {
@@ -146,38 +151,15 @@ export function ChangeProjectModal({
           }
         />
 
-        <div>
-          <Select
-            items={skillOptions}
-            value={formData.environment}
-            onValueChange={(value) => {
-              if (value) {
-                setFieldValue('environment', value);
-              }
-            }}
-            disabled={skillsLoading}
-          >
-            <SelectTrigger
-              label={t('projects.environment', 'Environment')}
-              error={errors.environment ? t(errors.environment) : undefined}
-              className="border-[#AEAEAE] bg-secondary"
-              aria-label={t('projects.environment', 'Environment')}
-              aria-invalid={Boolean(errors.environment)}
-            >
-              <SelectValue
-                placeholder={t('projects.environment', 'Environment')}
-              />
-            </SelectTrigger>
-
-            <SelectContent>
-              {skillOptions.map(({ value, label }) => (
-                <SelectItem key={value} value={value}>
-                  {label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <MultiSelect
+          options={skillOptions}
+          value={selectedSkills}
+          onChange={handleSkillsChange}
+          placeholder={t('projects.environment', 'Environment')}
+          label={t('projects.environment', 'Environment')}
+          error={errors.environment ? t(errors.environment) : undefined}
+          disabled={skillsLoading}
+        />
       </div>
     </ChangeDialog>
   );

@@ -27,7 +27,9 @@ const getProjectInitialValues = (
     startDate: proj.startDate || '',
     endDate: isPresent ? '' : proj.endDate || '',
     description: proj.description || '',
-    environment: proj.environmentSkills?.[0] || '',
+    environment: Array.isArray(proj.environmentSkills)
+      ? proj.environmentSkills.join(', ')
+      : '',
   };
 };
 
