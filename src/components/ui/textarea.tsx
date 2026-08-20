@@ -18,7 +18,7 @@ function Textarea({
   const hasValue = value !== undefined && value !== '';
 
   return (
-    <div className="relative h-[120px]">
+    <div className="relative max-h-[120px]">
       {placeholder && (hasValue || error) && (
         <Label
           className={cn(

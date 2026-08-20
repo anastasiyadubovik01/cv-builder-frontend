@@ -336,6 +336,9 @@
     "endDate": "Дата окончания",
     "description": "Описание",
     "environment": "Стек технологий",
+    "roles": "Роли",
+    "responsibilities": "Обязанности",
+    "addProject": "ДОБАВИТЬ ПРОЕКТ",
     "search": "Поиск",
     "emptyState": "Проекты не найдены",
     "loadError": "Не удалось загрузить проекты",
@@ -344,6 +347,16 @@
     "actions": {
       "create": "СОЗДАТЬ",
       "cancel": "ОТМЕНА"
+    },
+    "validation": {
+      "projectRequired": "Выберите проект",
+      "startDateRequired": "Дата начала обязательна",
+      "endDateRequired": "Дата окончания обязательна",
+      "rolesRequired": "Выберите хотя бы одну роль",
+      "endDateMustBeLater": "Дата окончания не может быть раньше даты начала",
+      "startDateWithinProject": "Дата начала должна быть в пределах сроков проекта",
+      "endDateWithinProject": "Дата окончания должна быть в пределах сроков проекта",
+      "projectHasBeenAdded": "Проект уже добавлен"
     },
     "errors": {
       "nameRequired": "Название проекта обязательно",
@@ -359,7 +372,10 @@
     "notifications": {
       "createSuccess": "Проект успешно создан",
       "updateSuccess": "Проект успешно обновлен",
-      "deleteSuccess": "Проект успешно удален"
+      "deleteSuccess": "Проект успешно удален",
+      "addCvProjectSuccess": "Проект успешно добавлен в резюме",
+      "updateCvProjectSuccess": "Проект в резюме успешно обновлен",
+      "deleteCvProjectSuccess": "Проект успешно удален из резюме"
     }
   },
 

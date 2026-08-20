@@ -9,13 +9,14 @@ import { Button } from '@/components/ui/button';
 import { LoadingOverlay } from '@/components/ui/loading-overlay';
 import { SearchInput } from '@/components/ui/search-input';
 import { CvProjectsTable } from '@/features/cvs/components/CvProjectsTable';
+import { AddCvProjectModal } from '@/features/cvs/components/modals/AddCvProjectModal';
 
 import type {
   CvProject,
   CvProjectSortField,
   SortDirection,
 } from '@/features/cvs/types';
-import { CV_PROJECTS_QUERY } from '@/api/cvs';
+import { CV_PROJECTS_QUERY } from '@/api/cv-projects';
 
 interface ApiCvProject {
   id: string;
@@ -47,6 +48,7 @@ export function CvProjectsContent({ cvId }: CvProjectsContentProps) {
   const [search, setSearch] = useState('');
   const [sortBy, setSortBy] = useState<CvProjectSortField>('name');
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const { data, loading, error, refetch } = useQuery(CV_PROJECTS_QUERY, {
     variables: { cvId },
@@ -99,7 +101,7 @@ export function CvProjectsContent({ cvId }: CvProjectsContentProps) {
     setSortDirection('asc');
   };
 
-  const handleRefresh = async () => {
+  const handleRefresh = async (): Promise<void> => {
     await refetch();
   };
 
@@ -115,16 +117,24 @@ export function CvProjectsContent({ cvId }: CvProjectsContentProps) {
           className="bg-background"
         />
 
-        <Button
-          type="button"
-          className="w-10 border-transparent px-0 lg:w-auto lg:gap-3 lg:border-transparent lg:px-5 lg:hover:border-primary"
-          variant="primaryV2"
-        >
-          <PlusIcon className="size-6" />
-          <span className="hidden lg:inline">
-            {t('projects.addProject', 'ADD PROJECT')}
-          </span>
-        </Button>
+        <AddCvProjectModal
+          cvId={cvId}
+          open={isCreateModalOpen}
+          onOpenChange={setIsCreateModalOpen}
+          onSuccess={handleRefresh}
+          trigger={
+            <Button
+              type="button"
+              className="w-10 border-transparent px-0 lg:w-auto lg:gap-3 lg:border-transparent lg:px-5 lg:hover:border-primary"
+              variant="primaryV2"
+            >
+              <PlusIcon className="size-6" />
+              <span className="hidden lg:inline">
+                {t('projects.addProject', 'ADD PROJECT')}
+              </span>
+            </Button>
+          }
+        />
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col px-6 pt-4">

@@ -335,6 +335,9 @@
     "endDate": "End Date",
     "description": "Description",
     "environment": "Environment",
+    "roles": "Roles",
+    "responsibilities": "Responsibilities",
+    "addProject": "ADD PROJECT",
     "search": "Search",
     "emptyState": "No projects found",
     "loadError": "Failed to load projects",
@@ -343,6 +346,16 @@
     "actions": {
       "create": "CREATE",
       "cancel": "CANCEL"
+    },
+    "validation": {
+      "projectRequired": "Project is required",
+      "startDateRequired": "Start date is required",
+      "endDateRequired": "End date is required",
+      "rolesRequired": "At least one role must be selected",
+      "endDateMustBeLater": "End date cannot be earlier than start date",
+      "startDateWithinProject": "Start date must be within project duration",
+      "endDateWithinProject": "End date must be within project duration",
+      "projectHasBeenAdded": "Project has been already added"
     },
     "errors": {
       "nameRequired": "Project name is required",
@@ -358,7 +371,10 @@
     "notifications": {
       "createSuccess": "Project has been successfully created",
       "updateSuccess": "Project has been successfully updated",
-      "deleteSuccess": "Project has been successfully deleted"
+      "deleteSuccess": "Project has been successfully deleted",
+      "addCvProjectSuccess": "Project has been successfully added to CV",
+      "updateCvProjectSuccess": "CV project has been successfully updated",
+      "deleteCvProjectSuccess": "Project has been successfully removed from CV"
     }
   },
 
