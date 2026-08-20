@@ -130,3 +130,4 @@ export const DELETE_CV_MUTATION = gql`
     }
   }
 `;
+

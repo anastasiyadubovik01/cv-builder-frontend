@@ -19,6 +19,8 @@ export const DEFAULT_ERROR_MAPPING: ErrorMapping = {
   [SERVER_ERROR_CODES.UNAUTHORIZED]: 'auth.errors.unauthorized',
   [SERVER_ERROR_CODES.EXPIRED_RESET_TOKEN]: 'auth.errors.expiredResetToken',
   [SERVER_ERROR_CODES.INVALID_OTP]: 'auth.errors.invalidOtp',
+  [SERVER_ERROR_CODES.PROJECT_HAS_BEEN_ADDED]:
+    'projects.errors.projectHasBeenAdded',
 
   // Пока не протестированы конкретные имена ошибок
   [SERVER_ERROR_CODES.EXPIRED_OTP]: 'auth.errors.expiredOtp',

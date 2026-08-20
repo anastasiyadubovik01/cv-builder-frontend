@@ -6,6 +6,7 @@ export const SERVER_ERROR_CODES = {
   UNAUTHORIZED: 'unauthorized',
   EXPIRED_RESET_TOKEN: 'actionExpired',
   INVALID_OTP: 'mailNotFound',
+  PROJECT_HAS_BEEN_ADDED: 'projectHasBeenAdded',
 
   // Пока не протестированы конкретные имена ошибок
   EXPIRED_OTP: 'expiredOtp',
