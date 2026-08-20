@@ -265,6 +265,11 @@ export function ProfileFields({
             <SelectTrigger
               id="department"
               className="h-12 w-full"
+              error={
+                canEdit && errors.departmentId
+                  ? t(errors.departmentId)
+                  : undefined
+              }
               aria-invalid={Boolean(canEdit && errors.departmentId)}
             >
               <SelectValue>
@@ -282,12 +287,6 @@ export function ProfileFields({
               ))}
             </SelectContent>
           </Select>
-
-          {canEdit && errors.departmentId && (
-            <p className="ml-4 mt-1 text-xs text-destructive">
-              {t(errors.departmentId)}
-            </p>
-          )}
         </div>
 
         <div>
@@ -303,6 +302,11 @@ export function ProfileFields({
             <SelectTrigger
               id="position"
               className="h-12 w-full"
+              error={
+                canEdit && errors.departmentId
+                  ? t(errors.departmentId)
+                  : undefined
+              }
               aria-invalid={Boolean(canEdit && errors.positionId)}
             >
               <SelectValue>
@@ -320,12 +324,6 @@ export function ProfileFields({
               ))}
             </SelectContent>
           </Select>
-
-          {canEdit && errors.positionId && (
-            <p className="ml-4 mt-1 text-xs text-destructive">
-              {t(errors.positionId)}
-            </p>
-          )}
         </div>
       </div>
 

@@ -96,6 +96,7 @@ export function ChangeUserLanguageModal({
             <SelectTrigger
               label={t('users.languages.language')}
               className="border-[#AEAEAE] bg-secondary"
+              error={errors.languageName ? t(errors.languageName) : undefined}
               aria-label={t('users.languages.language')}
               aria-invalid={Boolean(errors.languageName)}
               onBlur={() => validateField('languageName')}
@@ -111,12 +112,6 @@ export function ChangeUserLanguageModal({
               ))}
             </SelectContent>
           </Select>
-
-          {errors.languageName && (
-            <p className="mt-1 ml-3 text-xs text-destructive">
-              {t(errors.languageName)}
-            </p>
-          )}
         </div>
 
         <div>
@@ -132,6 +127,7 @@ export function ChangeUserLanguageModal({
             <SelectTrigger
               label={t('users.languages.proficiency')}
               className="border-[#AEAEAE] bg-secondary"
+              error={errors.proficiency ? t(errors.proficiency) : undefined}
               aria-label={t('users.languages.proficiency')}
               aria-invalid={Boolean(errors.proficiency)}
               onBlur={() => validateField('proficiency')}
@@ -147,12 +143,6 @@ export function ChangeUserLanguageModal({
               ))}
             </SelectContent>
           </Select>
-
-          {errors.proficiency && (
-            <p className="mt-1 ml-3 text-xs text-destructive">
-              {t(errors.proficiency)}
-            </p>
-          )}
         </div>
       </div>
     </ChangeDialog>
