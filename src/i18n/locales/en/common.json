@@ -284,6 +284,7 @@
       }
     }
   },
+
   "languages": {
     "admin": {
       "search": "Search",
@@ -307,6 +308,14 @@
         "deleteSuccess": "Language successfully deleted"
       }
     }
+  },
+
+  "departments": {
+    "title": "Departments",
+    "search": "Search",
+    "name": "Name",
+    "empty": "No departments found",
+    "loadError": "Failed to load departments"
   },
 
   "cvs": {
