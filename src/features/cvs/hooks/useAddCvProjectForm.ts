@@ -75,17 +75,21 @@ export function useAddCvProjectForm({
     const project = catalogProjects.find((p) => p.id === selectedProjectId);
     if (!project) return;
 
-    setFormData({
-      ...INITIAL_VALUES,
+    const envString = Array.isArray(project.environment)
+      ? project.environment.join(', ')
+      : project.environment || '';
+
+    setFormData((prev) => ({
+      ...prev,
       projectId: project.id,
       domain: project.domain || '',
       description: project.description || '',
-      environment: (project.environment || []).join(', '),
+      environment: envString,
       startDate: project.start_date || '',
       endDate: project.end_date || '',
       projectStartDate: project.start_date || '',
       projectEndDate: project.end_date || '',
-    });
+    }));
     clearErrors();
   };
 
@@ -101,7 +105,7 @@ export function useAddCvProjectForm({
 
     const responsibilitiesArray = formData.responsibilities
       ? formData.responsibilities
-          .split('\n')
+          .split(/[\n,]+/)
           .map((item) => item.trim())
           .filter(Boolean)
       : [];

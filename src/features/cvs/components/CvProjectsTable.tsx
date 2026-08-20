@@ -99,12 +99,18 @@ export function CvProjectsTable({
       emptyState={emptyStateMessage}
       renderSubRow={(project) => {
         const hasDescription = Boolean(project.description);
-        const hasResponsibilities = Boolean(project.responsibilities?.length);
+
+        const parsedResponsibilities = (project.responsibilities || [])
+          .flatMap((item) => item.split(/[\n,]+/))
+          .map((item) => item.trim())
+          .filter(Boolean);
+
+        const hasResponsibilities = parsedResponsibilities.length > 0;
 
         if (!hasDescription && !hasResponsibilities) return null;
 
         return (
-          <div className="flex flex-col gap-3 py-1">
+          <div className="flex flex-col gap-4.5">
             {hasDescription && (
               <p
                 className="text-[16px] font-regular leading-relaxed"
@@ -116,8 +122,10 @@ export function CvProjectsTable({
 
             {hasResponsibilities && (
               <div className="flex flex-wrap items-center gap-2">
-                {project.responsibilities.map((resp) => (
-                  <Badge key={resp}>{resp}</Badge>
+                {parsedResponsibilities.map((resp, idx) => (
+                  <Badge variant="secondary" key={`${resp}-${idx}`}>
+                    {resp}
+                  </Badge>
                 ))}
               </div>
             )}
