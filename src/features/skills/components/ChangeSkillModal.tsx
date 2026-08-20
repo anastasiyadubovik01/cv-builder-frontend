@@ -112,6 +112,7 @@ export function ChangeSkillModal({
             <SelectTrigger
               label={t('skills.admin.category')}
               className="border-[#AEAEAE] bg-secondary"
+              error={errors.categoryId ? t(errors.categoryId) : undefined}
               aria-label={t('skills.admin.category')}
               aria-invalid={Boolean(errors.categoryId)}
               onBlur={() => validateField('categoryId')}
@@ -127,12 +128,6 @@ export function ChangeSkillModal({
               ))}
             </SelectContent>
           </Select>
-
-          {errors.categoryId && (
-            <p className="mt-1 ml-3 text-xs text-destructive">
-              {t(errors.categoryId)}
-            </p>
-          )}
         </div>
       </div>
     </ChangeDialog>

@@ -27,7 +27,7 @@ const getProjectInitialValues = (
     startDate: proj.startDate || '',
     endDate: isPresent ? '' : proj.endDate || '',
     description: proj.description || '',
-    environment: proj.environmentSkills
+    environment: Array.isArray(proj.environmentSkills)
       ? proj.environmentSkills.join(', ')
       : '',
   };
@@ -49,6 +49,7 @@ export function useUpdateProjectForm({
     errors,
     validateForm,
     handleChange,
+    setFieldValue,
     setFormData,
     clearErrors,
   } = useValidatedForm<CreateProjectInputValues>({
@@ -116,6 +117,7 @@ export function useUpdateProjectForm({
     loading,
     validateForm,
     handleChange,
+    setFieldValue,
     handleSubmit,
     resetForm,
     t,

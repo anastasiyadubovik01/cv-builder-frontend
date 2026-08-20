@@ -95,6 +95,7 @@ export function ChangeUserSkillModal({
             <SelectTrigger
               label={t('users.skills.skill')}
               className="border-[#AEAEAE] bg-secondary"
+              error={errors.skillName ? t(errors.skillName) : undefined}
               aria-label={t('users.skills.skill')}
               aria-invalid={Boolean(errors.skillName)}
               onBlur={() => validateField('skillName')}
@@ -110,12 +111,6 @@ export function ChangeUserSkillModal({
               ))}
             </SelectContent>
           </Select>
-
-          {errors.skillName && (
-            <p className="mt-1 ml-3 text-xs text-destructive">
-              {t(errors.skillName)}
-            </p>
-          )}
         </div>
 
         <div>
@@ -131,6 +126,7 @@ export function ChangeUserSkillModal({
             <SelectTrigger
               label={t('users.skills.mastery')}
               className="border-[#AEAEAE] bg-secondary"
+              error={errors.mastery ? t(errors.mastery) : undefined}
               aria-label={t('users.skills.mastery')}
               aria-invalid={Boolean(errors.mastery)}
               onBlur={() => validateField('mastery')}
@@ -146,12 +142,6 @@ export function ChangeUserSkillModal({
               ))}
             </SelectContent>
           </Select>
-
-          {errors.mastery && (
-            <p className="mt-1 ml-3 text-xs text-destructive">
-              {t(errors.mastery)}
-            </p>
-          )}
         </div>
       </div>
     </ChangeDialog>

@@ -56,7 +56,7 @@ export function DatePicker({
             error={error}
             className="pr-10 cursor-pointer"
           />
-          <CalendarIcon className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-muted-foreground pointer-events-none" />
+          <CalendarIcon className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-[#626262] dark:text-[#AEAEAE] pointer-events-none" />
         </div>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">

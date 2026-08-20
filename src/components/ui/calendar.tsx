@@ -9,6 +9,7 @@ import {
   type DayPickerProps,
 } from 'react-day-picker';
 import { addMonths, subMonths, setMonth, setYear } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -16,20 +17,20 @@ import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 
 type CalendarView = 'days' | 'months' | 'years';
 
-const MONTH_NAMES = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
+const MONTH_KEYS = [
+  'january',
+  'february',
+  'march',
+  'april',
+  'may',
+  'june',
+  'july',
+  'august',
+  'september',
+  'october',
+  'november',
+  'december',
+] as const;
 
 type CalendarProps = DayPickerProps & {
   buttonVariant?: React.ComponentProps<typeof Button>['variant'];
@@ -46,6 +47,7 @@ function Calendar({
   onMonthChange,
   ...props
 }: CalendarProps) {
+  const { t } = useTranslation();
   const defaultClassNames = getDefaultClassNames();
 
   const [view, setView] = React.useState<CalendarView>('days');
@@ -106,9 +108,7 @@ function Calendar({
               view === 'months' && 'text-destructive',
             )}
           >
-            {displayMonth.toLocaleString(locale?.code || 'en-US', {
-              month: 'long',
-            })}
+            {t(`months.${MONTH_KEYS[displayMonth.getMonth()]}`)}
           </button>
           <button
             type="button"
@@ -145,11 +145,11 @@ function Calendar({
 
       {view === 'months' && (
         <div className="grid grid-cols-3 gap-y-5 gap-x-1.5 mt-[53px] mb-[6px]">
-          {MONTH_NAMES.map((monthName, idx) => {
+          {MONTH_KEYS.map((monthKey, idx) => {
             const isSelected = displayMonth.getMonth() === idx;
             return (
               <button
-                key={monthName}
+                key={monthKey}
                 type="button"
                 onClick={() => {
                   handleMonthChange(setMonth(displayMonth, idx));
@@ -162,7 +162,7 @@ function Calendar({
                     : 'hover:bg-muted text-foreground',
                 )}
               >
-                {monthName}
+                {t(`months.${monthKey}`)}
               </button>
             );
           })}
@@ -202,10 +202,15 @@ function Calendar({
           onMonthChange={handleMonthChange}
           locale={locale}
           formatters={{
-            formatWeekdayName: (date) =>
-              date.toLocaleString(locale?.code || 'en-US', {
+            formatWeekdayName: (date) => {
+              const weekdays = t('weekdays.short', { returnObjects: true });
+              if (Array.isArray(weekdays)) {
+                return weekdays[date.getDay()];
+              }
+              return date.toLocaleString(locale?.code || 'en-US', {
                 weekday: 'narrow',
-              }),
+              });
+            },
             ...formatters,
           }}
           classNames={{
@@ -292,7 +297,7 @@ function CalendarDayButton({
         'relative isolate z-10 size-8 rounded-full border-0',
         'text-[18px] font-normal',
         'text-foreground',
-        'data-[outside=true]:text-[#aeaeae] data-[outside=true]:dark:text-[#626262]]',
+        'data-[outside=true]:text-[#aeaeae] data-[outside=true]:dark:text-[#626262]',
         'data-[selected-single=true]:bg-destructive',
         'data-[selected-single=true]:text-white',
         'data-[selected-single=true]:hover:bg-destructive/90',

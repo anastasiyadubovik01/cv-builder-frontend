@@ -32,6 +32,7 @@ export function useCreateProjectForm({
     errors,
     validateForm,
     handleChange,
+    setFieldValue,
     setFormData,
     clearErrors,
   } = useValidatedForm<CreateProjectInputValues>({
@@ -97,6 +98,7 @@ export function useCreateProjectForm({
     loading,
     validateForm,
     handleChange,
+    setFieldValue,
     handleSubmit,
     resetForm,
     t,

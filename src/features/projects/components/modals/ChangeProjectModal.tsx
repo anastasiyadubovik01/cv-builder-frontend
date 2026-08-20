@@ -1,16 +1,21 @@
 'use client';
 
 import React, { ChangeEvent } from 'react';
+import { useQuery } from '@apollo/client/react';
 import type { TFunction } from 'i18next';
 import { ChangeDialog } from '@/components/dialogs/ChangeDialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { DatePicker } from '@/components/ui/date-picker';
+import { MultiSelect } from '@/components/ui/multi-select';
 import type {
   createActionTitles,
   updateActionTitles,
 } from '@/components/dialogs/types';
 import { CreateProjectInputValues } from '@/lib/validations/project';
+import { SKILLS_QUERY } from '@/api/skills';
+
+const SKILLS_LIMIT = 1000;
 
 export interface ChangeProjectModalProps {
   type: createActionTitles | updateActionTitles;
@@ -23,6 +28,7 @@ export interface ChangeProjectModalProps {
   handleChange: (
     field: keyof CreateProjectInputValues,
   ) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  setFieldValue: (field: keyof CreateProjectInputValues, value: string) => void;
   handleSubmit: () => Promise<boolean>;
   t: TFunction;
 }
@@ -36,9 +42,34 @@ export function ChangeProjectModal({
   errors,
   loading,
   handleChange,
+  setFieldValue,
   handleSubmit,
   t,
 }: ChangeProjectModalProps) {
+  const { data: skillsData, loading: skillsLoading } = useQuery(SKILLS_QUERY, {
+    variables: {
+      params: {
+        limit: SKILLS_LIMIT,
+      },
+    },
+  });
+
+  const skillOptions = (skillsData?.skills?.items || []).map((skill) => ({
+    value: skill.name,
+    label: skill.name,
+  }));
+
+  const selectedSkills = formData.environment
+    ? formData.environment
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean)
+    : [];
+
+  const handleSkillsChange = (newSkills: string[]) => {
+    setFieldValue('environment', newSkills.join(', '));
+  };
+
   const handleDateSelect =
     (field: keyof CreateProjectInputValues) => (dateString: string) => {
       const fieldHandler = handleChange(field);
@@ -120,11 +151,14 @@ export function ChangeProjectModal({
           }
         />
 
-        <Input
-          value={formData.environment}
-          onChange={handleChange('environment')}
+        <MultiSelect
+          options={skillOptions}
+          value={selectedSkills}
+          onChange={handleSkillsChange}
           placeholder={t('projects.environment', 'Environment')}
+          label={t('projects.environment', 'Environment')}
           error={errors.environment ? t(errors.environment) : undefined}
+          disabled={skillsLoading}
         />
       </div>
     </ChangeDialog>

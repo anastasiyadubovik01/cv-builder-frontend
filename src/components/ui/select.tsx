@@ -31,18 +31,37 @@ function SelectValue({ className, ...props }: SelectPrimitive.Value.Props) {
 
 type SelectTriggerProps = SelectPrimitive.Trigger.Props & {
   label?: string;
+  error?: string;
+  containerClassName?: string;
 };
 
 function SelectTrigger({
   className,
+  containerClassName,
   children,
   label,
+  error,
   ...props
 }: SelectTriggerProps) {
   return (
-    <div className="relative">
+    <div className={cn('relative', containerClassName)}>
+      {label && (
+        <Label
+          className={cn(
+            'pointer-events-none absolute -top-4 left-2.5 px-1 text-xs',
+            'peer-data-[placeholder]:hidden',
+            error
+              ? 'text-destructive'
+              : 'peer-aria-invalid:block peer-aria-invalid:text-destructive',
+          )}
+        >
+          {label}
+        </Label>
+      )}
+
       <SelectPrimitive.Trigger
         data-slot="select-trigger"
+        aria-invalid={Boolean(error)}
         className={cn(
           [
             'peer group flex h-12 w-full items-center justify-between',
@@ -87,15 +106,9 @@ function SelectTrigger({
         />
       </SelectPrimitive.Trigger>
 
-      {label && (
-        <Label
-          className={cn(
-            'pointer-events-none absolute -top-4 left-2.5 px-1 text-xs',
-            'peer-data-[placeholder]:hidden',
-            'peer-aria-invalid:block peer-aria-invalid:text-destructive',
-          )}
-        >
-          {label}
+      {error && (
+        <Label className="pointer-events-none absolute -bottom-4 left-2.5 px-1 text-xs text-destructive">
+          {error}
         </Label>
       )}
     </div>
