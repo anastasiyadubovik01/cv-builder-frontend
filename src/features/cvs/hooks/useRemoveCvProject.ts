@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 
 import {
   REMOVE_CV_PROJECT_MUTATION,
-  CV_PROJECTS_QUERY,
   type ApiCvProject,
 } from '@/api/cv-projects';
 import { toast } from '@/components/ui/sonner';
@@ -32,10 +31,7 @@ export function useRemoveCvProject(options: UseRemoveCvProjectOptions = {}) {
   const [removeCvProject, { loading }] = useMutation<
     RemoveCvProjectData,
     RemoveCvProjectVariables
-  >(REMOVE_CV_PROJECT_MUTATION, {
-    refetchQueries: [CV_PROJECTS_QUERY],
-    awaitRefetchQueries: true,
-  });
+  >(REMOVE_CV_PROJECT_MUTATION);
 
   const handleDelete = async (
     cvId: string,
