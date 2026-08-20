@@ -286,6 +286,31 @@
     }
   },
 
+  "languages": {
+    "admin": {
+      "search": "Поиск",
+      "name": "Название",
+      "iso": "ISO",
+      "nativeName": "Название на родном языке",
+      "empty": "Языки не найдены",
+      "loadError": "Не удалось загрузить языки",
+      "create": "Создать язык",
+      "validation": {
+        "nameRequired": "Название языка обязательно",
+        "isoRequired": "ISO обязателен",
+        "isoMaxLength": "ISO не должен превышать 5 символов",
+        "nativeNameRequired": "Название на родном языке обязательно",
+        "duplicateName": "Язык уже существует",
+        "duplicateIso": "Такой ISO уже существует"
+      },
+      "notifications": {
+        "createSuccess": "Язык успешно создан",
+        "updateSuccess": "Язык успешно обновлён",
+        "deleteSuccess": "Язык успешно удалён"
+      }
+    }
+  },
+
   "cvs": {
     "name": "Название",
     "education": "Образование",

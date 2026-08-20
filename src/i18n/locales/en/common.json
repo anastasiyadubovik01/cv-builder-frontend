@@ -284,6 +284,30 @@
       }
     }
   },
+  "languages": {
+    "admin": {
+      "search": "Search",
+      "name": "Name",
+      "iso": "ISO",
+      "nativeName": "Native name",
+      "empty": "No languages found",
+      "loadError": "Failed to load languages",
+      "create": "Create language",
+      "validation": {
+        "nameRequired": "Language name is required",
+        "isoRequired": "ISO is required",
+        "isoMaxLength": "ISO must not exceed 5 characters",
+        "nativeNameRequired": "Native name is required",
+        "duplicateName": "Language already exists",
+        "duplicateIso": "ISO code already exists"
+      },
+      "notifications": {
+        "createSuccess": "Language successfully created",
+        "updateSuccess": "Language successfully updated",
+        "deleteSuccess": "Language successfully deleted"
+      }
+    }
+  },
 
   "cvs": {
     "name": "Name",
