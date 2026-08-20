@@ -292,7 +292,7 @@ function CalendarDayButton({
         'relative isolate z-10 size-8 rounded-full border-0',
         'text-[18px] font-normal',
         'text-foreground',
-        'data-[outside=true]:text-[#aeaeae] data-[outside=true]:dark:text-[#626262]]',
+        'data-[outside=true]:text-[#aeaeae] data-[outside=true]:dark:text-[#626262]',
         'data-[selected-single=true]:bg-destructive',
         'data-[selected-single=true]:text-white',
         'data-[selected-single=true]:hover:bg-destructive/90',
