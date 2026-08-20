@@ -105,7 +105,7 @@ export function useAddCvProjectForm({
 
     const responsibilitiesArray = formData.responsibilities
       ? formData.responsibilities
-          .split(/[\n,]+/)
+          .split(',')
           .map((item) => item.trim())
           .filter(Boolean)
       : [];

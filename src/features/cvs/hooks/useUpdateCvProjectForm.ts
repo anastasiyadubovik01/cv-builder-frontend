@@ -45,7 +45,7 @@ export function useUpdateCvProjectForm({
       : '';
 
     const responsibilitiesString = Array.isArray(project.responsibilities)
-      ? project.responsibilities.join('\n')
+      ? project.responsibilities.join(', ')
       : '';
 
     return {
@@ -105,10 +105,6 @@ export function useUpdateCvProjectForm({
     );
   }, [formData, initialValues]);
 
-  const handleProjectSelect = () => {
-    // В режиме Update выбор проекта заблокирован
-  };
-
   const handleSubmit = async (): Promise<boolean> => {
     if (!isDirty) {
       return false;
@@ -125,7 +121,7 @@ export function useUpdateCvProjectForm({
 
     const responsibilitiesArray = formData.responsibilities
       ? formData.responsibilities
-          .split(/[\n,]+/)
+          .split(',')
           .map((item) => item.trim())
           .filter(Boolean)
       : [];
@@ -179,7 +175,6 @@ export function useUpdateCvProjectForm({
     handleChange,
     setFieldValue,
     validateField,
-    handleProjectSelect,
     handleSubmit,
     resetForm,
     t,
