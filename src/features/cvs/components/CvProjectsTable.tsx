@@ -13,6 +13,7 @@ import type {
   SortDirection,
 } from '@/features/cvs/types';
 import { UpdateCvProjectModal } from '@/features/cvs/components/modals/UpdateCvProjectModal';
+import { RemoveCvProjectModal } from '@/features/cvs/components/modals/RemoveCvProjectModal';
 
 type CvProjectsTableProps = {
   cvId: string;
@@ -43,6 +44,10 @@ export function CvProjectsTable({
   const [editingProject, setEditingProject] = useState<ApiCvProject | null>(
     null,
   );
+  const [deletingProject, setDeletingProject] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
 
   const emptyStateMessage = hasSearchQuery
     ? t('projects.noResults', 'No projects found')
@@ -78,6 +83,7 @@ export function CvProjectsTable({
       widthClassName: 'w-10',
       render: (project) => {
         const rawProject = rawProjects.find((p) => p.id === project.id);
+        const realProjectId = rawProject?.project?.id || project.id;
 
         return (
           <RowActionsMenu
@@ -98,7 +104,13 @@ export function CvProjectsTable({
               },
               {
                 label: t('dialogs.actions.delete', 'Delete'),
-                onClick: () => {},
+                onClick: () => {
+                  setDeletingProject({
+                    id: realProjectId,
+                    name: project.name,
+                  });
+                  setOpenMenuProjectId(null);
+                },
               },
             ]}
           />
@@ -121,7 +133,7 @@ export function CvProjectsTable({
           const hasDescription = Boolean(project.description);
 
           const parsedResponsibilities = (project.responsibilities || [])
-            .flatMap((item) => item.split(/[\n,]+/))
+            .flatMap((item) => item.split(','))
             .map((item) => item.trim())
             .filter(Boolean);
 
@@ -164,6 +176,22 @@ export function CvProjectsTable({
           }}
           onSuccess={async () => {
             setEditingProject(null);
+            await onRefetch?.();
+          }}
+        />
+      )}
+
+      {deletingProject && (
+        <RemoveCvProjectModal
+          cvId={cvId}
+          projectId={deletingProject.id}
+          name={deletingProject.name}
+          open={Boolean(deletingProject)}
+          onOpenChange={(open) => {
+            if (!open) setDeletingProject(null);
+          }}
+          onSuccess={async () => {
+            setDeletingProject(null);
             await onRefetch?.();
           }}
         />

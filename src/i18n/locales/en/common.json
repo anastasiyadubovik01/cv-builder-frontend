@@ -374,7 +374,7 @@
       "deleteSuccess": "Project has been successfully deleted",
       "addCvProjectSuccess": "Project has been successfully added to CV",
       "updateCvProjectSuccess": "CV project has been successfully updated",
-      "deleteCvProjectSuccess": "Project has been successfully removed from CV"
+      "removeCvProjectSuccess": "Project has been successfully removed from CV"
     }
   },
 
