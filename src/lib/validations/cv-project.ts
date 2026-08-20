@@ -65,3 +65,4 @@ export const createCvProjectSchema = z
   );
 
 export type CreateCvProjectInputValues = z.infer<typeof createCvProjectSchema>;
+export type UpdateCvProjectInputValues = CreateCvProjectInputValues;

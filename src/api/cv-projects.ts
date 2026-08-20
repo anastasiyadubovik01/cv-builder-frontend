@@ -38,106 +38,133 @@ export interface CvProjectsVars {
   cvId: string;
 }
 
+export interface UpdateCvProjectInput {
+  cvId: string;
+  projectId: string;
+  start_date: string;
+  end_date?: string | null;
+  roles: string[];
+  responsibilities: string[];
+}
+
+export interface UpdateCvProjectData {
+  updateCvProject: {
+    id: string;
+    created_at: string;
+    name: string;
+    education?: string | null;
+    description: string;
+    projects: ApiCvProject[];
+  };
+}
+
+export interface UpdateCvProjectVars {
+  project: UpdateCvProjectInput;
+}
+
 export const CV_PROJECTS_QUERY: TypedDocumentNode<
   CvProjectsData,
   CvProjectsVars
 > = gql`
-    query CvProjects($cvId: ID!) {
-        cv(cvId: $cvId) {
-            id
-            name
-            projects {
-                id
-                name
-                internal_name
-                description
-                domain
-                start_date
-                end_date
-                environment
-                roles
-                responsibilities
-                project {
-                    id
-                    created_at
-                    name
-                    internal_name
-                    domain
-                    start_date
-                    end_date
-                    description
-                    environment
-                }
-            }
+  query CvProjects($cvId: ID!) {
+    cv(cvId: $cvId) {
+      id
+      name
+      projects {
+        id
+        name
+        internal_name
+        description
+        domain
+        start_date
+        end_date
+        environment
+        roles
+        responsibilities
+        project {
+          id
+          created_at
+          name
+          internal_name
+          domain
+          start_date
+          end_date
+          description
+          environment
         }
+      }
     }
+  }
 `;
 
 export const ADD_CV_PROJECT_MUTATION = gql`
-    mutation AddCvProject($project: AddCvProjectInput!) {
-        addCvProject(project: $project) {
-            id
-            created_at
-            name
-            education
-            description
-            projects {
-                id
-                name
-                domain
-                start_date
-                end_date
-                description
-                environment
-                roles
-                responsibilities
-            }
-        }
+  mutation AddCvProject($project: AddCvProjectInput!) {
+    addCvProject(project: $project) {
+      id
+      created_at
+      name
+      education
+      description
+      projects {
+        id
+        name
+        domain
+        start_date
+        end_date
+        description
+        environment
+        roles
+        responsibilities
+      }
     }
+  }
 `;
 
-export const UPDATE_CV_PROJECT_MUTATION = gql`
-    mutation UpdateCvProject($project: UpdateCvProjectInput!) {
-        updateCvProject(project: $project) {
-            id
-            created_at
-            name
-            education
-            description
-            projects {
-                id
-                name
-                domain
-                start_date
-                end_date
-                description
-                environment
-                roles
-                responsibilities
-            }
-        }
+export const UPDATE_CV_PROJECT_MUTATION: TypedDocumentNode<
+  UpdateCvProjectData,
+  UpdateCvProjectVars
+> = gql`
+  mutation UpdateCvProject($project: UpdateCvProjectInput!) {
+    updateCvProject(project: $project) {
+      id
+      created_at
+      name
+      education
+      description
+      projects {
+        id
+        name
+        domain
+        start_date
+        end_date
+        description
+        environment
+        roles
+        responsibilities
+      }
     }
+  }
 `;
 
 export const REMOVE_CV_PROJECT_MUTATION = gql`
-    mutation RemoveCvProject($project: RemoveCvProjectInput!) {
-        removeCvProject(project: $project) {
-            id
-            created_at
-            name
-            education
-            description
-            projects {
-                id
-                name
-                domain
-                start_date
-                end_date
-                description
-                environment
-                roles
-                responsibilities
-            }
-        }
+  mutation RemoveCvProject($project: RemoveCvProjectInput!) {
+    removeCvProject(project: $project) {
+      id
+      created_at
+      name
+      education
+      description
+      projects {
+        id
+        name
+        domain
+        start_date
+        end_date
+        description
+        environment
+        roles
+        responsibilities
+      }
     }
+  }
 `;
