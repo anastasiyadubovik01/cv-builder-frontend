@@ -342,6 +342,7 @@
     "emptyState": "No projects found",
     "loadError": "Failed to load projects",
     "present": "Present",
+    "tillNow": "Till now",
     "createProject": "Create project",
     "actions": {
       "create": "CREATE",
@@ -355,7 +356,7 @@
       "endDateMustBeLater": "End date cannot be earlier than start date",
       "startDateWithinProject": "Start date must be within project duration",
       "endDateWithinProject": "End date must be within project duration",
-      "projectHasBeenAdded": "Project has been already added"
+      "endDateRequiredForFinishedProject": "End date is required because the project has already ended"
     },
     "errors": {
       "nameRequired": "Project name is required",
@@ -366,7 +367,8 @@
       "endDateRequired": "End date is required",
       "endDateMustBeLater": "End date must be later than start date",
       "descriptionRequired": "Description is required",
-      "descriptionMaxLength": "Description must not exceed 2000 characters"
+      "descriptionMaxLength": "Description must not exceed 2000 characters",
+      "projectHasBeenAdded": "Project has been already added"
     },
     "notifications": {
       "createSuccess": "Project has been successfully created",

@@ -343,6 +343,7 @@
     "emptyState": "Проекты не найдены",
     "loadError": "Не удалось загрузить проекты",
     "present": "По настоящее время",
+    "tillNow": "По настоящее время",
     "createProject": "Создать проект",
     "actions": {
       "create": "СОЗДАТЬ",
@@ -356,7 +357,7 @@
       "endDateMustBeLater": "Дата окончания не может быть раньше даты начала",
       "startDateWithinProject": "Дата начала должна быть в пределах сроков проекта",
       "endDateWithinProject": "Дата окончания должна быть в пределах сроков проекта",
-      "projectHasBeenAdded": "Проект уже добавлен"
+      "endDateRequiredForFinishedProject": "Дата окончания обязательна, так как проект уже завершен"
     },
     "errors": {
       "nameRequired": "Название проекта обязательно",
@@ -367,7 +368,8 @@
       "endDateRequired": "Дата окончания обязательна",
       "endDateMustBeLater": "Дата окончания должна быть позже даты начала",
       "descriptionRequired": "Описание обязательно",
-      "descriptionMaxLength": "Описание не должно превышать 2000 символов"
+      "descriptionMaxLength": "Описание не должно превышать 2000 символов",
+      "projectHasBeenAdded": "Проект уже добавлен"
     },
     "notifications": {
       "createSuccess": "Проект успешно создан",

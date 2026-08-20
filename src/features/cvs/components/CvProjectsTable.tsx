@@ -75,7 +75,10 @@ export function CvProjectsTable({
       id: 'endDate',
       sortKey: 'endDate',
       header: t('projects.endDate', 'End Date'),
-      render: (project) => project.endDate ?? '',
+      render: (project) =>
+        project.endDate && project.endDate.trim() !== ''
+          ? project.endDate
+          : t('projects.tillNow', 'Till now'),
     },
     {
       id: 'actions',

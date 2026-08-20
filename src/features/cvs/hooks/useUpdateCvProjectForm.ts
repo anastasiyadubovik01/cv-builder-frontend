@@ -57,8 +57,8 @@ export function useUpdateCvProjectForm({
       domain: project.domain || project.project?.domain || '',
       description: project.description || project.project?.description || '',
       environment: envString,
-      projectStartDate: project.project?.start_date || '',
-      projectEndDate: project.project?.end_date || '',
+      projectStartDate: project.project?.start_date || project.start_date || '',
+      projectEndDate: project.project?.end_date || project.end_date || '',
     };
   }, [project]);
 
@@ -133,7 +133,7 @@ export function useUpdateCvProjectForm({
             cvId,
             projectId: formData.projectId,
             start_date: formData.startDate.trim(),
-            end_date: formData.endDate.trim() || null,
+            end_date: formData.endDate ? formData.endDate.trim() : null,
             roles: rolesArray,
             responsibilities: responsibilitiesArray,
           },
