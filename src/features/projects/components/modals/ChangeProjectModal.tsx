@@ -1,16 +1,27 @@
 'use client';
 
 import React, { ChangeEvent } from 'react';
+import { useQuery } from '@apollo/client/react';
 import type { TFunction } from 'i18next';
 import { ChangeDialog } from '@/components/dialogs/ChangeDialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { DatePicker } from '@/components/ui/date-picker';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import type {
   createActionTitles,
   updateActionTitles,
 } from '@/components/dialogs/types';
 import { CreateProjectInputValues } from '@/lib/validations/project';
+import { SKILLS_QUERY } from '@/api/skills';
+
+const SKILLS_LIMIT = 1000;
 
 export interface ChangeProjectModalProps {
   type: createActionTitles | updateActionTitles;
@@ -23,6 +34,7 @@ export interface ChangeProjectModalProps {
   handleChange: (
     field: keyof CreateProjectInputValues,
   ) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  setFieldValue: (field: keyof CreateProjectInputValues, value: string) => void;
   handleSubmit: () => Promise<boolean>;
   t: TFunction;
 }
@@ -36,9 +48,23 @@ export function ChangeProjectModal({
   errors,
   loading,
   handleChange,
+  setFieldValue,
   handleSubmit,
   t,
 }: ChangeProjectModalProps) {
+  const { data: skillsData, loading: skillsLoading } = useQuery(SKILLS_QUERY, {
+    variables: {
+      params: {
+        limit: SKILLS_LIMIT,
+      },
+    },
+  });
+
+  const skillOptions = (skillsData?.skills?.items || []).map((skill) => ({
+    value: skill.name,
+    label: skill.name,
+  }));
+
   const handleDateSelect =
     (field: keyof CreateProjectInputValues) => (dateString: string) => {
       const fieldHandler = handleChange(field);
@@ -120,12 +146,38 @@ export function ChangeProjectModal({
           }
         />
 
-        <Input
-          value={formData.environment}
-          onChange={handleChange('environment')}
-          placeholder={t('projects.environment', 'Environment')}
-          error={errors.environment ? t(errors.environment) : undefined}
-        />
+        <div>
+          <Select
+            items={skillOptions}
+            value={formData.environment}
+            onValueChange={(value) => {
+              if (value) {
+                setFieldValue('environment', value);
+              }
+            }}
+            disabled={skillsLoading}
+          >
+            <SelectTrigger
+              label={t('projects.environment', 'Environment')}
+              error={errors.environment ? t(errors.environment) : undefined}
+              className="border-[#AEAEAE] bg-secondary"
+              aria-label={t('projects.environment', 'Environment')}
+              aria-invalid={Boolean(errors.environment)}
+            >
+              <SelectValue
+                placeholder={t('projects.environment', 'Environment')}
+              />
+            </SelectTrigger>
+
+            <SelectContent>
+              {skillOptions.map(({ value, label }) => (
+                <SelectItem key={value} value={value}>
+                  {label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
     </ChangeDialog>
   );
