@@ -32,6 +32,7 @@ export function RemoveCvProjectModal({
   return (
     <DeleteDialog
       {...props}
+      actionTitle="Remove"
       name={name}
       itemType="CV Project"
       onConfirm={handleConfirm}

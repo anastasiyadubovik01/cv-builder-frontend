@@ -13,12 +13,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { itemType } from '@/components/dialogs/types';
-import { getItemTypeTranslation } from '@/components/dialogs/i18n';
+import { deleteActionTitles, itemType } from '@/components/dialogs/types';
+import {
+  getActionTranslation,
+  getItemTypeTranslation,
+} from '@/components/dialogs/i18n';
 
 export interface DeleteDialogProps {
   name: string;
   itemType: itemType;
+  actionTitle?: deleteActionTitles;
   onConfirm: () => boolean | Promise<boolean> | void;
   trigger?: React.ReactNode;
   t: (key: string) => string;
@@ -29,6 +33,7 @@ export interface DeleteDialogProps {
 export function DeleteDialog({
   name,
   itemType,
+  actionTitle = 'Delete',
   onConfirm,
   trigger,
   t,
@@ -56,6 +61,7 @@ export function DeleteDialog({
   };
 
   const translatedItemType = getItemTypeTranslation(itemType, t);
+  const translatedAction = getActionTranslation(actionTitle, t);
 
   return (
     <AlertDialog open={isOpen} onOpenChange={handleOpenChange}>
@@ -70,8 +76,7 @@ export function DeleteDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {t('dialogs.delete.title')}
-            {translatedItemType}
+            {translatedAction} {translatedItemType}
           </AlertDialogTitle>
           <AlertDialogDescription className="font-regular text-foreground">
             {t('dialogs.delete.description')} {translatedItemType}{' '}
