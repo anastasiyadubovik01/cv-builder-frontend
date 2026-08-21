@@ -57,7 +57,7 @@ export function CvPreviewContent({ cvId }: CvPreviewContentProps) {
           {t('cvs.preview.loadError', 'Failed to load CV preview')}
         </p>
         <Button variant="secondary" onClick={() => void refetch()}>
-          {t('retry', 'Retry')}
+          {t('retry', 'RETRY')}
         </Button>
       </div>
     );
@@ -80,7 +80,7 @@ export function CvPreviewContent({ cvId }: CvPreviewContentProps) {
     (acc, cvSkill) => {
       const foundSkill = availableSkills.find((s) => s.name === cvSkill.name);
       const categoryName =
-        foundSkill?.category.name ?? t('skills.uncategorized', 'Uncategorized');
+        foundSkill?.category.name ?? t('skills.uncategorized', 'Other');
 
       if (!acc[categoryName]) acc[categoryName] = [];
       acc[categoryName].push(cvSkill.name);
@@ -114,7 +114,7 @@ export function CvPreviewContent({ cvId }: CvPreviewContentProps) {
           disabled={exportLoading}
           className="no-print w-[160px] h-[40px]"
         >
-          Export PDF
+          {t('cvs.preview.exportPdf', 'Export PDF')}
         </Button>
       </header>
 
@@ -123,14 +123,18 @@ export function CvPreviewContent({ cvId }: CvPreviewContentProps) {
           <div className="space-y-4 col-span-4 py-4">
             {cv.education && (
               <div>
-                <h3 className="font-bold">Education</h3>
+                <h3 className="font-bold">
+                  {t('cvs.preview.education', 'Education')}
+                </h3>
                 <p className="mt-2">{cv.education}</p>
               </div>
             )}
 
             {profile?.languages && profile.languages.length > 0 && (
               <div>
-                <h3 className="font-bold">Language proficiency</h3>
+                <h3 className="font-bold">
+                  {t('cvs.preview.languageProficiency', 'Language proficiency')}
+                </h3>
                 {profile.languages.map((lang) => (
                   <p key={lang.name} className="mt-2">
                     {lang.name} — {lang.proficiency}
@@ -141,7 +145,9 @@ export function CvPreviewContent({ cvId }: CvPreviewContentProps) {
 
             {uniqueDomains.length > 0 && (
               <div>
-                <h3 className="font-bold">Domains</h3>
+                <h3 className="font-bold">
+                  {t('cvs.preview.domains', 'Domains')}
+                </h3>
                 <p className="mt-2">{uniqueDomains.join(', ')}</p>
               </div>
             )}
@@ -166,12 +172,14 @@ export function CvPreviewContent({ cvId }: CvPreviewContentProps) {
 
         {cv.projects.length > 0 && (
           <section className="mb-12">
-            <h2 className="text-[34px] tracking-tight mb-[33px]">Projects</h2>
+            <h2 className="text-[34px] tracking-tight mb-[33px]">
+              {t('cvs.preview.projects', 'Projects')}
+            </h2>
             {cv.projects.map((project) => {
               const startFormatted = formatPeriodDate(project.start_date);
               const endFormatted = project.end_date
                 ? formatPeriodDate(project.end_date)
-                : 'Present';
+                : t('projects.present', 'Present');
 
               return (
                 <div
@@ -190,7 +198,9 @@ export function CvPreviewContent({ cvId }: CvPreviewContentProps) {
                   <div className="border-l border-primary pl-[25px] space-y-4.5 col-span-8 pt-4">
                     {project.roles.length > 0 && (
                       <div>
-                        <h2 className="font-bold">Project roles</h2>
+                        <h2 className="font-bold">
+                          {t('cvs.preview.projectRoles', 'Project roles')}
+                        </h2>
                         <p className="mt-[10px] leading-relaxed">
                           {project.roles.join(', ')}
                         </p>
@@ -198,7 +208,9 @@ export function CvPreviewContent({ cvId }: CvPreviewContentProps) {
                     )}
 
                     <div>
-                      <h2 className="font-bold">Period</h2>
+                      <h2 className="font-bold">
+                        {t('cvs.preview.period', 'Period')}
+                      </h2>
                       <p className="mt-[10px] leading-relaxed">
                         {startFormatted} - {endFormatted}
                       </p>
@@ -207,7 +219,12 @@ export function CvPreviewContent({ cvId }: CvPreviewContentProps) {
                     {project.responsibilities &&
                       project.responsibilities.length > 0 && (
                         <div>
-                          <h2 className="font-bold">Responsibilities</h2>
+                          <h2 className="font-bold">
+                            {t(
+                              'cvs.preview.responsibilities',
+                              'Responsibilities',
+                            )}
+                          </h2>
                           <ul className="mt-[10px] list-disc pl-5 leading-relaxed marker:text-[12px]">
                             {project.responsibilities.map((resp, idx) => (
                               <li key={idx}>{resp}</li>
@@ -218,7 +235,9 @@ export function CvPreviewContent({ cvId }: CvPreviewContentProps) {
 
                     {project.environment && project.environment.length > 0 && (
                       <div>
-                        <h2 className="font-bold">Environment</h2>
+                        <h2 className="font-bold">
+                          {t('cvs.preview.environment', 'Environment')}
+                        </h2>
                         <p className="mt-[10px] leading-relaxed">
                           {project.environment.join(', ')}
                         </p>
@@ -234,7 +253,7 @@ export function CvPreviewContent({ cvId }: CvPreviewContentProps) {
         {categoryMetrics.length > 0 && (
           <section className="mb-12">
             <h2 className="text-[34px] tracking-tight mb-[33px]">
-              Professional skills
+              {t('cvs.preview.professionalSkills', 'Professional skills')}
             </h2>
 
             <div className="overflow-x-auto">
@@ -242,14 +261,17 @@ export function CvPreviewContent({ cvId }: CvPreviewContentProps) {
                 <thead>
                   <tr className="border-b border-primary uppercase align-sub">
                     <th className="pt-2.5 pb-8 pl-4 w-1/3 font-medium">
-                      Skills
+                      {t('cvs.preview.table.skills', 'Skills')}
                     </th>
                     <th className="pt-2.5 pb-8 w-1/3 font-medium"></th>
                     <th className="pt-2.5 text-center w-[114px] font-medium">
-                      Experience in years
+                      {t(
+                        'cvs.preview.table.experienceInYears',
+                        'Experience in years',
+                      )}
                     </th>
                     <th className="pt-2.5 pb-8 text-center font-medium">
-                      Last used
+                      {t('cvs.preview.table.lastUsed', 'Last used')}
                     </th>
                   </tr>
                 </thead>

@@ -325,6 +325,25 @@
       "employee": "У вас ещё нет резюме"
     },
     "noResults": "Резюме не найдены",
+    "preview": {
+      "exportPdf": "Экспорт в PDF",
+      "education": "Образование",
+      "languageProficiency": "Владение языками",
+      "domains": "Предметные области",
+      "projects": "Проекты",
+      "projectRoles": "Роли в проекте",
+      "period": "Период",
+      "responsibilities": "Обязанности",
+      "environment": "Стек технологий",
+      "professionalSkills": "Профессиональные навыки",
+      "table": {
+        "skills": "Навыки",
+        "experienceInYears": "Опыт в годах",
+        "lastUsed": "Последнее использование"
+      },
+      "loadError": "Не удалось загрузить предпросмотр CV",
+      "exportSuccess": "PDF успешно сгенерирован"
+    },
     "tabs": {
       "details": "Детали",
       "skills": "Навыки",
