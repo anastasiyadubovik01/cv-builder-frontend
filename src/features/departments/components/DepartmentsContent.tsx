@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
+import { PlusIcon } from '@/components/icons/plus-icon';
 
 import { DEPARTMENTS_QUERY, type ApiDepartment } from '@/api/departments';
 import { Button } from '@/components/ui/button';
@@ -190,9 +191,13 @@ export function DepartmentsContent() {
               <Button
                 type="button"
                 variant="primaryV2"
-                className="text-[14px] font-medium uppercase"
+                className="w-10 border-transparent px-0 lg:w-auto lg:gap-3 lg:border-transparent lg:px-5 lg:hover:border-primary"
               >
-                {t('departments.create', 'CREATE DEPARTMENT')}
+                <PlusIcon className="size-6" />
+
+                <span className="hidden lg:inline">
+                  {t('departments.create', 'CREATE DEPARTMENT')}
+                </span>
               </Button>
             }
           />
