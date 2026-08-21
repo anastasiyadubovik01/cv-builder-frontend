@@ -1,3 +1,5 @@
+import { CvPreviewContent } from '@/features/cvs/components/CvPreviewContent';
+
 export default function CvPreviewPage() {
-  return null;
+  return <CvPreviewContent />;
 }
