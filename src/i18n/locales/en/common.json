@@ -342,6 +342,25 @@
       "employee": "You have no CVs yet"
     },
     "noResults": "No CVs found",
+    "preview": {
+      "exportPdf": "Export PDF",
+      "education": "Education",
+      "languageProficiency": "Language proficiency",
+      "domains": "Domains",
+      "projects": "Projects",
+      "projectRoles": "Project roles",
+      "period": "Period",
+      "responsibilities": "Responsibilities",
+      "environment": "Environment",
+      "professionalSkills": "Professional skills",
+      "table": {
+        "skills": "Skills",
+        "experienceInYears": "Experience in years",
+        "lastUsed": "Last used"
+      },
+      "loadError": "Failed to load CV preview",
+      "exportSuccess": "PDF successfully generated"
+    },
     "tabs": {
       "details": "Details",
       "skills": "Skills",
