@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react';
 
 import type { ApiSkill } from '@/api/skills';
-import { ChangeUserSkillModal } from '@/features/skills/components/ChangeUserSkillModal';
+import { ChangeSkillModal } from '@/features/skills/components/ChangeSkillModal';
 import { useAddUserSkill } from '@/features/skills/hooks/useAddUserSkill';
 
 type AddUserSkillModalProps = {
@@ -13,7 +13,7 @@ type AddUserSkillModalProps = {
   onSuccess?: () => void | Promise<void>;
 };
 
-export function AddUserSkillModal({
+export function AddSkillModal({
   userId,
   skills,
   trigger,
@@ -26,11 +26,6 @@ export function AddUserSkillModal({
   });
 
   return (
-    <ChangeUserSkillModal
-      {...form}
-      type="Add"
-      skills={skills}
-      trigger={trigger}
-    />
+    <ChangeSkillModal {...form} type="Add" skills={skills} trigger={trigger} />
   );
 }

@@ -1,25 +1,25 @@
 'use client';
 
 import { DeleteCountDialog } from '@/components/dialogs/DeleteCountDialog';
-import { useRemoveUserSkills } from '@/features/skills/hooks/useRemoveUserSkills';
+import { useRemoveCvSkills } from '@/features/cvs/hooks/useRemoveCvSkills';
 
-type RemoveUserSkillsModalProps = {
-  userId: string;
+type RemoveCvSkillsModalProps = {
+  cvId: string;
   selectedSkills: string[];
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSuccess?: () => void | Promise<void>;
 };
 
-export function RemoveUserSkillsModal({
-  userId,
+export function RemoveCvSkillsModal({
+  cvId,
   selectedSkills,
   open,
   onOpenChange,
   onSuccess,
-}: RemoveUserSkillsModalProps) {
-  const { handleRemove, loading, t } = useRemoveUserSkills({
-    userId,
+}: RemoveCvSkillsModalProps) {
+  const { handleRemove, loading, t } = useRemoveCvSkills({
+    cvId,
     onSuccess,
   });
 
@@ -27,8 +27,8 @@ export function RemoveUserSkillsModal({
     <DeleteCountDialog
       open={open}
       onOpenChange={onOpenChange}
-      title={t('users.skills.removeDialog.title')}
-      description={t('users.skills.removeDialog.description', {
+      title={t('skills.removeDialog.title')}
+      description={t('skills.removeDialog.description', {
         count: selectedSkills.length,
       })}
       confirmDisabled={loading}

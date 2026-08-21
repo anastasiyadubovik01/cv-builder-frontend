@@ -4,9 +4,9 @@ import type { ReactNode } from 'react';
 
 import type { ApiSkill } from '@/api/skills';
 import {
-  ChangeSkillModal,
+  ChangeSkillAdminModal,
   type SkillFormCategory,
-} from '@/features/skills/components/ChangeSkillModal';
+} from '@/features/skills/components/ChangeSkillAdminModal';
 import { useCreateSkillForm } from '@/features/skills/hooks/useCreateSkillForm';
 
 type CreateSkillModalProps = {
@@ -16,7 +16,7 @@ type CreateSkillModalProps = {
   onSuccess?: () => void | Promise<void>;
 };
 
-export function CreateSkillModal({
+export function CreateSkillAdminModal({
   skills,
   categories,
   trigger,
@@ -28,7 +28,7 @@ export function CreateSkillModal({
   });
 
   return (
-    <ChangeSkillModal
+    <ChangeSkillAdminModal
       {...form}
       type="Create"
       categories={categories}

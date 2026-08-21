@@ -7,16 +7,16 @@ import { useValidatedForm } from '@/components/hooks/useValidatedForm';
 import { toast } from '@/components/ui/sonner';
 import { handleFormError } from '@/lib/error/errorHandler';
 import {
-  addUserSkillSchema,
-  type AddUserSkillFormValues,
+  addSkillSchema,
+  type AddSkillFormValues,
 } from '@/lib/validations/skill';
 
-const INITIAL_VALUES: AddUserSkillFormValues = {
+const INITIAL_VALUES: AddSkillFormValues = {
   skillName: '',
   mastery: '',
 };
 
-type UseAddUserSkillOptions = {
+type UseAddSkillOptions = {
   userId: string;
   skills: ApiSkill[];
   onSuccess?: () => void | Promise<void>;
@@ -26,7 +26,7 @@ export function useAddUserSkill({
   userId,
   skills,
   onSuccess,
-}: UseAddUserSkillOptions) {
+}: UseAddSkillOptions) {
   const { t } = useTranslation();
 
   const {
@@ -37,16 +37,16 @@ export function useAddUserSkill({
     validateField,
     setFieldValue,
     clearErrors,
-  } = useValidatedForm<AddUserSkillFormValues>({
+  } = useValidatedForm<AddSkillFormValues>({
     initialValues: INITIAL_VALUES,
-    schema: addUserSkillSchema,
+    schema: addSkillSchema,
   });
 
   const [addProfileSkill, { loading }] = useMutation(
     ADD_PROFILE_SKILL_MUTATION,
   );
 
-  const isValid = addUserSkillSchema.safeParse(formData).success;
+  const isValid = addSkillSchema.safeParse(formData).success;
 
   const handleSubmit = async (): Promise<boolean> => {
     if (!validateForm()) {
@@ -78,7 +78,7 @@ export function useAddUserSkill({
 
       await onSuccess?.();
 
-      toast.success(t('users.skills.addSuccess'));
+      toast.success(t('skills.addSuccess'));
 
       return true;
     } catch (error) {

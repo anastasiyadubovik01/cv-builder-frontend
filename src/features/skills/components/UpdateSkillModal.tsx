@@ -1,32 +1,31 @@
 'use client';
 
-import type { ApiSkill } from '@/api/skills';
-import {
-  ChangeSkillModal,
-  type SkillFormCategory,
-} from '@/features/skills/components/ChangeSkillModal';
-import { useUpdateSkillForm } from '@/features/skills/hooks/useUpdateSkillForm';
+import type { ApiSkill, ProfileSkill } from '@/api/skills';
+import { ChangeSkillModal } from '@/features/skills/components/ChangeSkillModal';
+import { useUpdateUserSkill } from '@/features/skills/hooks/useUpdateUserSkill';
 
 type UpdateSkillModalProps = {
-  skill: ApiSkill;
+  userId: string;
+  skill: ProfileSkill;
   skills: ApiSkill[];
-  categories: SkillFormCategory[];
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSuccess?: () => void | Promise<void>;
 };
 
 export function UpdateSkillModal({
+  userId,
   skill,
   skills,
-  categories,
   open,
   onOpenChange,
   onSuccess,
 }: UpdateSkillModalProps) {
-  const form = useUpdateSkillForm({
-    skill,
-    skills,
+  const form = useUpdateUserSkill({
+    userId,
+    skillName: skill.name,
+    categoryId: skill.categoryId,
+    mastery: skill.mastery,
     onSuccess,
   });
 
@@ -34,9 +33,10 @@ export function UpdateSkillModal({
     <ChangeSkillModal
       {...form}
       type="Update"
-      categories={categories}
+      skills={skills}
       open={open}
       onOpenChange={onOpenChange}
+      skillDisabled
     />
   );
 }
