@@ -37,7 +37,7 @@ export function useRemoveUserSkills({
 
       await onSuccess?.();
 
-      toast.success(t('users.skills.removeSuccess'));
+      toast.success(t('skills.removeSuccess'));
 
       return true;
     } catch (error) {

@@ -27,8 +27,8 @@ export function RemoveCvSkillsModal({
     <DeleteCountDialog
       open={open}
       onOpenChange={onOpenChange}
-      title={t('users.skills.removeDialog.title')}
-      description={t('users.skills.removeDialog.description', {
+      title={t('skills.removeDialog.title')}
+      description={t('skills.removeDialog.description', {
         count: selectedSkills.length,
       })}
       confirmDisabled={loading}

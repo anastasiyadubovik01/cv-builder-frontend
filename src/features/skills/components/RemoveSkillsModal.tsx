@@ -11,7 +11,7 @@ type RemoveUserSkillsModalProps = {
   onSuccess?: () => void | Promise<void>;
 };
 
-export function RemoveUserSkillsModal({
+export function RemoveSkillsModal({
   userId,
   selectedSkills,
   open,
@@ -27,8 +27,8 @@ export function RemoveUserSkillsModal({
     <DeleteCountDialog
       open={open}
       onOpenChange={onOpenChange}
-      title={t('users.skills.removeDialog.title')}
-      description={t('users.skills.removeDialog.description', {
+      title={t('skills.removeDialog.title')}
+      description={t('skills.removeDialog.description', {
         count: selectedSkills.length,
       })}
       confirmDisabled={loading}

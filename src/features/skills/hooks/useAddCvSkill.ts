@@ -8,11 +8,11 @@ import { toast } from '@/components/ui/sonner';
 import type { Mastery } from '@/features/skills/types';
 import { handleFormError } from '@/lib/error/errorHandler';
 import {
-  addUserSkillSchema,
-  type AddUserSkillFormValues,
+  addSkillSchema,
+  type AddSkillFormValues,
 } from '@/lib/validations/skill';
 
-const INITIAL_VALUES: AddUserSkillFormValues = {
+const INITIAL_VALUES: AddSkillFormValues = {
   skillName: '',
   mastery: '',
 };
@@ -38,14 +38,14 @@ export function useAddCvSkill({
     validateField,
     setFieldValue,
     clearErrors,
-  } = useValidatedForm<AddUserSkillFormValues>({
+  } = useValidatedForm<AddSkillFormValues>({
     initialValues: INITIAL_VALUES,
-    schema: addUserSkillSchema,
+    schema: addSkillSchema,
   });
 
   const [addCvSkill, { loading }] = useMutation(ADD_CV_SKILL_MUTATION);
 
-  const isValid = addUserSkillSchema.safeParse(formData).success;
+  const isValid = addSkillSchema.safeParse(formData).success;
 
   const handleSubmit = async (): Promise<boolean> => {
     if (!validateForm()) {
@@ -77,7 +77,7 @@ export function useAddCvSkill({
 
       await onSuccess?.();
 
-      toast.success(t('users.skills.addSuccess'));
+      toast.success(t('skills.addSuccess'));
 
       return true;
     } catch (error) {

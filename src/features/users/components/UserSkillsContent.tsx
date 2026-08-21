@@ -13,10 +13,10 @@ import { DeleteIcon } from '@/components/icons/delete-icon';
 import { PlusIcon } from '@/components/icons/plus-icon';
 import { Button } from '@/components/ui/button';
 import { LoadingOverlay } from '@/components/ui/loading-overlay';
-import { AddUserSkillModal } from '@/features/skills/components/AddUserSkillModal';
-import { RemoveUserSkillsModal } from '@/features/skills/components/RemoveUserSkillsModal';
+import { AddSkillModal } from '@/features/skills/components/AddSkillModal';
+import { RemoveSkillsModal } from '@/features/skills/components/RemoveSkillsModal';
 import { SkillMasteryProgress } from '@/features/skills/components/SkillMasteryProgress';
-import { UpdateUserSkillModal } from '@/features/skills/components/UpdateUserSkillModal';
+import { UpdateSkillModal } from '@/features/skills/components/UpdateSkillModal';
 
 type UserSkillsContentProps = {
   userId: string;
@@ -100,9 +100,7 @@ export function UserSkillsContent({
   if (error) {
     return (
       <div className="flex flex-col items-center gap-4 pt-10">
-        <p className="text-sm text-destructive">
-          {t('users.skills.loadError')}
-        </p>
+        <p className="text-sm text-destructive">{t('skills.loadError')}</p>
 
         <Button
           type="button"
@@ -127,7 +125,7 @@ export function UserSkillsContent({
       const categoryName =
         skill?.category.name ??
         skill?.category_name ??
-        t('users.skills.uncategorized');
+        t('skills.uncategorized');
 
       if (!groups[categoryName]) {
         groups[categoryName] = [];
@@ -144,7 +142,7 @@ export function UserSkillsContent({
     <div className="mx-auto w-full max-w-[760px] pt-8">
       {profileSkills.length === 0 ? (
         <p className="pt-8 text-center text-muted-foreground">
-          {t('users.skills.empty')}
+          {t('skills.empty')}
         </p>
       ) : (
         <div className="flex flex-col gap-10">
@@ -200,14 +198,14 @@ export function UserSkillsContent({
                 disabled={selectedSkills.length === 0}
                 onClick={() => setRemoveDialogOpen(true)}
               >
-                {t('users.skills.removeSelected', {
+                {t('skills.removeSelected', {
                   count: selectedSkills.length,
                 })}
               </Button>
             </>
           ) : (
             <>
-              <AddUserSkillModal
+              <AddSkillModal
                 userId={userId}
                 skills={selectableSkills}
                 onSuccess={async () => {
@@ -216,7 +214,7 @@ export function UserSkillsContent({
                 trigger={
                   <Button type="button" variant="ghost" className="gap-3">
                     <PlusIcon className="size-5" />
-                    {t('users.skills.add')}
+                    {t('skills.add')}
                   </Button>
                 }
               />
@@ -228,7 +226,7 @@ export function UserSkillsContent({
                 onClick={() => setIsRemoveMode(true)}
               >
                 <DeleteIcon className="shrink-0" />
-                {t('users.skills.remove')}
+                {t('skills.remove')}
               </Button>
             </>
           )}
@@ -236,7 +234,7 @@ export function UserSkillsContent({
       )}
 
       {editingSkill && (
-        <UpdateUserSkillModal
+        <UpdateSkillModal
           userId={userId}
           skill={editingSkill}
           skills={availableSkills}
@@ -253,7 +251,7 @@ export function UserSkillsContent({
         />
       )}
 
-      <RemoveUserSkillsModal
+      <RemoveSkillsModal
         userId={userId}
         selectedSkills={selectedSkills}
         open={removeDialogOpen}

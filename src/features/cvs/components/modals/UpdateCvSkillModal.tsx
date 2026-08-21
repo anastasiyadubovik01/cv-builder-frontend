@@ -1,8 +1,8 @@
 'use client';
 
 import type { ApiSkill, ProfileSkill } from '@/api/skills';
-import { ChangeUserSkillModal } from '@/features/skills/components/ChangeUserSkillModal';
-import { useUpdateCvSkill } from '@/features/cvs/hooks/useUpdateCvSkill';
+import { ChangeSkillModal } from '@/features/skills/components/ChangeSkillModal';
+import { useUpdateCvSkill } from '@/features/skills/hooks/useUpdateCvSkill';
 
 type UpdateCvSkillModalProps = {
   cvId: string;
@@ -30,7 +30,7 @@ export function UpdateCvSkillModal({
   });
 
   return (
-    <ChangeUserSkillModal
+    <ChangeSkillModal
       {...form}
       type="Update"
       skills={skills}

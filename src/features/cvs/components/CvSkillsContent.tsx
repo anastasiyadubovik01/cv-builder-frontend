@@ -95,7 +95,7 @@ export function CvSkillsContent({ cvId }: CvSkillsContentProps) {
     return (
       <div className="flex flex-col items-center gap-4 pt-10">
         <p className="text-sm text-destructive">
-          {t('users.skills.loadError', 'Failed to load skills')}
+          {t('skills.loadError', 'Failed to load skills')}
         </p>
 
         <Button
@@ -120,7 +120,7 @@ export function CvSkillsContent({ cvId }: CvSkillsContentProps) {
       const categoryName =
         skill?.category.name ??
         skill?.category_name ??
-        t('users.skills.uncategorized', 'Uncategorized');
+        t('skills.uncategorized', 'Uncategorized');
 
       if (!groups[categoryName]) {
         groups[categoryName] = [];
@@ -137,7 +137,7 @@ export function CvSkillsContent({ cvId }: CvSkillsContentProps) {
     <div className="mx-auto w-full max-w-[760px] pt-8">
       {cvSkills.length === 0 ? (
         <p className="pt-8 text-center text-muted-foreground">
-          {t('users.skills.empty', 'No skills added yet')}
+          {t('skills.empty', 'No skills added yet')}
         </p>
       ) : (
         <div className="flex flex-col gap-10">
@@ -188,7 +188,7 @@ export function CvSkillsContent({ cvId }: CvSkillsContentProps) {
               disabled={selectedSkills.length === 0}
               onClick={() => setRemoveDialogOpen(true)}
             >
-              {t('users.skills.removeSelected', {
+              {t('skills.removeSelected', {
                 count: selectedSkills.length,
               })}
             </Button>
@@ -202,7 +202,7 @@ export function CvSkillsContent({ cvId }: CvSkillsContentProps) {
               trigger={
                 <Button type="button" variant="ghost" className="gap-3">
                   <PlusIcon className="size-5" />
-                  {t('users.skills.add', 'Add Skill')}
+                  {t('skills.add', 'Add Skill')}
                 </Button>
               }
             />
@@ -214,7 +214,7 @@ export function CvSkillsContent({ cvId }: CvSkillsContentProps) {
               onClick={() => setIsRemoveMode(true)}
             >
               <DeleteIcon className="shrink-0" />
-              {t('users.skills.remove', 'Remove Skill')}
+              {t('skills.remove', 'Remove Skill')}
             </Button>
           </>
         )}

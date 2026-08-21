@@ -1,14 +1,13 @@
 'use client';
 
-import type { TFunction } from 'i18next';
 import type { ReactNode } from 'react';
 
-import { ChangeDialog } from '@/components/dialogs/ChangeDialog';
+import type { ApiSkill } from '@/api/skills';
 import type {
   createActionTitles,
   updateActionTitles,
 } from '@/components/dialogs/types';
-import { Input } from '@/components/ui/input';
+import { ChangeDialog } from '@/components/dialogs/ChangeDialog';
 import {
   Select,
   SelectContent,
@@ -16,60 +15,58 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import type { AdminSkillFormValues } from '@/lib/validations/admin-skill';
+import type { Mastery } from '@/features/skills/types';
+import type { AddSkillFormValues } from '@/lib/validations/skill';
 
-export type SkillFormCategory = {
-  id: string;
-  name: string;
-};
-
-type ChangeSkillModalProps = {
+type ChangeUserSkillModalProps = {
   type: createActionTitles | updateActionTitles;
-  categories: SkillFormCategory[];
   trigger?: ReactNode;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  skillDisabled?: boolean;
 
-  formData: AdminSkillFormValues;
-  errors: Partial<Record<keyof AdminSkillFormValues, string>>;
+  skills: ApiSkill[];
+  formData: AddSkillFormValues;
+  errors: Partial<Record<keyof AddSkillFormValues, string>>;
 
   loading: boolean;
   isValid: boolean;
-  isDuplicate: boolean;
 
-  setFieldValue: (field: keyof AdminSkillFormValues, value: string) => void;
+  setFieldValue: (field: keyof AddSkillFormValues, value: string) => void;
 
-  validateField: (field: keyof AdminSkillFormValues) => boolean;
+  validateField: (field: keyof AddSkillFormValues) => boolean;
   handleSubmit: () => Promise<boolean>;
-  t: TFunction;
+  t: (key: string) => string;
 };
+
+const masteryItems: { value: Mastery; label: string }[] = [
+  { value: 'Novice', label: 'Novice' },
+  { value: 'Advanced', label: 'Advanced' },
+  { value: 'Competent', label: 'Competent' },
+  { value: 'Proficient', label: 'Proficient' },
+  { value: 'Expert', label: 'Expert' },
+];
 
 export function ChangeSkillModal({
   type,
-  categories,
   trigger,
   open,
   onOpenChange,
+  skillDisabled = false,
+  skills,
   formData,
   errors,
   loading,
   isValid,
-  isDuplicate,
   setFieldValue,
   validateField,
   handleSubmit,
   t,
-}: ChangeSkillModalProps) {
-  const categoryItems = categories.map((category) => ({
-    value: category.id,
-    label: category.name,
+}: ChangeUserSkillModalProps) {
+  const skillItems = skills.map((skill) => ({
+    value: skill.name,
+    label: skill.name,
   }));
-
-  const nameError = errors.name
-    ? t(errors.name)
-    : isDuplicate
-      ? t('skills.admin.validation.duplicate')
-      : null;
 
   return (
     <ChangeDialog
@@ -85,43 +82,60 @@ export function ChangeSkillModal({
     >
       <div className="flex flex-col gap-9">
         <div>
-          <Input
-            value={formData.name}
-            placeholder={t('skills.admin.name')}
-            aria-label={t('skills.admin.name')}
-            aria-invalid={Boolean(nameError)}
-            onChange={(event) => setFieldValue('name', event.target.value)}
-            onBlur={() => validateField('name')}
-          />
-
-          {nameError && (
-            <p className="mt-1 ml-3 text-xs text-destructive">{nameError}</p>
-          )}
-        </div>
-
-        <div>
           <Select
-            items={categoryItems}
-            value={formData.categoryId}
+            items={skillItems}
+            value={formData.skillName}
+            disabled={skillDisabled}
             onValueChange={(value) => {
               if (value) {
-                setFieldValue('categoryId', value);
+                setFieldValue('skillName', value);
               }
             }}
           >
             <SelectTrigger
-              label={t('skills.admin.category')}
+              label={t('skills.skill')}
               className="border-[#AEAEAE] bg-secondary"
-              error={errors.categoryId ? t(errors.categoryId) : undefined}
-              aria-label={t('skills.admin.category')}
-              aria-invalid={Boolean(errors.categoryId)}
-              onBlur={() => validateField('categoryId')}
+              error={errors.skillName ? t(errors.skillName) : undefined}
+              aria-label={t('skills.skill')}
+              aria-invalid={Boolean(errors.skillName)}
+              onBlur={() => validateField('skillName')}
             >
-              <SelectValue placeholder={t('skills.admin.category')} />
+              <SelectValue placeholder={t('skills.skill')} />
             </SelectTrigger>
 
             <SelectContent className="bg-secondary">
-              {categoryItems.map(({ value, label }) => (
+              {skillItems.map(({ value, label }) => (
+                <SelectItem key={value} value={value}>
+                  {label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <Select
+            items={masteryItems}
+            value={formData.mastery}
+            onValueChange={(value) => {
+              if (value) {
+                setFieldValue('mastery', value);
+              }
+            }}
+          >
+            <SelectTrigger
+              label={t('skills.mastery')}
+              className="border-[#AEAEAE] bg-secondary"
+              error={errors.mastery ? t(errors.mastery) : undefined}
+              aria-label={t('skills.mastery')}
+              aria-invalid={Boolean(errors.mastery)}
+              onBlur={() => validateField('mastery')}
+            >
+              <SelectValue placeholder={t('skills.mastery')} />
+            </SelectTrigger>
+
+            <SelectContent className="bg-secondary">
+              {masteryItems.map(({ value, label }) => (
                 <SelectItem key={value} value={value}>
                   {label}
                 </SelectItem>

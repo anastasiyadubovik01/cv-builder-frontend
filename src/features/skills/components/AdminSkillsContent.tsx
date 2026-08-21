@@ -18,9 +18,9 @@ import { SearchInput } from '@/components/ui/search-input';
 import { SkillsTable } from '@/features/skills/components/SkillsTable';
 import type { SkillSortField, SortDirection } from '@/features/skills/types';
 
-import { CreateSkillModal } from '@/features/skills/components/CreateSkillModal';
+import { CreateSkillAdminModal } from '@/features/skills/components/CreateSkillAdminModal';
 import { DeleteSkillModal } from '@/features/skills/components/DeleteSkillModal';
-import { UpdateSkillModal } from '@/features/skills/components/UpdateSkillModal';
+import { UpdateSkillAdminModal } from '@/features/skills/components/UpdateSkillAdminModal';
 import {
   BACKEND_PAGE_SIZE,
   DEFAULT_PAGE_SIZE,
@@ -219,7 +219,7 @@ export function AdminSkillsContent() {
             className="bg-background"
           />
 
-          <CreateSkillModal
+          <CreateSkillAdminModal
             skills={allSkills}
             categories={selectableCategories}
             onSuccess={handleRefresh}
@@ -275,7 +275,7 @@ export function AdminSkillsContent() {
             </div>
 
             {editingSkill && (
-              <UpdateSkillModal
+              <UpdateSkillAdminModal
                 skill={editingSkill}
                 skills={allSkills}
                 categories={selectableCategories}

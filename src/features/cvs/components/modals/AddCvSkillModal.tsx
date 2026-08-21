@@ -3,8 +3,8 @@
 import type { ReactNode } from 'react';
 
 import type { ApiSkill } from '@/api/skills';
-import { ChangeUserSkillModal } from '@/features/skills/components/ChangeUserSkillModal';
-import { useAddCvSkill } from '@/features/cvs/hooks/useAddCvSkill';
+import { ChangeSkillModal } from '@/features/skills/components/ChangeSkillModal';
+import { useAddCvSkill } from '@/features/skills/hooks/useAddCvSkill';
 
 type AddCvSkillModalProps = {
   cvId: string;
@@ -26,11 +26,6 @@ export function AddCvSkillModal({
   });
 
   return (
-    <ChangeUserSkillModal
-      {...form}
-      type="Add"
-      skills={skills}
-      trigger={trigger}
-    />
+    <ChangeSkillModal {...form} type="Add" skills={skills} trigger={trigger} />
   );
 }

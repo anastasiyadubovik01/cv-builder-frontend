@@ -29,10 +29,7 @@ export function useRemoveCvSkills({ cvId, onSuccess }: UseRemoveCvSkillsProps) {
       });
 
       toast.success(
-        t(
-          'users.skills.notifications.removeSuccess',
-          'Skills removed successfully',
-        ),
+        t('skills.notifications.removeSuccess', 'Skills removed successfully'),
       );
       await onSuccess?.();
       return true;

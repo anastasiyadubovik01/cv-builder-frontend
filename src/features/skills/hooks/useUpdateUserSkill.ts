@@ -7,8 +7,8 @@ import { toast } from '@/components/ui/sonner';
 import type { Mastery } from '@/features/skills/types';
 import { handleFormError } from '@/lib/error/errorHandler';
 import {
-  addUserSkillSchema,
-  type AddUserSkillFormValues,
+  addSkillSchema,
+  type AddSkillFormValues,
 } from '@/lib/validations/skill';
 
 type UseUpdateUserSkillOptions = {
@@ -29,19 +29,19 @@ export function useUpdateUserSkill({
   const { t } = useTranslation();
 
   const { formData, errors, validateForm, validateField, setFieldValue } =
-    useValidatedForm<AddUserSkillFormValues>({
+    useValidatedForm<AddSkillFormValues>({
       initialValues: {
         skillName,
         mastery,
       },
-      schema: addUserSkillSchema,
+      schema: addSkillSchema,
     });
 
   const [updateProfileSkill, { loading }] = useMutation(
     UPDATE_PROFILE_SKILL_MUTATION,
   );
 
-  const isValid = addUserSkillSchema.safeParse(formData).success;
+  const isValid = addSkillSchema.safeParse(formData).success;
 
   const handleSubmit = async (): Promise<boolean> => {
     if (!validateForm()) {
@@ -62,7 +62,7 @@ export function useUpdateUserSkill({
 
       await onSuccess?.();
 
-      toast.success(t('users.skills.updateSuccess'));
+      toast.success(t('skills.updateSuccess'));
 
       return true;
     } catch (error) {
