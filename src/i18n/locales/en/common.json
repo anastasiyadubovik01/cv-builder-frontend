@@ -326,6 +326,14 @@
     }
   },
 
+  "positions": {
+    "title": "Positions",
+    "search": "Search",
+    "name": "Name",
+    "empty": "No positions found",
+    "loadError": "Failed to load positions"
+  },
+
   "cvs": {
     "name": "Name",
     "education": "Education",
