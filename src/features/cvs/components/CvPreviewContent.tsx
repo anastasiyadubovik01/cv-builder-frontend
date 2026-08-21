@@ -1,214 +1,285 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { useQuery } from '@apollo/client/react';
+import { useTranslation } from 'react-i18next';
 
-export function CvPreviewContent() {
-  const handleExportPdf = () => {
-    // for now
-    window.print();
-  };
+import { CV_PREVIEW_QUERY } from '@/api/cv-preview';
+import { SKILLS_QUERY } from '@/api/skills';
+import { Button } from '@/components/ui/button';
+import { LoadingOverlay } from '@/components/ui/loading-overlay';
+import { useExportCvPdf } from '@/features/cvs/hooks/useExportCvPdf';
+import {
+  calculateSkillsCategoryMetrics,
+  CategoryMetric,
+} from '@/features/cvs/utils/calculateSkillsCategoryMetrics';
+import { formatPeriodDate } from '@/lib/helpers/date';
+
+type CvPreviewContentProps = {
+  cvId: string;
+};
+
+const NO_DATA_CHAR = '-';
+const DEFAULT_FILENAME = 'cv-preview';
+
+export function CvPreviewContent({ cvId }: CvPreviewContentProps) {
+  const { t } = useTranslation();
+
+  const {
+    data: cvData,
+    loading: cvLoading,
+    error: cvError,
+    refetch,
+  } = useQuery(CV_PREVIEW_QUERY, {
+    variables: { cvId },
+    fetchPolicy: 'cache-and-network',
+  });
+
+  const { data: skillsData } = useQuery(SKILLS_QUERY, {
+    variables: { params: { page: 1, limit: 100 } },
+  });
+
+  const cv = cvData?.cv;
+  const user = cv?.user;
+  const profile = user?.profile;
+
+  const {
+    containerRef,
+    handleExport,
+    loading: exportLoading,
+  } = useExportCvPdf(cv?.name ?? DEFAULT_FILENAME);
+
+  if (cvLoading) return <LoadingOverlay />;
+
+  if (cvError || !cv) {
+    return (
+      <div className="flex flex-col items-center gap-4 pt-10">
+        <p className="text-sm text-destructive">
+          {t('cvs.preview.loadError', 'Failed to load CV preview')}
+        </p>
+        <Button variant="secondary" onClick={() => void refetch()}>
+          {t('retry', 'Retry')}
+        </Button>
+      </div>
+    );
+  }
+
+  const fullName =
+    profile?.full_name ||
+    [profile?.first_name, profile?.last_name].filter(Boolean).join(' ') ||
+    NO_DATA_CHAR;
+
+  const positionName = user?.position?.name ?? NO_DATA_CHAR;
+
+  const uniqueDomains = Array.from(
+    new Set(cv.projects.map((p) => p.domain).filter(Boolean)),
+  );
+
+  const availableSkills = skillsData?.skills.items ?? [];
+
+  const skillsByCategory = cv.skills.reduce<Record<string, string[]>>(
+    (acc, cvSkill) => {
+      const foundSkill = availableSkills.find((s) => s.name === cvSkill.name);
+      const categoryName =
+        foundSkill?.category.name ?? t('skills.uncategorized', 'Uncategorized');
+
+      if (!acc[categoryName]) acc[categoryName] = [];
+      acc[categoryName].push(cvSkill.name);
+      return acc;
+    },
+    {},
+  );
+
+  const categoryMetrics: CategoryMetric[] = Object.entries(skillsByCategory)
+    .map(([categoryName, skills]) =>
+      calculateSkillsCategoryMetrics(categoryName, skills, cv.projects),
+    )
+    .filter((metric): metric is CategoryMetric => metric !== null);
 
   return (
-    <div className="mx-auto w-full max-w-[900px] px-6 pt-8 pb-3 text-foreground">
+    <div
+      ref={containerRef}
+      className="mx-auto w-full max-w-[900px] px-6 pt-8 pb-3 text-foreground"
+    >
       <header className="mb-8 flex justify-between items-baseline">
         <div>
-          <h1 className="text-[34px] tracking-tight">Rostislav Harlanov</h1>
+          <h1 className="text-[34px] tracking-tight">{fullName}</h1>
           <p className="text-[16px] uppercase leading-[1.5] tracking-[0.01em]">
-            Software Engineer
+            {positionName}
           </p>
         </div>
 
         <Button
           variant="primaryV2"
-          onClick={handleExportPdf}
-          className="w-[160px] h-[40px]"
+          onClick={handleExport}
+          disabled={exportLoading}
+          className="no-print w-[160px] h-[40px]"
         >
           Export PDF
         </Button>
       </header>
 
-      <div className="grid grid-cols-1 gap-8 grid-cols-12 text-[16px] mb-[51px]">
-        <div className="space-y-4 col-span-4 py-4">
-          <div>
-            <h3 className="font-bold">Education</h3>
-            <p className="mt-2">Computer Systems Design</p>
-          </div>
-          <div>
-            <h3 className="font-bold">Language proficiency</h3>
-            <p className="mt-2">English — C1</p>
-          </div>
-          <div>
-            <h3 className="font-bold">Domains</h3>
-            <p className="mt-2">IoT (Internet of Things)</p>
-          </div>
-        </div>
-        <div className="border-l-1 border-primary pl-[25px] space-y-4.5 col-span-8 pt-4">
-          <div>
-            <h2 className="font-bold">
-              Software Engineer with 5+ years of experience
-            </h2>
-            <p className="mt-[10px] leading-relaxed">
-              Highly motivated and experienced Software Engineer with 5+ years
-              of proven success in designing and developing complex software
-              solutions. Adept at utilizing cutting-edge technologies such as
-              React and Node.js to create user- friendly and scalable
-              applications. Possesses a strong understanding of Computer Systems
-              Design principles and methodologies. A results-oriented individual
-              with a passion for delivering high-quality work and exceeding
-              expectations. A strong team leader and mentor with a proven
-              ability to guide and motivate others to achieve shared goals.
-              Seeking a challenging and rewarding Software Engineer position
-              where I can leverage my skills and experience to contribute to the
-              success of a dynamic and innovative organization.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="font-bold">Programming languages</h3>
-            <p className="mt-[10px]">JavaScript, TypeScript.</p>
-          </div>
-          <div>
-            <h3 className="font-bold">Frontend</h3>
-            <p className="mt-[10px]">React, Redux.</p>
-          </div>
-          <div>
-            <h3 className="font-bold">Backend</h3>
-            <p className="mt-[10px]">gRPC.</p>
-          </div>
-        </div>
-      </div>
-
-      <section className="mb-12">
-        <h2 className="text-[34px] tracking-tight mb-[33px]">Projects</h2>
-        <div className="grid grid-cols-1 gap-8 grid-cols-12 text-[16px] mb-[51px]">
+      <div>
+        <div className="grid grid-cols-12 gap-8 text-[16px] mb-[51px]">
           <div className="space-y-4 col-span-4 py-4">
-            <div>
-              <h3 className="font-bold uppercase text-primary">
-                SaaS Media Platform
-              </h3>
-              <p className="mt-[10px]">
-                A digital music, podcast, and video service that gives you
-                access to millions of songs and other content from creators all
-                over the world. The user can connect and manage service
-                providers such as Spotify, Apple Music, Tidal and SoundCloud in
-                a few clicks and play content from them.
-              </p>
-            </div>
+            {cv.education && (
+              <div>
+                <h3 className="font-bold">Education</h3>
+                <p className="mt-2">{cv.education}</p>
+              </div>
+            )}
+
+            {profile?.languages && profile.languages.length > 0 && (
+              <div>
+                <h3 className="font-bold">Language proficiency</h3>
+                {profile.languages.map((lang) => (
+                  <p key={lang.name} className="mt-2">
+                    {lang.name} — {lang.proficiency}
+                  </p>
+                ))}
+              </div>
+            )}
+
+            {uniqueDomains.length > 0 && (
+              <div>
+                <h3 className="font-bold">Domains</h3>
+                <p className="mt-2">{uniqueDomains.join(', ')}</p>
+              </div>
+            )}
           </div>
 
-          <div className="border-l-1 border-primary pl-[25px] space-y-4.5 col-span-8 pt-4">
+          <div className="border-l border-primary pl-[25px] space-y-4.5 col-span-8 pt-4">
             <div>
-              <h2 className="font-bold">Project roles</h2>
-              <p className="mt-[10px] leading-relaxed">
-                Frontend Developer, AI Developer
+              <h2 className="font-bold">{cv.name}</h2>
+              <p className="mt-[10px] leading-relaxed whitespace-pre-line">
+                {cv.description}
               </p>
             </div>
-            <div>
-              <h2 className="font-bold">Period</h2>
-              <p className="mt-[10px] leading-relaxed">08.2023 – Till now</p>
-            </div>
-            <div>
-              <h2 className="font-bold">Responsibilities</h2>
-              <ul className="mt-[10px] list-disc pl-5 leading-relaxed marker:text-[12px]">
-                <li>
-                  Integrated Keycloak OAuth SSO login for seamless user
-                  authentication;
-                </li>
-                <li>
-                  Developed web components according to the Figma design system
-                  to ensure a consistent and modern user interface;
-                </li>
-                <li>
-                  Successfully managed and onboarded both wired and wireless IoT
-                  devices, enabling real-time data streaming and control;
-                </li>
-                <li>
-                  Collaborated with the development team to integrate with
-                  third-party service providers;
-                </li>
-                <li>
-                  Contributed to the overall success of the project by
-                  implementing robust security measures and optimizing
-                  performance.
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h2 className="font-bold">Environment</h2>
-              <p className="mt-[10px] leading-relaxed">
-                TypeScript, React, Redux, Redux Toolkit, RTK Query, Radix UI,
-                gRPC, Keycloak.
-              </p>
-            </div>
+
+            {categoryMetrics.map((cat) => (
+              <div key={cat.categoryName}>
+                <h3 className="font-bold">{cat.categoryName}</h3>
+                <p className="mt-[10px]">{cat.skills.join(', ')}</p>
+              </div>
+            ))}
           </div>
         </div>
-      </section>
 
-      <section className="mb-12">
-        <h2 className="text-[34px] tracking-tight mb-[33px]">
-          Professional skills
-        </h2>
+        {cv.projects.length > 0 && (
+          <section className="mb-12">
+            <h2 className="text-[34px] tracking-tight mb-[33px]">Projects</h2>
+            {cv.projects.map((project) => {
+              const startFormatted = formatPeriodDate(project.start_date);
+              const endFormatted = project.end_date
+                ? formatPeriodDate(project.end_date)
+                : 'Present';
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-[14px]">
-            <thead>
-              <tr className="border-b border-primary uppercase align-sub">
-                <th className="pt-2.5 pb-8 pl-4 w-1/3 font-medium">Skills</th>
-                <th className="pt-2.5 pb-8 w-1/3 font-medium"></th>
-                <th className="pt-2.5 text-center w-[114px] font-medium">
-                  Experience in years
-                </th>
-                <th className="pt-2.5 pb-8 text-center font-medium">
-                  Last used
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border font-medium">
-              <tr className="align-sub">
-                <td className="pt-2.5 pb-7 pl-4  text-primary">
-                  Programming languages
-                </td>
-                <td className="pt-2.5 pb-7 flex flex-col items-start gap-5">
-                  <span>TypeScript</span>
-                  <span>JavaScript</span>
-                </td>
-                <td className="pt-2.5 pb-7 text-center font-normal">2</td>
-                <td className="pt-2.5 pb-7 text-center font-normal">2025</td>
-              </tr>
-              <tr className="align-sub">
-                <td className="pt-2.5 pb-7 pl-4 text-primary">
-                  Frontend technologies
-                </td>
-                <td className="pt-2.5 pb-7 flex flex-col items-start gap-5">
-                  React
-                </td>
-                <td className="pt-2.5 pb-7 text-center font-normal">2</td>
-                <td className="pt-2.5 pb-7 text-center font-normal">2025</td>
-              </tr>
-              <tr className="align-sub">
-                <td className="pt-2.5 pb-7 pl-4 text-primary">
-                  State management libraries
-                </td>
-                <td className="pt-2.5 pb-7 flex flex-col items-start gap-5">
-                  Redux
-                </td>
-                <td className="pt-2.5 pb-7 text-center font-normal">2</td>
-                <td className="pt-2.5 pb-7 text-center font-normal">2025</td>
-              </tr>
-              <tr className="align-sub">
-                <td className="pt-2.5 pb-7 pl-4 text-primary">
-                  Backend technologies
-                </td>
-                <td className="pt-2.5 pb-7 flex flex-col items-start gap-5">
-                  gRPC
-                </td>
-                <td className="pt-2.5 pb-7 text-center font-normal">2</td>
-                <td className="pt-2.5 pb-7 text-center font-normal">2025</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+              return (
+                <div
+                  key={project.id}
+                  className="grid grid-cols-12 gap-8 text-[16px] mb-[51px]"
+                >
+                  <div className="space-y-4 col-span-4 py-4">
+                    <div>
+                      <h3 className="font-bold uppercase text-primary">
+                        {project.name}
+                      </h3>
+                      <p className="mt-[10px]">{project.description}</p>
+                    </div>
+                  </div>
+
+                  <div className="border-l border-primary pl-[25px] space-y-4.5 col-span-8 pt-4">
+                    {project.roles.length > 0 && (
+                      <div>
+                        <h2 className="font-bold">Project roles</h2>
+                        <p className="mt-[10px] leading-relaxed">
+                          {project.roles.join(', ')}
+                        </p>
+                      </div>
+                    )}
+
+                    <div>
+                      <h2 className="font-bold">Period</h2>
+                      <p className="mt-[10px] leading-relaxed">
+                        {startFormatted} - {endFormatted}
+                      </p>
+                    </div>
+
+                    {project.responsibilities &&
+                      project.responsibilities.length > 0 && (
+                        <div>
+                          <h2 className="font-bold">Responsibilities</h2>
+                          <ul className="mt-[10px] list-disc pl-5 leading-relaxed marker:text-[12px]">
+                            {project.responsibilities.map((resp, idx) => (
+                              <li key={idx}>{resp}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                    {project.environment && project.environment.length > 0 && (
+                      <div>
+                        <h2 className="font-bold">Environment</h2>
+                        <p className="mt-[10px] leading-relaxed">
+                          {project.environment.join(', ')}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </section>
+        )}
+
+        {categoryMetrics.length > 0 && (
+          <section className="mb-12">
+            <h2 className="text-[34px] tracking-tight mb-[33px]">
+              Professional skills
+            </h2>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-[14px]">
+                <thead>
+                  <tr className="border-b border-primary uppercase align-sub">
+                    <th className="pt-2.5 pb-8 pl-4 w-1/3 font-medium">
+                      Skills
+                    </th>
+                    <th className="pt-2.5 pb-8 w-1/3 font-medium"></th>
+                    <th className="pt-2.5 text-center w-[114px] font-medium">
+                      Experience in years
+                    </th>
+                    <th className="pt-2.5 pb-8 text-center font-medium">
+                      Last used
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border font-medium">
+                  {categoryMetrics.map((cat) => (
+                    <tr key={cat.categoryName} className="align-sub">
+                      <td className="pt-2.5 pb-7 pl-4 text-primary">
+                        {cat.categoryName}
+                      </td>
+                      <td className="pt-2.5 pb-7">
+                        <div className="flex flex-col items-start gap-5">
+                          {cat.skills.map((skill) => (
+                            <span key={skill}>{skill}</span>
+                          ))}
+                        </div>
+                      </td>
+                      <td className="pt-2.5 pb-7 text-center font-normal">
+                        <span>{cat.experienceYears}</span>
+                      </td>
+                      <td className="pt-2.5 pb-7 text-center font-normal">
+                        <span>{cat.lastUsed}</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )}
+      </div>
     </div>
   );
 }
