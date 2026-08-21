@@ -1,11 +1,11 @@
 'use client';
 
 import type { ApiSkill, ProfileSkill } from '@/api/skills';
-import { ChangeUserSkillModal } from '@/features/skills/components/ChangeUserSkillModal';
-import { useUpdateUserSkill } from '@/features/skills/hooks/useUpdateUserSkill';
+import { ChangeSkillModal } from '@/features/skills/components/ChangeSkillModal';
+import { useUpdateCvSkill } from '@/features/skills/hooks/useUpdateCvSkill';
 
-type UpdateUserSkillModalProps = {
-  userId: string;
+type UpdateCvSkillModalProps = {
+  cvId: string;
   skill: ProfileSkill;
   skills: ApiSkill[];
   open: boolean;
@@ -13,16 +13,16 @@ type UpdateUserSkillModalProps = {
   onSuccess?: () => void | Promise<void>;
 };
 
-export function UpdateUserSkillModal({
-  userId,
+export function UpdateCvSkillModal({
+  cvId,
   skill,
   skills,
   open,
   onOpenChange,
   onSuccess,
-}: UpdateUserSkillModalProps) {
-  const form = useUpdateUserSkill({
-    userId,
+}: UpdateCvSkillModalProps) {
+  const form = useUpdateCvSkill({
+    cvId,
     skillName: skill.name,
     categoryId: skill.categoryId,
     mastery: skill.mastery,
@@ -30,7 +30,7 @@ export function UpdateUserSkillModal({
   });
 
   return (
-    <ChangeUserSkillModal
+    <ChangeSkillModal
       {...form}
       type="Update"
       skills={skills}
