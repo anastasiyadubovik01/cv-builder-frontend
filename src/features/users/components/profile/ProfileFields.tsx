@@ -303,9 +303,7 @@ export function ProfileFields({
               id="position"
               className="h-12 w-full"
               error={
-                canEdit && errors.departmentId
-                  ? t(errors.departmentId)
-                  : undefined
+                canEdit && errors.positionId ? t(errors.positionId) : undefined
               }
               aria-invalid={Boolean(canEdit && errors.positionId)}
             >

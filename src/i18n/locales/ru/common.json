@@ -309,6 +309,24 @@
     }
   },
 
+  "departments": {
+    "title": "Отделы",
+    "search": "Поиск",
+    "name": "Название",
+    "empty": "Отделы не найдены",
+    "loadError": "Не удалось загрузить отделы",
+    "create": "Создать отдел",
+    "validation": {
+      "nameRequired": "Название отдела обязательно",
+      "duplicateName": "Такой отдел уже существует"
+    },
+    "notifications": {
+      "createSuccess": "Отдел успешно создан",
+      "updateSuccess": "Отдел успешно обновлён",
+      "deleteSuccess": "Отдел успешно удалён"
+    }
+  },
+
   "cvs": {
     "name": "Название",
     "education": "Образование",
