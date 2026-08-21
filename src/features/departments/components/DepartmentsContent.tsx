@@ -14,7 +14,11 @@ import {
   DEFAULT_PAGE_SIZE,
 } from '@/lib/constants/pagination';
 
+import { CreateDepartmentModal } from './CreateDepartmentModal';
 import { DepartmentsTable } from './DepartmentsTable';
+import { UpdateDepartmentModal } from './UpdateDepartmentModal';
+import { DeleteDepartmentModal } from './DeleteDepartmentModal';
+
 import type { DepartmentSortField, SortDirection } from '../types';
 
 export function DepartmentsContent() {
@@ -29,6 +33,12 @@ export function DepartmentsContent() {
 
   const [allDepartments, setAllDepartments] = useState<ApiDepartment[]>([]);
   const [loadError, setLoadError] = useState(false);
+
+  const [editingDepartment, setEditingDepartment] =
+    useState<ApiDepartment | null>(null);
+
+  const [deletingDepartment, setDeletingDepartment] =
+    useState<ApiDepartment | null>(null);
 
   const { data, loading, error, fetchMore, refetch } = useQuery(
     DEPARTMENTS_QUERY,
@@ -117,11 +127,11 @@ export function DepartmentsContent() {
     department.name.toLowerCase().includes(normalizedSearch),
   );
 
-  const sortedDepartments = [...filteredDepartments].sort((a, b) => {
-    return sortDirection === 'asc'
+  const sortedDepartments = [...filteredDepartments].sort((a, b) =>
+    sortDirection === 'asc'
       ? a.name.localeCompare(b.name)
-      : b.name.localeCompare(a.name);
-  });
+      : b.name.localeCompare(a.name),
+  );
 
   const totalPages = Math.ceil(sortedDepartments.length / pageSize) || 1;
 
@@ -144,6 +154,14 @@ export function DepartmentsContent() {
     setCurrentPage(1);
   };
 
+  const handleEdit = (department: ApiDepartment) => {
+    setEditingDepartment(department);
+  };
+
+  const handleDelete = (department: ApiDepartment) => {
+    setDeletingDepartment(department);
+  };
+
   const hasError = Boolean(error) || loadError;
 
   const isLoading =
@@ -154,7 +172,7 @@ export function DepartmentsContent() {
       {!hasError && isLoading && <LoadingOverlay />}
 
       <div className="mx-auto w-full max-w-[1190px] px-6">
-        <div className="pt-2 pb-4">
+        <div className="flex items-center justify-between pt-2 pb-4">
           <SearchInput
             value={search}
             onChange={(event) => {
@@ -163,6 +181,20 @@ export function DepartmentsContent() {
             }}
             placeholder={t('departments.search', 'Search')}
             className="bg-background"
+          />
+
+          <CreateDepartmentModal
+            departments={allDepartments}
+            onSuccess={handleRefresh}
+            trigger={
+              <Button
+                type="button"
+                variant="primaryV2"
+                className="text-[14px] font-medium uppercase"
+              >
+                {t('departments.create', 'CREATE DEPARTMENT')}
+              </Button>
+            }
           />
         </div>
 
@@ -183,6 +215,8 @@ export function DepartmentsContent() {
               sortBy={sortBy}
               sortDirection={sortDirection}
               onSort={handleSort}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
             />
 
             <Pagination
@@ -195,6 +229,40 @@ export function DepartmentsContent() {
                 setCurrentPage(1);
               }}
             />
+
+            {editingDepartment && (
+              <UpdateDepartmentModal
+                department={editingDepartment}
+                departments={allDepartments}
+                open={Boolean(editingDepartment)}
+                onOpenChange={(open) => {
+                  if (!open) {
+                    setEditingDepartment(null);
+                  }
+                }}
+                onSuccess={async () => {
+                  await handleRefresh();
+                  setEditingDepartment(null);
+                }}
+              />
+            )}
+
+            {deletingDepartment && (
+              <DeleteDepartmentModal
+                departmentId={deletingDepartment.id}
+                name={deletingDepartment.name}
+                open={Boolean(deletingDepartment)}
+                onOpenChange={(open) => {
+                  if (!open) {
+                    setDeletingDepartment(null);
+                  }
+                }}
+                onSuccess={async () => {
+                  await handleRefresh();
+                  setDeletingDepartment(null);
+                }}
+              />
+            )}
           </>
         )}
       </div>

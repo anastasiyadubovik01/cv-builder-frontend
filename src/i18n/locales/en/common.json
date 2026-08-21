@@ -313,7 +313,17 @@
     "search": "Search",
     "name": "Name",
     "empty": "No departments found",
-    "loadError": "Failed to load departments"
+    "loadError": "Failed to load departments",
+    "create": "Create department",
+    "validation": {
+      "nameRequired": "Department name is required",
+      "duplicateName": "Department already exists"
+    },
+    "notifications": {
+      "createSuccess": "Department successfully created",
+      "updateSuccess": "Department successfully updated",
+      "deleteSuccess": "Department successfully deleted"
+    }
   },
 
   "cvs": {
