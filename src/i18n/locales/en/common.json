@@ -278,7 +278,8 @@
       "notifications": {
         "createSuccess": "Skill created successfully",
         "updateSuccess": "Skill updated successfully",
-        "deleteSuccess": "Skill deleted successfully"
+        "deleteSuccess": "Skill deleted successfully",
+        "removedSuccess": "Skill removed successfully"
       }
     }
   },
