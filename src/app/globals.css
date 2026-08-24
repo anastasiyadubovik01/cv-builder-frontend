@@ -248,3 +248,30 @@
     -webkit-appearance: none;
   }
 }
+
+@layer utilities {
+  [class*='overflow-']:not(.overflow-visible) {
+    scrollbar-width: thin;
+    scrollbar-color: var(--muted-foreground) var(--muted);
+  }
+
+  [class*='overflow-']:not(.overflow-visible)::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  [class*='overflow-']:not(.overflow-visible)::-webkit-scrollbar-track {
+    background: var(--muted);
+    border-radius: 8px;
+  }
+
+  [class*='overflow-']:not(.overflow-visible)::-webkit-scrollbar-thumb {
+    background: var(--muted-foreground);
+    border-radius: 8px;
+    transition: background 0.2s;
+  }
+
+  [class*='overflow-']:not(.overflow-visible)::-webkit-scrollbar-thumb:hover {
+    background: var(--border);
+  }
+}
