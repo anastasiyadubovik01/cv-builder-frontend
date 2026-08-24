@@ -24,7 +24,7 @@ export default async function CvDetailsLayout({
   const accessToken = cookieStore.get('access_token')?.value;
 
   if (!accessToken) {
-    redirect('/auth/login');
+    redirect('/sign-in');
   }
 
   const currentUserId = getUserIdFromJwt(accessToken);
