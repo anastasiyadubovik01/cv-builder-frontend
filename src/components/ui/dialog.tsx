@@ -60,13 +60,8 @@ function DialogContent({
         data-size={size}
         className={cn(
           'fixed top-1/2 left-1/2 z-50 hidden -translate-x-1/2 -translate-y-1/2 bg-secondary text-popover-foreground ring-1 ring-foreground/10 duration-100 outline-none md:grid data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
-
-          size === 'wide'
-            ? 'w-[620px] gap-[26px] rounded-none p-6 lg:w-[860px]'
-            : size === 'sm'
-              ? 'w-[620px] gap-[26px] rounded-xl p-6 pt-4 pb-4'
-              : 'w-[620px] gap-[26px] rounded-xl p-6 pt-4 pb-4',
-
+          'w-[620px] gap-[26px] rounded-xl p-6 pt-4 pb-3',
+          size === 'wide' ? 'lg:w-[860px]' : '',
           className,
         )}
         {...props}
