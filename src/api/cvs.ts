@@ -12,7 +12,15 @@ export type ApiCv = {
   } | null;
 };
 
-type CvsData = {
+export type SearchPaginationInput = {
+  search?: string;
+  sort_order?: string;
+  sort_by?: string;
+  page?: number;
+  limit?: number;
+};
+
+export type CvsData = {
   cvs: {
     items: ApiCv[];
     total: number;
@@ -23,13 +31,7 @@ type CvsData = {
 };
 
 type CvsVariables = {
-  params?: {
-    search?: string;
-    sort_order?: string;
-    sort_by?: string;
-    page?: number;
-    limit?: number;
-  };
+  params?: SearchPaginationInput;
 };
 
 export const CVS_QUERY: TypedDocumentNode<CvsData, CvsVariables> = gql`
@@ -74,6 +76,46 @@ export const CV_QUERY: TypedDocumentNode<CvData, CvVariables> = gql`
         id
         email
       }
+    }
+  }
+`;
+
+export type CvsByUserIdData = {
+  cvsByUserId: {
+    items: ApiCv[];
+    total: number;
+    page: number;
+    limit: number;
+    total_pages: number;
+  };
+};
+
+type CvsByUserIdVariables = {
+  userId: string;
+  params?: SearchPaginationInput;
+};
+
+export const CVS_BY_USER_ID_QUERY: TypedDocumentNode<
+  CvsByUserIdData,
+  CvsByUserIdVariables
+> = gql`
+  query CvsByUserId($userId: ID!, $params: SearchPaginationInput) {
+    cvsByUserId(userId: $userId, params: $params) {
+      items {
+        id
+        created_at
+        name
+        education
+        description
+        user {
+          id
+          email
+        }
+      }
+      total
+      page
+      limit
+      total_pages
     }
   }
 `;
