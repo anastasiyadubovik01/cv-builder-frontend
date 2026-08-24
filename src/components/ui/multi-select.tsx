@@ -153,8 +153,8 @@ export function MultiSelect({
           <SelectPrimitive.Popup
             data-slot="select-content"
             className={cn(
-              'relative z-50 max-h-(--available-height) w-(--anchor-width) overflow-x-hidden overflow-y-auto',
-              'rounded-none border border-t-0 border-[var(--input-active-border)]',
+              'relative z-50 max-h-100 w-(--anchor-width) overflow-x-hidden overflow-y-auto',
+              'rounded-none border border-[var(--input-active-border)]',
               'bg-background text-foreground shadow-none ring-0',
             )}
           >

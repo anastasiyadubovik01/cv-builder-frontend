@@ -145,11 +145,11 @@ function SelectContent({
           className={cn(
             [
               'relative z-50',
-              'max-h-(--available-height)',
+              'max-h-100',
               'w-(--anchor-width)',
               'overflow-x-hidden overflow-y-auto',
               'rounded-none',
-              'border border-t-0 border-[var(--select-border-active)]',
+              'border border-[var(--select-border-active)]',
               'bg-[var(--select-background)]',
               'text-[var(--select-foreground)]',
               'shadow-none ring-0',
