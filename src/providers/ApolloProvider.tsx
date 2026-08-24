@@ -41,8 +41,7 @@ function makeClient() {
     credentials: 'include',
   });
 
-  // Access token to the request
-  const authLink = new ApolloLink((operation, forward) => {
+  const setAuthHeader = (operation: ApolloLink.Operation) => {
     const token = getAccessToken();
 
     operation.setContext(
@@ -57,7 +56,11 @@ function makeClient() {
         };
       },
     );
+  };
 
+  // Access token to the request
+  const authLink = new ApolloLink((operation, forward) => {
+    setAuthHeader(operation);
     return forward(operation);
   });
 
@@ -100,6 +103,7 @@ function makeClient() {
               observer.error(new AuthRefreshError());
               return;
             }
+            setAuthHeader(operation);
             subscription = forward(operation).subscribe(observer);
           })
           .catch((err: unknown) => {
@@ -111,6 +115,7 @@ function makeClient() {
       } else {
         pendingRequests.push((success: boolean) => {
           if (success) {
+            setAuthHeader(operation);
             subscription = forward(operation).subscribe(observer);
           } else {
             redirectToLogin();

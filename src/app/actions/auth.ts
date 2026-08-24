@@ -3,8 +3,6 @@
 import { cookies } from 'next/headers';
 import { TOKEN_EXPIRY } from '@/lib/constants/auth';
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/lib/auth/tokenUtils';
-import { getClient } from '@/lib/apollo/client';
-import { UPDATE_TOKEN_MUTATION, type UpdateTokenResponse } from '@/api/auth';
 
 interface SetTokensParams {
   accessToken: string;
@@ -39,19 +37,35 @@ export async function refreshAuthTokensAction(): Promise<boolean> {
   if (!refreshToken) return false;
 
   try {
-    const client = getClient();
+    const graphqlUrl = process.env.NEXT_PUBLIC_GRAPHQL_URL;
+    if (!graphqlUrl) return false;
 
-    const { data } = await client.mutate<UpdateTokenResponse>({
-      mutation: UPDATE_TOKEN_MUTATION,
-      context: {
-        headers: {
-          Authorization: `Bearer ${refreshToken}`,
-        },
+    const res = await fetch(graphqlUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${refreshToken}`,
       },
+      body: JSON.stringify({
+        query: `
+          mutation UpdateToken {
+            updateToken {
+              access_token
+              refresh_token
+            }
+          }
+        `,
+      }),
     });
 
-    const tokens = data?.updateToken;
-    if (!tokens) return false;
+    if (!res.ok) return false;
+
+    const json = await res.json();
+    const tokens = json.data?.updateToken;
+
+    if (!tokens?.access_token || !tokens?.refresh_token) {
+      return false;
+    }
 
     await setAuthCookies({
       accessToken: tokens.access_token,
