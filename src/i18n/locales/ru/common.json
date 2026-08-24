@@ -279,7 +279,8 @@
       "notifications": {
         "createSuccess": "Навык успешно создан",
         "updateSuccess": "Навык успешно обновлён",
-        "deleteSuccess": "Навык успешно удалён"
+        "deleteSuccess": "Навык успешно удалён",
+        "removedSuccess": "Навык успешно удалён"
       }
     }
   },
