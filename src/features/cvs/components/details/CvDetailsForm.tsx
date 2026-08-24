@@ -85,11 +85,11 @@ export function CvDetailsForm({
           onChange={handleChange('description')}
           placeholder={t('cvs.description', 'Description')}
           disabled={!canEdit || isUpdating}
-          rows={5}
+          rows={10}
           error={
             canEdit && errors.description ? t(errors.description) : undefined
           }
-          className="w-full resize-none disabled:opacity-100"
+          className="w-full resize-none disabled:opacity-100 min-h-[160px]"
         />
       </div>
 
