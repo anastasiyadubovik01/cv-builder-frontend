@@ -327,6 +327,27 @@
     }
   },
 
+  "positions": {
+    "title": "Positions",
+    "search": "Search",
+    "name": "Position",
+    "create": "Create position",
+    "empty": "No positions found",
+    "loadError": "Failed to load positions",
+    "validation": {
+      "nameRequired": "Position name is required",
+      "duplicateName": "Position already exists"
+    },
+    "notifications": {
+      "createSuccess": "Position successfully created",
+      "updateSuccess": "Position successfully updated",
+      "deleteSuccess": "Position successfully deleted"
+    },
+    "errors": {
+      "inUse": "Position cannot be deleted because it is currently in use"
+    }
+  },
+
   "cvs": {
     "name": "Name",
     "education": "Education",

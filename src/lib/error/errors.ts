@@ -7,6 +7,7 @@ export const SERVER_ERROR_CODES = {
   EXPIRED_RESET_TOKEN: 'actionExpired',
   INVALID_OTP: 'mailNotFound',
   PROJECT_HAS_BEEN_ADDED: 'projectHasBeenAdded',
+  POSITION_IS_IN_USE: 'positionIsUsed',
 
   // Пока не протестированы конкретные имена ошибок
   EXPIRED_OTP: 'expiredOtp',
