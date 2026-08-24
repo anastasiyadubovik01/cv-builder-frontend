@@ -21,6 +21,7 @@ export const DEFAULT_ERROR_MAPPING: ErrorMapping = {
   [SERVER_ERROR_CODES.INVALID_OTP]: 'auth.errors.invalidOtp',
   [SERVER_ERROR_CODES.PROJECT_HAS_BEEN_ADDED]:
     'projects.errors.projectHasBeenAdded',
+  [SERVER_ERROR_CODES.DEPARTMENT_IS_IN_USE]: 'departments.errors.inUse',
   [SERVER_ERROR_CODES.POSITION_IS_IN_USE]: 'positions.errors.inUse',
 
   // Пока не протестированы конкретные имена ошибок
@@ -46,6 +47,10 @@ export function mapServerError(
     if (translationKey && message.includes(code.toLowerCase())) {
       return translationKey;
     }
+  }
+
+  if (message.includes('validationerror')) {
+    return 'languages.errors.invalidData';
   }
 
   return 'auth.errors.unknownError';

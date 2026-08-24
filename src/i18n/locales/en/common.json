@@ -306,6 +306,9 @@
         "updateSuccess": "Language successfully updated",
         "deleteSuccess": "Language successfully deleted"
       }
+    },
+    "errors": {
+      "invalidData": "Invalid language data"
     }
   },
 
@@ -324,6 +327,9 @@
       "createSuccess": "Department successfully created",
       "updateSuccess": "Department successfully updated",
       "deleteSuccess": "Department successfully deleted"
+    },
+    "errors": {
+      "inUse": "Department cannot be deleted because it is currently in use"
     }
   },
 
