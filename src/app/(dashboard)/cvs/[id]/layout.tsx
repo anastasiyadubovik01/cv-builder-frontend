@@ -2,7 +2,7 @@ import React from 'react';
 import { getT } from 'next-i18next/server';
 import { CvDetailsNavigation } from '@/features/cvs/components/details/CvDetailsNavigation';
 import { cookies } from 'next/headers';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { getRoleFromJwt, getUserIdFromJwt } from '@/lib/helpers/jwt';
 import { CV_QUERY } from '@/api/cvs';
 import { getClient } from '@/lib/apollo/client';
@@ -21,11 +21,7 @@ export default async function CvDetailsLayout({
   const { id } = await params;
 
   const cookieStore = await cookies();
-  const accessToken = cookieStore.get('access_token')?.value;
-
-  if (!accessToken) {
-    redirect('/sign-in');
-  }
+  const accessToken = cookieStore.get('access_token')?.value ?? '';
 
   const currentUserId = getUserIdFromJwt(accessToken);
   const role = getRoleFromJwt(accessToken);
@@ -37,11 +33,6 @@ export default async function CvDetailsLayout({
         query: CV_QUERY,
         variables: {
           cvId: id,
-        },
-        context: {
-          headers: {
-            authorization: `Bearer ${accessToken}`,
-          },
         },
       });
 
