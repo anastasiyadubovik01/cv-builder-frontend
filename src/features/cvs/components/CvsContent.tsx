@@ -3,7 +3,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client/react';
-import { CVS_QUERY } from '@/api/cvs';
+import {
+  CVS_BY_USER_ID_QUERY,
+  CVS_QUERY,
+  type ApiCv,
+  type CvsData,
+  type CvsByUserIdData,
+} from '@/api/cvs';
 import { PlusIcon } from '@/components/icons/plus-icon';
 import { Button } from '@/components/ui/button';
 import { LoadingOverlay } from '@/components/ui/loading-overlay';
@@ -15,7 +21,6 @@ import {
   BACKEND_PAGE_SIZE,
   DEFAULT_PAGE_SIZE,
 } from '@/lib/constants/pagination';
-import type { ApiCv } from '@/api/cvs';
 import type { Cv, SortDirection, SortField } from '@/features/cvs/types';
 
 interface CvsContentProps {
@@ -40,8 +45,9 @@ export function CvsContent({
   const [loadError, setLoadError] = useState(false);
 
   const targetUserId = userId || currentUserId;
+  const isUserSpecific = Boolean(userId);
 
-  const { data, loading, error, fetchMore, refetch } = useQuery(CVS_QUERY, {
+  const globalQueryResult = useQuery<CvsData>(CVS_QUERY, {
     variables: {
       params: {
         page: 1,
@@ -49,15 +55,41 @@ export function CvsContent({
       },
     },
     fetchPolicy: 'cache-and-network',
+    skip: isUserSpecific,
   });
 
+  const userQueryResult = useQuery<CvsByUserIdData>(CVS_BY_USER_ID_QUERY, {
+    variables: {
+      userId: userId ?? '',
+      params: {
+        page: 1,
+        limit: BACKEND_PAGE_SIZE,
+      },
+    },
+    fetchPolicy: 'cache-and-network',
+    skip: !isUserSpecific,
+  });
+
+  const activeQueryResult = isUserSpecific
+    ? userQueryResult
+    : globalQueryResult;
+  const { data, loading, error, fetchMore, refetch } = activeQueryResult;
+
   const loadAllCvs = useCallback(
-    async (sourceData: NonNullable<typeof data>): Promise<ApiCv[]> => {
-      const firstPageCvs = sourceData.cvs.items;
-      const totalBackendPages = sourceData.cvs.total_pages;
+    async (sourceData: CvsData | CvsByUserIdData): Promise<ApiCv[]> => {
+      let items: ApiCv[] = [];
+      let totalBackendPages = 0;
+
+      if ('cvsByUserId' in sourceData && sourceData.cvsByUserId) {
+        items = sourceData.cvsByUserId.items;
+        totalBackendPages = sourceData.cvsByUserId.total_pages;
+      } else if ('cvs' in sourceData && sourceData.cvs) {
+        items = sourceData.cvs.items;
+        totalBackendPages = sourceData.cvs.total_pages;
+      }
 
       if (totalBackendPages <= 1) {
-        return firstPageCvs;
+        return items;
       }
 
       const pagesToLoad = Array.from(
@@ -68,23 +100,35 @@ export function CvsContent({
       const responses = await Promise.all(
         pagesToLoad.map((page) =>
           fetchMore({
-            variables: {
-              params: {
-                page,
-                limit: BACKEND_PAGE_SIZE,
-              },
-            },
+            variables: isUserSpecific
+              ? {
+                  userId: userId ?? '',
+                  params: { page, limit: BACKEND_PAGE_SIZE },
+                }
+              : {
+                  params: { page, limit: BACKEND_PAGE_SIZE },
+                },
           }),
         ),
       );
 
-      const remainingCvs = responses.flatMap(
-        (response) => response.data.cvs.items,
-      );
+      const remainingCvs = responses.flatMap((response) => {
+        const responseData = response.data as
+          (CvsData | CvsByUserIdData) | undefined;
+        if (!responseData) return [];
 
-      return [...firstPageCvs, ...remainingCvs];
+        if ('cvsByUserId' in responseData && responseData.cvsByUserId?.items) {
+          return responseData.cvsByUserId.items;
+        }
+        if ('cvs' in responseData && responseData.cvs?.items) {
+          return responseData.cvs.items;
+        }
+        return [];
+      });
+
+      return [...items, ...remainingCvs];
     },
-    [fetchMore],
+    [fetchMore, isUserSpecific, userId],
   );
 
   useEffect(() => {
@@ -116,11 +160,7 @@ export function CvsContent({
     }
   };
 
-  const userFilteredApiCvs = userId
-    ? allCvs.filter((cv) => cv.user?.id === userId)
-    : allCvs;
-
-  const cvs: Cv[] = userFilteredApiCvs.map((cv) => ({
+  const cvs: Cv[] = allCvs.map((cv) => ({
     id: cv.id,
     name: cv.name,
     education: cv.education ?? '',
@@ -167,8 +207,20 @@ export function CvsContent({
     setCurrentPage(1);
   };
 
+  const getTotalItems = (): number => {
+    if (!data) return 0;
+    if ('cvsByUserId' in data && data.cvsByUserId) {
+      return data.cvsByUserId.total;
+    }
+    if ('cvs' in data && data.cvs) {
+      return data.cvs.total;
+    }
+    return 0;
+  };
+
+  const totalItems = getTotalItems();
   const hasError = Boolean(error) || loadError;
-  const isLoading = loading || Boolean(data && allCvs.length < data.cvs.total);
+  const isLoading = loading || Boolean(data && allCvs.length < totalItems);
 
   return (
     <div className="flex h-[calc(100dvh-3.5rem)] min-h-0 flex-col overflow-hidden">
