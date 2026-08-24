@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 
 import { POSITIONS_QUERY, type Position } from '@/api/positions';
+import { PlusIcon } from '@/components/icons/plus-icon';
 import { Button } from '@/components/ui/button';
 import { LoadingOverlay } from '@/components/ui/loading-overlay';
 import { Pagination } from '@/components/ui/pagination';
@@ -14,7 +15,10 @@ import {
   DEFAULT_PAGE_SIZE,
 } from '@/lib/constants/pagination';
 
+import { CreatePositionModal } from './CreatePositionModal';
+import { DeletePositionModal } from './DeletePositionModal';
 import { PositionsTable } from './PositionsTable';
+import { UpdatePositionModal } from './UpdatePositionModal';
 import type { PositionSortField, SortDirection } from '../types';
 
 export function PositionsContent() {
@@ -29,6 +33,11 @@ export function PositionsContent() {
 
   const [allPositions, setAllPositions] = useState<Position[]>([]);
   const [loadError, setLoadError] = useState(false);
+
+  const [editingPosition, setEditingPosition] = useState<Position | null>(null);
+  const [deletingPosition, setDeletingPosition] = useState<Position | null>(
+    null,
+  );
 
   const { data, loading, error, fetchMore, refetch } = useQuery(
     POSITIONS_QUERY,
@@ -132,7 +141,6 @@ export function PositionsContent() {
   const handleSort = (field: PositionSortField) => {
     if (sortBy === field) {
       setSortDirection((previous) => (previous === 'asc' ? 'desc' : 'asc'));
-
       setCurrentPage(1);
       return;
     }
@@ -148,24 +156,42 @@ export function PositionsContent() {
     loading || Boolean(data && allPositions.length < data.positions.total);
 
   return (
-    <div className="min-h-[calc(100dvh-3.5rem)]">
+    <div className="flex h-[calc(100dvh-3.5rem)] min-h-0 flex-col overflow-hidden">
       {!hasError && isLoading && <LoadingOverlay />}
 
-      <div className="mx-auto w-full max-w-[1190px] px-6">
-        <div className="flex items-center justify-between pt-2 pb-4">
-          <SearchInput
-            value={search}
-            onChange={(event) => {
-              setSearch(event.target.value);
-              setCurrentPage(1);
-            }}
-            placeholder={t('positions.search', 'Search')}
-            className="bg-background"
-          />
-        </div>
+      <div className="mx-6 mt-[7px] flex shrink-0 items-center justify-between">
+        <SearchInput
+          value={search}
+          onChange={(event) => {
+            setSearch(event.target.value);
+            setCurrentPage(1);
+          }}
+          placeholder={t('positions.search', 'Search')}
+          className="bg-background"
+        />
 
+        <CreatePositionModal
+          positions={allPositions}
+          onSuccess={handleRefresh}
+          trigger={
+            <Button
+              type="button"
+              variant="primaryV2"
+              className="w-10 border-transparent px-0 lg:w-auto lg:gap-3 lg:border-transparent lg:px-5 lg:hover:border-primary"
+            >
+              <PlusIcon className="size-6" />
+
+              <span className="hidden lg:inline">
+                {t('positions.create', 'Create position')}
+              </span>
+            </Button>
+          }
+        />
+      </div>
+
+      <div className="flex min-h-0 flex-1 flex-col px-5 pt-4">
         {hasError ? (
-          <div className="flex min-h-[400px] flex-col items-center justify-center gap-4">
+          <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4">
             <p className="text-base text-foreground">
               {t('positions.loadError', 'Failed to load positions')}
             </p>
@@ -176,25 +202,63 @@ export function PositionsContent() {
           </div>
         ) : (
           <>
-            <PositionsTable
-              positions={positions}
-              sortBy={sortBy}
-              sortDirection={sortDirection}
-              onSort={handleSort}
-              onEdit={() => {}}
-              onDelete={() => {}}
-            />
+            <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]">
+              <PositionsTable
+                positions={positions}
+                sortBy={sortBy}
+                sortDirection={sortDirection}
+                onSort={handleSort}
+                onEdit={setEditingPosition}
+                onDelete={setDeletingPosition}
+              />
+            </div>
 
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              pageSize={pageSize}
-              onPageChange={setCurrentPage}
-              onPageSizeChange={(size) => {
-                setPageSize(size);
-                setCurrentPage(1);
-              }}
-            />
+            <div className="shrink-0 bg-background pb-4">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                pageSize={pageSize}
+                onPageChange={setCurrentPage}
+                onPageSizeChange={(size) => {
+                  setPageSize(size);
+                  setCurrentPage(1);
+                }}
+              />
+            </div>
+
+            {editingPosition && (
+              <UpdatePositionModal
+                position={editingPosition}
+                positions={allPositions}
+                open={Boolean(editingPosition)}
+                onOpenChange={(open) => {
+                  if (!open) {
+                    setEditingPosition(null);
+                  }
+                }}
+                onSuccess={async () => {
+                  await handleRefresh();
+                  setEditingPosition(null);
+                }}
+              />
+            )}
+
+            {deletingPosition && (
+              <DeletePositionModal
+                positionId={deletingPosition.id}
+                name={deletingPosition.name}
+                open={Boolean(deletingPosition)}
+                onOpenChange={(open) => {
+                  if (!open) {
+                    setDeletingPosition(null);
+                  }
+                }}
+                onSuccess={async () => {
+                  await handleRefresh();
+                  setDeletingPosition(null);
+                }}
+              />
+            )}
           </>
         )}
       </div>
