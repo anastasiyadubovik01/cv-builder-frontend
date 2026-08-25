@@ -1,31 +1,20 @@
 'use client';
 
 import * as React from 'react';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { usePathname, useRouter } from 'next/navigation';
+import { NavTabs } from '@/components/ui/nav-tabs';
 import { useTranslation } from 'react-i18next';
 
 export function AuthTabs() {
-  const router = useRouter();
-  const pathname = usePathname();
   const { t } = useTranslation();
 
-  const value = pathname === '/sign-in' ? 'sign-in' : 'sign-up';
-
-  const handleTabChange = (val: string) => {
-    router.push(`/${val}`);
-  };
+  const authTabs = [
+    { key: 'sign-in', label: t('auth.tabs.signIn'), href: '/sign-in' },
+    { key: 'sign-up', label: t('auth.tabs.signUp'), href: '/sign-up' },
+  ];
 
   return (
-    <Tabs
-      value={value}
-      onValueChange={handleTabChange}
-      className="fixed top-0 left-1/2 -translate-x-1/2 mt-[calc(6px+8px)]"
-    >
-      <TabsList>
-        <TabsTrigger value="sign-in">{t('auth.tabs.signIn')}</TabsTrigger>
-        <TabsTrigger value="sign-up">{t('auth.tabs.signUp')}</TabsTrigger>
-      </TabsList>
-    </Tabs>
+    <div className="fixed top-0 left-1/2 -translate-x-1/2 mt-[calc(6px+8px)]">
+      <NavTabs items={authTabs} />
+    </div>
   );
 }
