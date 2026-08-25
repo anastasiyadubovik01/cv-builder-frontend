@@ -1,12 +1,13 @@
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useTranslation } from 'react-i18next';
-import { useMutation } from '@apollo/client/react';
 import { SIGN_UP_MUTATION } from '@/api/auth';
-import { setAuthCookies } from '@/app/actions/auth';
-import { handleFormError } from '@/lib/error/errorHandler';
 import { SignUpFormValues, signUpSchema } from '@/lib/validations/auth';
-import { useValidatedForm } from '@/components/hooks/useValidatedForm';
+import { useAuthForm } from './useAuthForm';
+
+interface SignUpMutationData {
+  signup: {
+    access_token: string;
+    refresh_token: string;
+  };
+}
 
 const INITIAL_VALUES: SignUpFormValues = {
   email: '',
@@ -15,67 +16,12 @@ const INITIAL_VALUES: SignUpFormValues = {
 };
 
 export function useSignUpForm() {
-  const { t } = useTranslation();
-  const router = useRouter();
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const { formData, errors, validateForm, validateField, setFieldValue } =
-    useValidatedForm<SignUpFormValues>({
-      initialValues: INITIAL_VALUES,
-      schema: signUpSchema,
-    });
-
-  const [signup, { loading }] = useMutation(SIGN_UP_MUTATION, {
-    onCompleted: async (data) => {
-      if (data?.signup?.access_token && data?.signup?.refresh_token) {
-        await setAuthCookies({
-          accessToken: data.signup.access_token,
-          refreshToken: data.signup.refresh_token,
-        });
-        router.push('/verify-email');
-        router.refresh();
-      }
-    },
+  return useAuthForm<SignUpFormValues, SignUpMutationData>({
+    initialValues: INITIAL_VALUES,
+    schema: signUpSchema,
+    mutation: SIGN_UP_MUTATION,
+    getTokens: (data) => data?.signup,
+    redirectTo: '/verify-email',
+    errorContext: 'SignUp error',
   });
-
-  const handleChange =
-    (field: keyof SignUpFormValues) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFieldValue(field, e.target.value, { shouldValidate: isSubmitted });
-    };
-
-  const handleBlur = (field: keyof SignUpFormValues) => () => {
-    validateField(field);
-  };
-
-  const handleSubmit = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    setIsSubmitted(true);
-
-    if (!validateForm()) {
-      return;
-    }
-
-    try {
-      await signup({
-        variables: {
-          auth: formData,
-        },
-      });
-    } catch (err: unknown) {
-      handleFormError(err, {
-        t,
-        context: 'SignUp error',
-      });
-    }
-  };
-
-  return {
-    formData,
-    errors,
-    loading,
-    handleChange,
-    handleBlur,
-    handleSubmit,
-  };
 }
