@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { getT } from 'next-i18next/server';
-import { EmailVerificationForm } from '@/app/(auth)/_components/email-verification-form';
+import { EmailVerificationForm } from '@/app/(auth)/_components/EmailVerificationForm';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();

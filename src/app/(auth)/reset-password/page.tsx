@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { getT } from 'next-i18next/server';
-import { ResetPasswordForm } from '@/app/(auth)/_components/reset-password-form';
+import { ResetPasswordForm } from '@/app/(auth)/_components/ResetPasswordForm';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { getT } from 'next-i18next/server';
-import { AuthTabs } from '../_components/auth-tabs';
-import { SignUpForm } from '@/app/(auth)/_components/sign-up-form';
+import { AuthTabs } from '../_components/AuthTabs';
+import { SignUpForm } from '@/app/(auth)/_components/SignUpForm';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
