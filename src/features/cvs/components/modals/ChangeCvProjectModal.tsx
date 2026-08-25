@@ -217,7 +217,7 @@ export function ChangeCvProjectModal({
           value={formData.responsibilities || ''}
           onChange={handleChange('responsibilities')}
           placeholder={t('projects.responsibilities', 'Responsibilities')}
-          className="h-13"
+          variant="input"
           error={
             errors.responsibilities ? t(errors.responsibilities) : undefined
           }
