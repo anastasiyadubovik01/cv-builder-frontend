@@ -96,7 +96,10 @@
     "positions": "Должности",
     "projects": "Проекты",
     "collapse": "Свернуть меню",
-    "expand": "Развернуть меню"
+    "expand": "Развернуть меню",
+    "profile": "Профиль",
+    "settings": "Настройки",
+    "logout": "Выйти"
   },
 
   "errors": {
@@ -463,6 +466,17 @@
       "addCvProjectSuccess": "Проект успешно добавлен в резюме",
       "updateCvProjectSuccess": "Проект в резюме успешно обновлен",
       "removeCvProjectSuccess": "Проект успешно удален из резюме"
+    }
+  },
+
+  "settings": {
+    "title": "Настройки",
+    "theme": "Тема",
+    "language": "Язык",
+    "themes": {
+      "light": "Светлая",
+      "dark": "Темная",
+      "system": "Настройки устройства"
     }
   },
 

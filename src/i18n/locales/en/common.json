@@ -97,7 +97,10 @@
     "positions": "Positions",
     "projects": "Projects",
     "collapse": "Collapse sidebar",
-    "expand": "Expand sidebar"
+    "expand": "Expand sidebar",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout"
   },
 
   "errors": {
@@ -462,6 +465,17 @@
       "addCvProjectSuccess": "Project has been successfully added to CV",
       "updateCvProjectSuccess": "CV project has been successfully updated",
       "removeCvProjectSuccess": "Project has been successfully removed from CV"
+    }
+  },
+
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "language": "Language",
+    "themes": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "Device settings"
     }
   },
 
