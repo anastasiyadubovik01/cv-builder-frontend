@@ -3,16 +3,19 @@ import { parseDate } from '../helpers/date';
 
 export const createCvProjectSchema = z
   .object({
-    projectId: z.string().min(1, 'projects.validation.projectRequired'),
-    startDate: z.string().min(1, 'projects.validation.startDateRequired'),
-    endDate: z.string().optional().or(z.literal('')),
-    roles: z.string().min(1, 'projects.validation.rolesRequired'),
-    responsibilities: z.string().optional(),
-    domain: z.string().optional(),
-    description: z.string().optional(),
-    environment: z.string().optional(),
-    projectStartDate: z.string().optional(),
-    projectEndDate: z.string().optional(),
+    projectId: z.string().trim().min(1, 'projects.validation.projectRequired'),
+    startDate: z
+      .string()
+      .trim()
+      .min(1, 'projects.validation.startDateRequired'),
+    endDate: z.string().trim().optional().or(z.literal('')),
+    roles: z.string().trim().min(1, 'projects.validation.rolesRequired'),
+    responsibilities: z.string().trim().optional(),
+    domain: z.string().trim().optional(),
+    description: z.string().trim().optional(),
+    environment: z.string().trim().optional(),
+    projectStartDate: z.string().trim().optional(),
+    projectEndDate: z.string().trim().optional(),
   })
   .refine(
     (data) => {

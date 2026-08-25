@@ -68,7 +68,7 @@ export function ChangeCvProjectModal({
   catalogProjects,
   positions,
   loading,
-  isValid = true,
+  isValid = false,
   handleChange,
   setFieldValue,
   validateField,
@@ -108,11 +108,13 @@ export function ChangeCvProjectModal({
     : [];
 
   const handleRolesChange = (newRoles: string[]) => {
+    // Валидация вызовется автоматически внутри setFieldValue с новыми значениями
     setFieldValue('roles', newRoles.join(', '));
   };
 
   const handleDateSelect =
     (field: keyof CreateCvProjectInputValues) => (dateString: string) => {
+      // Валидация вызовется автоматически, включая случай очистки даты ('')
       setFieldValue(field, dateString);
     };
 
@@ -138,6 +140,13 @@ export function ChangeCvProjectModal({
               onValueChange={(value) => {
                 if (value) {
                   handleProjectSelect?.(value);
+                  setFieldValue('projectId', value);
+                }
+              }}
+              onOpenChange={(isOpen) => {
+                // Если селект просто открыли и закрыли без выбора
+                if (!isOpen) {
+                  validateField('projectId');
                 }
               }}
             >
@@ -147,7 +156,6 @@ export function ChangeCvProjectModal({
                 error={errors.projectId ? t(errors.projectId) : undefined}
                 aria-label={t('projects.name', 'Name')}
                 aria-invalid={Boolean(errors.projectId)}
-                onBlur={() => validateField('projectId')}
               >
                 <SelectValue placeholder={t('projects.name', 'Name')} />
               </SelectTrigger>
@@ -174,6 +182,7 @@ export function ChangeCvProjectModal({
           <DatePicker
             value={formData.startDate}
             onChange={handleDateSelect('startDate')}
+            onBlur={() => validateField('startDate')}
             placeholder={t('projects.startDate', 'Start Date')}
             required
             error={errors.startDate ? t(errors.startDate) : undefined}
@@ -181,6 +190,7 @@ export function ChangeCvProjectModal({
           <DatePicker
             value={formData.endDate}
             onChange={handleDateSelect('endDate')}
+            onBlur={() => validateField('endDate')}
             placeholder={t('projects.endDate', 'End Date')}
             required
             error={errors.endDate ? t(errors.endDate) : undefined}
@@ -204,18 +214,27 @@ export function ChangeCvProjectModal({
           disabled
         />
 
-        <MultiSelect
-          options={roleOptions}
-          value={selectedRoles}
-          onChange={handleRolesChange}
-          placeholder={t('projects.roles', 'Roles')}
-          label={t('projects.roles', 'Roles')}
-          error={errors.roles ? t(errors.roles) : undefined}
-        />
+        <div
+          onBlur={(e) => {
+            if (!e.currentTarget.contains(e.relatedTarget)) {
+              validateField('roles');
+            }
+          }}
+        >
+          <MultiSelect
+            options={roleOptions}
+            value={selectedRoles}
+            onChange={handleRolesChange}
+            placeholder={t('projects.roles', 'Roles')}
+            label={t('projects.roles', 'Roles')}
+            error={errors.roles ? t(errors.roles) : undefined}
+          />
+        </div>
 
         <Textarea
           value={formData.responsibilities || ''}
           onChange={handleChange('responsibilities')}
+          onBlur={() => validateField('responsibilities')}
           placeholder={t('projects.responsibilities', 'Responsibilities')}
           variant="input"
           error={

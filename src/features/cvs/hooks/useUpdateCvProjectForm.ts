@@ -98,15 +98,19 @@ export function useUpdateCvProjectForm({
 
   const isDirty = useMemo(() => {
     return (
-      formData.startDate !== initialValues.startDate ||
-      formData.endDate !== initialValues.endDate ||
-      formData.roles !== initialValues.roles ||
-      formData.responsibilities !== initialValues.responsibilities
+      formData.startDate.trim() !== initialValues.startDate.trim() ||
+      formData.endDate?.trim() !== initialValues.endDate?.trim() ||
+      formData.roles.trim() !== initialValues.roles.trim() ||
+      (formData.responsibilities || '').trim() !==
+        (initialValues.responsibilities || '').trim()
     );
   }, [formData, initialValues]);
 
+  const isSchemaValid = createCvProjectSchema.safeParse(formData).success;
+  const isValid = isDirty && isSchemaValid;
+
   const handleSubmit = async (): Promise<boolean> => {
-    if (!isDirty) {
+    if (!isValid) {
       return false;
     }
 
@@ -169,7 +173,7 @@ export function useUpdateCvProjectForm({
     formData,
     errors,
     loading: mutationLoading || projectsLoading || positionsLoading,
-    isValid: isDirty,
+    isValid,
     catalogProjects,
     positions,
     handleChange,
