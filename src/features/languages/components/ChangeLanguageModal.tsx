@@ -26,6 +26,7 @@ type ChangeLanguageModalProps = {
   ) => (event: ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: () => Promise<boolean>;
   t: TFunction;
+  isValid: boolean;
 };
 
 export function ChangeLanguageModal({
@@ -41,9 +42,10 @@ export function ChangeLanguageModal({
   handleChange,
   handleSubmit,
   t,
+  isValid,
 }: ChangeLanguageModalProps) {
   const handleIsoChange = (event: ChangeEvent<HTMLInputElement>) => {
-    event.target.value = event.target.value.toUpperCase().slice(0, 5);
+    event.target.value = event.target.value.toUpperCase().slice(0, 2);
     handleChange('iso2')(event);
   };
 
@@ -52,7 +54,7 @@ export function ChangeLanguageModal({
       actionTitle={type}
       itemType="language"
       onConfirm={handleSubmit}
-      confirmDisabled={loading}
+      confirmDisabled={!isValid || loading}
       trigger={trigger}
       t={t}
       open={open}
@@ -77,7 +79,7 @@ export function ChangeLanguageModal({
           value={formData.iso2}
           onChange={handleIsoChange}
           placeholder={t('languages.admin.iso')}
-          maxLength={5}
+          maxLength={2}
           required
           error={
             errors.iso2

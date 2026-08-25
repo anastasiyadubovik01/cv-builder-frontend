@@ -56,6 +56,11 @@ export function useUpdateLanguageForm({
         item.iso2.trim().toUpperCase() === normalizedIso,
     );
 
+  const isValid =
+    adminLanguageSchema.safeParse(formData).success &&
+    !duplicateName &&
+    !duplicateIso;
+
   const handleSubmit = async (): Promise<boolean> => {
     if (!validateForm() || duplicateName || duplicateIso) {
       return false;
@@ -99,5 +104,6 @@ export function useUpdateLanguageForm({
     handleChange,
     handleSubmit,
     t,
+    isValid,
   };
 }

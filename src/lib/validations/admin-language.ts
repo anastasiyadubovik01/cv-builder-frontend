@@ -7,7 +7,7 @@ export const adminLanguageSchema = z.object({
     .string()
     .trim()
     .min(1, 'languages.admin.validation.isoRequired')
-    .max(5, 'languages.admin.validation.isoMaxLength'),
+    .length(2, 'languages.admin.validation.isoLength'),
 
   nativeName: z
     .string()
