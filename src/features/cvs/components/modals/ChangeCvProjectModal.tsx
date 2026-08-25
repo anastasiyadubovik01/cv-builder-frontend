@@ -108,13 +108,11 @@ export function ChangeCvProjectModal({
     : [];
 
   const handleRolesChange = (newRoles: string[]) => {
-    // Валидация вызовется автоматически внутри setFieldValue с новыми значениями
     setFieldValue('roles', newRoles.join(', '));
   };
 
   const handleDateSelect =
     (field: keyof CreateCvProjectInputValues) => (dateString: string) => {
-      // Валидация вызовется автоматически, включая случай очистки даты ('')
       setFieldValue(field, dateString);
     };
 
@@ -144,7 +142,6 @@ export function ChangeCvProjectModal({
                 }
               }}
               onOpenChange={(isOpen) => {
-                // Если селект просто открыли и закрыли без выбора
                 if (!isOpen) {
                   validateField('projectId');
                 }
@@ -152,7 +149,7 @@ export function ChangeCvProjectModal({
             >
               <SelectTrigger
                 label={t('projects.name', 'Name')}
-                className="border-[#AEAEAE] bg-secondary"
+                className="border-[#AEAEAE] bg-secondary data-[disabled]:cursor-default"
                 error={errors.projectId ? t(errors.projectId) : undefined}
                 aria-label={t('projects.name', 'Name')}
                 aria-invalid={Boolean(errors.projectId)}
