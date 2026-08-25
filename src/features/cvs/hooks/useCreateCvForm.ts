@@ -4,7 +4,7 @@ import { handleFormError } from '@/lib/error/errorHandler';
 import { CREATE_CV_MUTATION } from '@/api/cvs';
 import { type CreateCvFormValues, createCvSchema } from '@/lib/validations/cv';
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 
 const INITIAL_VALUES: CreateCvFormValues = {
   name: '',
@@ -22,6 +22,7 @@ export function useCreateCvForm({
   onSuccess,
 }: UseCreateCvFormOptions = {}) {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const {
     formData,

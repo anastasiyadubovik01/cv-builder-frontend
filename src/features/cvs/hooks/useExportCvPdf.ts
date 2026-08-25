@@ -3,12 +3,13 @@ import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 
 import { EXPORT_PDF_MUTATION } from '@/api/cv-preview';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import { handleFormError } from '@/lib/error/errorHandler';
 import { getPdfStyles } from '@/features/cvs/utils/pdfStyles';
 
 export function useExportCvPdf(cvName: string) {
   const { t } = useTranslation();
+  const toast = useToast();
   const containerRef = useRef<HTMLDivElement>(null);
   const [exportPdfMutation, { loading }] = useMutation(EXPORT_PDF_MUTATION);
 

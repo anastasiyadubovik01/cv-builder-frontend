@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client/react';
 import { UPDATE_CV_MUTATION } from '@/api/cvs';
 import { createCvSchema, type CreateCvFormValues } from '@/lib/validations/cv';
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import { handleFormError } from '@/lib/error/errorHandler';
 
 type UseUpdateCvFormOptions = {
@@ -18,6 +18,7 @@ export function useUpdateCvForm({
   onSuccess,
 }: UseUpdateCvFormOptions) {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const {
     formData,

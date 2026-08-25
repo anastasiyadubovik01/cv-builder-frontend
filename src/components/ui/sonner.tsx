@@ -1,6 +1,7 @@
 'use client';
 
 import { useTheme } from 'next-themes';
+import { useTranslation } from 'react-i18next';
 import {
   toast as sonnerToast,
   Toaster as Sonner,
@@ -47,43 +48,47 @@ const Toaster = ({ ...props }: ToasterProps) => {
   );
 };
 
-const toast = {
-  success: (
-    message: string,
-    options?: Omit<Parameters<typeof sonnerToast.success>[1], 'description'>,
-  ) => {
-    return sonnerToast.success('Success', {
-      description: message,
-      ...options,
-    });
-  },
-  error: (
-    message: string,
-    options?: Omit<Parameters<typeof sonnerToast.error>[1], 'description'>,
-  ) => {
-    return sonnerToast.error('Error', {
-      description: message,
-      ...options,
-    });
-  },
-  warning: (
-    message: string,
-    options?: Omit<Parameters<typeof sonnerToast.warning>[1], 'description'>,
-  ) => {
-    return sonnerToast.warning('Warning', {
-      description: message,
-      ...options,
-    });
-  },
-  info: (
-    message: string,
-    options?: Omit<Parameters<typeof sonnerToast.info>[1], 'description'>,
-  ) => {
-    return sonnerToast.info('Info', {
-      description: message,
-      ...options,
-    });
-  },
-};
+export function useToast() {
+  const { t } = useTranslation();
 
-export { Toaster, toast };
+  return {
+    success: (
+      message: string,
+      options?: Omit<Parameters<typeof sonnerToast.success>[1], 'description'>,
+    ) => {
+      return sonnerToast.success(t('toast.success'), {
+        description: message,
+        ...options,
+      });
+    },
+    error: (
+      message: string,
+      options?: Omit<Parameters<typeof sonnerToast.error>[1], 'description'>,
+    ) => {
+      return sonnerToast.error(t('toast.error'), {
+        description: message,
+        ...options,
+      });
+    },
+    warning: (
+      message: string,
+      options?: Omit<Parameters<typeof sonnerToast.warning>[1], 'description'>,
+    ) => {
+      return sonnerToast.warning(t('toast.warning'), {
+        description: message,
+        ...options,
+      });
+    },
+    info: (
+      message: string,
+      options?: Omit<Parameters<typeof sonnerToast.info>[1], 'description'>,
+    ) => {
+      return sonnerToast.info(t('toast.info'), {
+        description: message,
+        ...options,
+      });
+    },
+  };
+}
+
+export { Toaster };

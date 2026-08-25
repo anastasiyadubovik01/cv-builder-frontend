@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
-import { toast } from '@/components/ui/sonner';
 import { FORGOT_PASSWORD_MUTATION } from '@/api/auth';
 import { handleFormError } from '@/lib/error/errorHandler';
 import {
@@ -9,6 +8,7 @@ import {
   forgotPasswordSchema,
 } from '@/lib/validations/auth';
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
+import { useToast } from '@/components/ui/sonner';
 
 const INITIAL_VALUES: ForgotPasswordFormValues = {
   email: '',
@@ -16,6 +16,7 @@ const INITIAL_VALUES: ForgotPasswordFormValues = {
 
 export function useForgotPasswordForm() {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const { formData, errors, setErrors, validateForm, handleChange } =
     useValidatedForm<ForgotPasswordFormValues>({

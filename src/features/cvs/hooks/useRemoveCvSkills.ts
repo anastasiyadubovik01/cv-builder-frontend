@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { DELETE_CV_SKILL_MUTATION } from '@/api/cv-skills';
 import { handleFormError } from '@/lib/error/errorHandler';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 
 type UseRemoveCvSkillsProps = {
   cvId: string;
@@ -11,6 +11,7 @@ type UseRemoveCvSkillsProps = {
 
 export function useRemoveCvSkills({ cvId, onSuccess }: UseRemoveCvSkillsProps) {
   const { t } = useTranslation();
+  const toast = useToast();
   const [deleteCvSkill, { loading }] = useMutation(DELETE_CV_SKILL_MUTATION);
 
   const handleRemove = async (skillNames: string[]): Promise<boolean> => {

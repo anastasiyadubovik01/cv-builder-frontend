@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
+import { useToast } from '@/components/ui/sonner';
 import { useRouter } from 'next/navigation';
 
 import {
@@ -55,6 +55,7 @@ export function ProfileFields({
   onUpdated,
 }: ProfileFieldsProps) {
   const { t } = useTranslation();
+  const toast = useToast();
   const router = useRouter();
 
   const {
@@ -202,13 +203,9 @@ export function ProfileFields({
 
       await onUpdated();
 
-      toast.success(t('users.details.updateSuccess'), {
-        description: t('users.details.updateSuccessDescription'),
-      });
+      toast.success(t('users.details.updateSuccess'));
     } catch {
-      toast.error(t('users.details.updateError'), {
-        description: t('users.details.updateErrorDescription'),
-      });
+      toast.error(t('users.details.updateError'));
     }
   };
 

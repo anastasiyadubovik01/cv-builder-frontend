@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import { handleFormError } from '@/lib/error/errorHandler';
 
 import { CREATE_USER_MUTATION } from '@/api/users';
@@ -30,6 +30,7 @@ export function useCreateUserForm({
   onSuccess,
 }: UseCreateUserFormOptions = {}) {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const {
     formData,

@@ -15,7 +15,7 @@ import {
   createCvProjectSchema,
 } from '@/lib/validations/cv-project';
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import { handleFormError } from '@/lib/error/errorHandler';
 
 type UseUpdateCvProjectFormOptions = {
@@ -32,6 +32,7 @@ export function useUpdateCvProjectForm({
   onSuccess,
 }: UseUpdateCvProjectFormOptions) {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const initialValues: UpdateCvProjectInputValues = useMemo(() => {
     const realProjectId = project.project?.id || '';

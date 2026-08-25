@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 
 import { DELETE_CV_MUTATION } from '@/api/cvs';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import { handleFormError } from '@/lib/error/errorHandler';
 
 type DeleteCvData = {
@@ -23,6 +23,7 @@ type UseDeleteCvOptions = {
 
 export function useDeleteCv(options: UseDeleteCvOptions = {}) {
   const { t } = useTranslation();
+  const toast = useToast();
   const [deleteCv, { loading }] = useMutation<DeleteCvData, DeleteCvVariables>(
     DELETE_CV_MUTATION,
   );

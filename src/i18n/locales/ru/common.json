@@ -165,10 +165,8 @@
         "position": "Должность"
       },
       "memberSince": "Участник с {{date}}",
-      "updateSuccess": "Успешно",
-      "updateSuccessDescription": "Профиль успешно обновлён",
-      "updateError": "Ошибка",
-      "updateErrorDescription": "Не удалось обновить профиль"
+      "updateSuccess": "Профиль успешно обновлён",
+      "updateError": "Не удалось обновить профиль"
     },
     "create": {
       "button": "Создать пользователя",
@@ -497,6 +495,12 @@
       "confirm": "Подтвердить",
       "cancel": "Отмена"
     }
+  },
+  "toast": {
+    "success": "Успех",
+    "error": "Ошибка",
+    "warning": "Предупреждение",
+    "info": "Информация"
   },
 
   "months": {
