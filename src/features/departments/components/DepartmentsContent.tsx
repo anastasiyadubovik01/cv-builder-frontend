@@ -169,42 +169,42 @@ export function DepartmentsContent() {
     loading || Boolean(data && allDepartments.length < data.departments.total);
 
   return (
-    <div className="min-h-[calc(100dvh-3.5rem)]">
+    <div className="flex h-[calc(100dvh-3.5rem)] min-h-0 flex-col overflow-hidden">
       {!hasError && isLoading && <LoadingOverlay />}
 
-      <div className="mx-auto w-full max-w-[1190px] px-6">
-        <div className="flex items-center justify-between pt-2 pb-4">
-          <SearchInput
-            value={search}
-            onChange={(event) => {
-              setSearch(event.target.value);
-              setCurrentPage(1);
-            }}
-            placeholder={t('departments.search', 'Search')}
-            className="bg-background"
-          />
+      <div className="mx-6 mt-[7px] flex shrink-0 items-center justify-between">
+        <SearchInput
+          value={search}
+          onChange={(event) => {
+            setSearch(event.target.value);
+            setCurrentPage(1);
+          }}
+          placeholder={t('departments.search', 'Search')}
+          className="bg-background"
+        />
 
-          <CreateDepartmentModal
-            departments={allDepartments}
-            onSuccess={handleRefresh}
-            trigger={
-              <Button
-                type="button"
-                variant="primaryV2"
-                className="w-10 border-transparent px-0 lg:w-auto lg:gap-3 lg:border-transparent lg:px-5 lg:hover:border-primary"
-              >
-                <PlusIcon className="size-6" />
+        <CreateDepartmentModal
+          departments={allDepartments}
+          onSuccess={handleRefresh}
+          trigger={
+            <Button
+              type="button"
+              variant="primaryV2"
+              className="w-10 border-transparent px-0 lg:w-auto lg:gap-3 lg:border-transparent lg:px-5 lg:hover:border-primary"
+            >
+              <PlusIcon className="size-6" />
 
-                <span className="hidden lg:inline">
-                  {t('departments.create', 'CREATE DEPARTMENT')}
-                </span>
-              </Button>
-            }
-          />
-        </div>
+              <span className="hidden lg:inline">
+                {t('departments.create', 'CREATE DEPARTMENT')}
+              </span>
+            </Button>
+          }
+        />
+      </div>
 
+      <div className="flex min-h-0 flex-1 flex-col px-5 pt-4">
         {hasError ? (
-          <div className="flex min-h-[400px] flex-col items-center justify-center gap-4">
+          <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4">
             <p className="text-base text-foreground">
               {t('departments.loadError', 'Failed to load departments')}
             </p>
@@ -215,25 +215,29 @@ export function DepartmentsContent() {
           </div>
         ) : (
           <>
-            <DepartmentsTable
-              departments={departments}
-              sortBy={sortBy}
-              sortDirection={sortDirection}
-              onSort={handleSort}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
+            <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]">
+              <DepartmentsTable
+                departments={departments}
+                sortBy={sortBy}
+                sortDirection={sortDirection}
+                onSort={handleSort}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            </div>
 
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              pageSize={pageSize}
-              onPageChange={setCurrentPage}
-              onPageSizeChange={(size) => {
-                setPageSize(size);
-                setCurrentPage(1);
-              }}
-            />
+            <div className="shrink-0 bg-background pb-4">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                pageSize={pageSize}
+                onPageChange={setCurrentPage}
+                onPageSizeChange={(size) => {
+                  setPageSize(size);
+                  setCurrentPage(1);
+                }}
+              />
+            </div>
 
             {editingDepartment && (
               <UpdateDepartmentModal

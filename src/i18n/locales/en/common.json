@@ -296,7 +296,7 @@
       "validation": {
         "nameRequired": "Language name is required",
         "isoRequired": "ISO is required",
-        "isoMaxLength": "ISO must not exceed 5 characters",
+        "isoMaxLength": "ISO must not exceed 2 characters",
         "nativeNameRequired": "Native name is required",
         "duplicateName": "Language already exists",
         "duplicateIso": "ISO code already exists"
@@ -306,9 +306,6 @@
         "updateSuccess": "Language successfully updated",
         "deleteSuccess": "Language successfully deleted"
       }
-    },
-    "errors": {
-      "invalidData": "Invalid language data"
     }
   },
 

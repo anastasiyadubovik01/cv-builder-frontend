@@ -297,7 +297,7 @@
       "validation": {
         "nameRequired": "Название языка обязательно",
         "isoRequired": "ISO обязателен",
-        "isoMaxLength": "ISO не должен превышать 5 символов",
+        "isoLength": "ISO должен содержать ровно 2 символа",
         "nativeNameRequired": "Название на родном языке обязательно",
         "duplicateName": "Язык уже существует",
         "duplicateIso": "Такой ISO уже существует"
@@ -307,9 +307,6 @@
         "updateSuccess": "Язык успешно обновлён",
         "deleteSuccess": "Язык успешно удалён"
       }
-    },
-    "errors": {
-      "invalidData": "Проверьте введенные данные"
     }
   },
 

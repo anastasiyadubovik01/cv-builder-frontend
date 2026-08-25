@@ -49,9 +49,5 @@ export function mapServerError(
     }
   }
 
-  if (message.includes('validationerror')) {
-    return 'languages.errors.invalidData';
-  }
-
   return 'auth.errors.unknownError';
 }

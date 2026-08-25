@@ -201,46 +201,47 @@ export function AdminSkillsContent() {
     loading ||
     categoriesLoading ||
     Boolean(data && allSkills.length < data.skills.total);
+
   const hasError = Boolean(error) || Boolean(categoriesError) || loadError;
 
   return (
-    <div className="min-h-[calc(100dvh-3.5rem)]">
-      {isLoading && <LoadingOverlay />}
+    <div className="flex h-[calc(100dvh-3.5rem)] min-h-0 flex-col overflow-hidden">
+      {!hasError && isLoading && <LoadingOverlay />}
 
-      <div className="mx-auto w-full max-w-[1190px] px-6">
-        <div className="flex items-center justify-between pt-2 pb-4">
-          <SearchInput
-            value={search}
-            onChange={(event) => {
-              setSearch(event.target.value);
-              setCurrentPage(1);
-            }}
-            placeholder={t('skills.admin.search')}
-            className="bg-background"
-          />
+      <div className="mx-6 mt-[7px] flex shrink-0 items-center justify-between">
+        <SearchInput
+          value={search}
+          onChange={(event) => {
+            setSearch(event.target.value);
+            setCurrentPage(1);
+          }}
+          placeholder={t('skills.admin.search')}
+          className="bg-background"
+        />
 
-          <CreateSkillAdminModal
-            skills={allSkills}
-            categories={selectableCategories}
-            onSuccess={handleRefresh}
-            trigger={
-              <Button
-                type="button"
-                variant="primaryV2"
-                className="flex items-center gap-2 text-[14px] font-medium uppercase"
-              >
-                <PlusIcon className="size-6" />
+        <CreateSkillAdminModal
+          skills={allSkills}
+          categories={selectableCategories}
+          onSuccess={handleRefresh}
+          trigger={
+            <Button
+              type="button"
+              variant="primaryV2"
+              className="w-10 border-transparent px-0 lg:w-auto lg:gap-3 lg:border-transparent lg:px-5 lg:hover:border-primary"
+            >
+              <PlusIcon className="size-6" />
 
-                <span className="hidden lg:inline">
-                  {t('skills.admin.create')}
-                </span>
-              </Button>
-            }
-          />
-        </div>
+              <span className="hidden lg:inline">
+                {t('skills.admin.create')}
+              </span>
+            </Button>
+          }
+        />
+      </div>
 
+      <div className="flex min-h-0 flex-1 flex-col px-5 pt-4">
         {hasError ? (
-          <div className="flex min-h-[400px] flex-col items-center justify-center gap-4">
+          <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4">
             <p className="text-base text-foreground">
               {t('skills.admin.loadError')}
             </p>
@@ -251,17 +252,19 @@ export function AdminSkillsContent() {
           </div>
         ) : (
           <>
-            <SkillsTable
-              skills={skills}
-              categoryTypes={categoryTypes}
-              sortBy={sortBy}
-              sortDirection={sortDirection}
-              onSort={handleSort}
-              onEdit={setEditingSkill}
-              onDelete={setDeletingSkill}
-            />
+            <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]">
+              <SkillsTable
+                skills={skills}
+                categoryTypes={categoryTypes}
+                sortBy={sortBy}
+                sortDirection={sortDirection}
+                onSort={handleSort}
+                onEdit={setEditingSkill}
+                onDelete={setDeletingSkill}
+              />
+            </div>
 
-            <div className="pb-4">
+            <div className="shrink-0 bg-background pb-4">
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
