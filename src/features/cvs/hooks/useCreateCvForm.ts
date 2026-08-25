@@ -27,6 +27,7 @@ export function useCreateCvForm({
     formData,
     errors,
     validateForm,
+    validateField,
     handleChange,
     setFormData,
     clearErrors,
@@ -36,6 +37,7 @@ export function useCreateCvForm({
   });
 
   const [createCv, { loading }] = useMutation(CREATE_CV_MUTATION);
+  const isValid = createCvSchema.safeParse(formData).success;
 
   const handleSubmit = async (): Promise<boolean> => {
     if (!validateForm()) {
@@ -84,7 +86,8 @@ export function useCreateCvForm({
     formData,
     errors,
     loading,
-    validateForm,
+    isValid,
+    validateField,
     handleChange,
     handleSubmit,
     resetForm,

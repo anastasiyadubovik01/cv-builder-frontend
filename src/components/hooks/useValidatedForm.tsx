@@ -39,35 +39,31 @@ export function useValidatedForm<T extends Record<string, string>>({
     return true;
   };
 
-  const setFieldValue = (field: keyof T, value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+  const setFieldValue = (
+    field: keyof T,
+    value: string,
+    options?: { shouldValidate?: boolean },
+  ) => {
+    setFormData((prev) => {
+      const nextState = { ...prev, [field]: value };
 
-    if (errors[field]) {
-      setErrors((prev) => ({
-        ...prev,
-        [field]: undefined,
-      }));
-    }
+      if (options?.shouldValidate !== false) {
+        validateField(field, nextState);
+      }
+
+      return nextState;
+    });
   };
 
-  const handleChange =
-    (field: keyof T) =>
-    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setFieldValue(field, event.target.value);
-    };
-
-  const validateField = (field: keyof T): boolean => {
-    const result = schema.safeParse(formData);
+  const validateField = (field: keyof T, updatedData?: T): boolean => {
+    const dataToValidate = updatedData || formData;
+    const result = schema.safeParse(dataToValidate);
 
     if (result.success) {
       setErrors((prev) => ({
         ...prev,
         [field]: undefined,
       }));
-
       return true;
     }
 
@@ -82,6 +78,12 @@ export function useValidatedForm<T extends Record<string, string>>({
 
     return !issue;
   };
+
+  const handleChange =
+    (field: keyof T) =>
+    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setFieldValue(field, event.target.value);
+    };
 
   const clearErrors = () => {
     setErrors({});

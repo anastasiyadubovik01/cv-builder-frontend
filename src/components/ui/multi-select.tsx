@@ -118,7 +118,9 @@ export function MultiSelect({
                 />
               ))
             ) : (
-              <span className="text-muted-foreground">{placeholder}</span>
+              <span className={disabled ? '' : 'text-muted-foreground'}>
+                {placeholder}
+              </span>
             )}
           </div>
 

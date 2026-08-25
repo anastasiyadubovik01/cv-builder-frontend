@@ -71,6 +71,8 @@ export function useAddCvProjectForm({
   const catalogProjects: ApiProject[] = projectsData?.projects?.items || [];
   const positions = positionsData?.positions?.items || [];
 
+  const isValid = createCvProjectSchema.safeParse(formData).success;
+
   const handleProjectSelect = (selectedProjectId: string) => {
     const project = catalogProjects.find((p) => p.id === selectedProjectId);
     if (!project) return;
@@ -154,7 +156,7 @@ export function useAddCvProjectForm({
     formData,
     errors,
     loading: mutationLoading || projectsLoading || positionsLoading,
-    isValid: true,
+    isValid,
     catalogProjects,
     positions,
     handleChange,
