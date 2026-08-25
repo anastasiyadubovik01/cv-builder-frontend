@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { useResetPasswordForm } from '@/app/(auth)/_components/hooks/useResetPasswordForm';
+import { useResetPasswordForm } from '@/features/auth/hooks/useResetPasswordForm';
 import { PasswordInput } from '@/components/ui/password-input';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';

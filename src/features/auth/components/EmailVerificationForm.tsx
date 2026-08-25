@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { useEmailVerificationForm } from '@/app/(auth)/_components/hooks/useEmailVerificationForm';
+import { useEmailVerificationForm } from '@/features/auth/hooks/useEmailVerificationForm';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { DigitsInputOTP } from '@/components/ui/digits-input-otp';
 import { cn } from '@/lib/utils';
@@ -26,7 +26,7 @@ export function EmailVerificationForm() {
           {t('auth.emailVerification.button')}
         </Button>
         <Link
-          href="/"
+          href="/public"
           className={cn(buttonVariants({ variant: 'ghost' }), 'w-[160px]')}
         >
           {t('auth.emailVerification.later')}

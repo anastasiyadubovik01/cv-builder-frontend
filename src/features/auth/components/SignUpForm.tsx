@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { useSignUpForm } from '@/app/(auth)/_components/hooks/useSignUpForm';
+import { useSignUpForm } from '@/features/auth/hooks/useSignUpForm';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { Button, buttonVariants } from '@/components/ui/button';
