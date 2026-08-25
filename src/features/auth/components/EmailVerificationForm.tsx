@@ -26,7 +26,7 @@ export function EmailVerificationForm() {
           {t('auth.emailVerification.button')}
         </Button>
         <Link
-          href="/public"
+          href="/"
           className={cn(buttonVariants({ variant: 'ghost' }), 'w-[160px]')}
         >
           {t('auth.emailVerification.later')}
