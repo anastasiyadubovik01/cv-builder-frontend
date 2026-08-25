@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
@@ -16,8 +17,9 @@ const INITIAL_VALUES: SignUpFormValues = {
 export function useSignUpForm() {
   const { t } = useTranslation();
   const router = useRouter();
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const { formData, errors, validateForm, handleChange } =
+  const { formData, errors, validateForm, validateField, setFieldValue } =
     useValidatedForm<SignUpFormValues>({
       initialValues: INITIAL_VALUES,
       schema: signUpSchema,
@@ -36,8 +38,19 @@ export function useSignUpForm() {
     },
   });
 
+  const handleChange =
+    (field: keyof SignUpFormValues) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFieldValue(field, e.target.value, { shouldValidate: isSubmitted });
+    };
+
+  const handleBlur = (field: keyof SignUpFormValues) => () => {
+    validateField(field);
+  };
+
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    setIsSubmitted(true);
 
     if (!validateForm()) {
       return;
@@ -62,6 +75,7 @@ export function useSignUpForm() {
     errors,
     loading,
     handleChange,
+    handleBlur,
     handleSubmit,
   };
 }

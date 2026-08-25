@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 
 export function SignInForm() {
   const { t } = useTranslation();
-  const { formData, errors, loading, handleChange, handleSubmit } =
+  const { formData, errors, loading, handleChange, handleBlur, handleSubmit } =
     useSignInForm();
 
   return (
@@ -21,6 +21,7 @@ export function SignInForm() {
         placeholder={t('auth.signIn.emailPlaceholder')}
         value={formData.email}
         onChange={handleChange('email')}
+        onBlur={handleBlur('email')}
         className="w-full bg-transparent p-3 text-[16px]"
         required
         error={errors.email && t(errors.email)}
@@ -30,6 +31,7 @@ export function SignInForm() {
         placeholder={t('auth.signIn.passwordPlaceholder')}
         value={formData.password}
         onChange={handleChange('password')}
+        onBlur={handleBlur('password')}
         className="w-full bg-transparent p-3 text-[16px]"
         required
         error={errors.password && t(errors.password)}

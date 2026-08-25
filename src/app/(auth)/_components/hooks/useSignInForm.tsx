@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
@@ -15,8 +16,9 @@ const INITIAL_VALUES: SignInFormValues = {
 export function useSignInForm() {
   const { t } = useTranslation();
   const router = useRouter();
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const { formData, errors, validateForm, handleChange } =
+  const { formData, errors, validateForm, validateField, setFieldValue } =
     useValidatedForm<SignInFormValues>({
       initialValues: INITIAL_VALUES,
       schema: signInSchema,
@@ -35,8 +37,20 @@ export function useSignInForm() {
     },
   });
 
+  const handleChange =
+    (field: keyof SignInFormValues) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      // Валидируем при вводе только если форма уже отправлялась или поле содержало ошибку
+      setFieldValue(field, e.target.value, { shouldValidate: isSubmitted });
+    };
+
+  const handleBlur = (field: keyof SignInFormValues) => () => {
+    validateField(field);
+  };
+
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    setIsSubmitted(true);
 
     if (!validateForm()) {
       return;
@@ -61,6 +75,7 @@ export function useSignInForm() {
     errors,
     loading,
     handleChange,
+    handleBlur,
     handleSubmit,
   };
 }
