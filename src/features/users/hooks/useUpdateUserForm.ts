@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { UPDATE_PROFILE_MUTATION, UPDATE_USER_MUTATION } from '@/api/users';
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import { useUserCatalogs } from '@/features/users/hooks/useUserCatalogs';
 import { handleFormError } from '@/lib/error/errorHandler';
 import {
@@ -23,6 +23,7 @@ export function useUpdateUserForm({
   onSuccess,
 }: UseUpdateUserFormOptions) {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const {
     formData,

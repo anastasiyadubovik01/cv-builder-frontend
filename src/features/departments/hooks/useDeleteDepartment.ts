@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 
 import { DELETE_DEPARTMENT_MUTATION } from '@/api/departments';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import { handleFormError } from '@/lib/error/errorHandler';
 
 type UseDeleteDepartmentOptions = {
@@ -13,6 +13,7 @@ export function useDeleteDepartment({
   onSuccess,
 }: UseDeleteDepartmentOptions = {}) {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const [deleteDepartment, { loading }] = useMutation(
     DELETE_DEPARTMENT_MUTATION,

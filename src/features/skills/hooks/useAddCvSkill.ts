@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ADD_CV_SKILL_MUTATION } from '@/api/cv-skills';
 import type { ApiSkill } from '@/api/skills';
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import type { Mastery } from '@/features/skills/types';
 import { handleFormError } from '@/lib/error/errorHandler';
 import {
@@ -29,6 +29,7 @@ export function useAddCvSkill({
   onSuccess,
 }: UseAddCvSkillOptions) {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const {
     formData,

@@ -7,7 +7,7 @@ import {
   createProjectSchema,
 } from '@/lib/validations/project';
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 
 const INITIAL_VALUES: CreateProjectInputValues = {
   name: '',
@@ -26,6 +26,7 @@ export function useCreateProjectForm({
   onSuccess,
 }: UseCreateProjectFormOptions = {}) {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const {
     formData,

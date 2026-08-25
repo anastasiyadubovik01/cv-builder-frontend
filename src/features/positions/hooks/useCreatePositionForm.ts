@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { CREATE_POSITION_MUTATION, type Position } from '@/api/positions';
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import { handleFormError } from '@/lib/error/errorHandler';
 import {
   adminPositionSchema,
@@ -24,6 +24,7 @@ export function useCreatePositionForm({
   onSuccess,
 }: UseCreatePositionFormOptions) {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const {
     formData,

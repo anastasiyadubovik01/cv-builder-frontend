@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { UPDATE_LANGUAGE_MUTATION, type ApiLanguage } from '@/api/languages';
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import { handleFormError } from '@/lib/error/errorHandler';
 import {
   adminLanguageSchema,
@@ -22,6 +22,7 @@ export function useUpdateLanguageForm({
   onSuccess,
 }: UseUpdateLanguageFormOptions) {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const initialValues: AdminLanguageFormValues = {
     name: language.name,

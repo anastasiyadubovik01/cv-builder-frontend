@@ -3,7 +3,7 @@
 import { type ChangeEvent, useRef } from 'react';
 import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
+import { useToast } from '@/components/ui/sonner';
 
 import { UPLOAD_AVATAR_MUTATION } from '@/api/profile';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -33,6 +33,7 @@ export function UserAvatar({
   onUpdated,
 }: UserAvatarProps) {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -47,18 +48,14 @@ export function UserAvatar({
     if (!file) return;
 
     if (!ALLOWED_TYPES.includes(file.type)) {
-      toast.error(t('users.details.updateError'), {
-        description: t('users.details.avatar.invalidType'),
-      });
+      toast.error(t('users.details.avatar.invalidType'));
 
       event.target.value = '';
       return;
     }
 
     if (file.size > MAX_FILE_SIZE) {
-      toast.error(t('users.details.updateError'), {
-        description: t('users.details.avatar.tooLarge'),
-      });
+      toast.error(t('users.details.avatar.tooLarge'));
 
       event.target.value = '';
       return;
@@ -79,14 +76,9 @@ export function UserAvatar({
       });
 
       await onUpdated();
-
-      toast.success(t('users.details.updateSuccess'), {
-        description: t('users.details.avatar.uploadSuccess'),
-      });
+      toast.success(t('users.details.avatar.uploadSucces'));
     } catch {
-      toast.error(t('users.details.updateError'), {
-        description: t('users.details.avatar.uploadError'),
-      });
+      toast.error(t('users.details.avatar.uploadError'));
     } finally {
       event.target.value = '';
     }

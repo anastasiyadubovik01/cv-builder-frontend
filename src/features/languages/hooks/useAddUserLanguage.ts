@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ADD_PROFILE_LANGUAGE_MUTATION } from '@/api/languages';
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import type { Proficiency } from '@/features/languages/types';
 import { handleFormError } from '@/lib/error/errorHandler';
 import {
@@ -26,6 +26,7 @@ export function useAddUserLanguage({
   onSuccess,
 }: UseAddUserLanguageOptions) {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const { formData, errors, validateForm, validateField, setFieldValue } =
     useValidatedForm<AddUserLanguageFormValues>({

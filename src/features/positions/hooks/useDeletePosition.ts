@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 
 import { DELETE_POSITION_MUTATION } from '@/api/positions';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import { handleFormError } from '@/lib/error/errorHandler';
 
 type UseDeletePositionOptions = {
@@ -13,6 +13,7 @@ export function useDeletePosition({
   onSuccess,
 }: UseDeletePositionOptions = {}) {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const [deletePosition, { loading }] = useMutation(DELETE_POSITION_MUTATION);
 

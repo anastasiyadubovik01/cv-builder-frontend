@@ -9,7 +9,7 @@ import {
   createCvProjectSchema,
 } from '@/lib/validations/cv-project';
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import { handleFormError } from '@/lib/error/errorHandler';
 
 const INITIAL_VALUES: CreateCvProjectInputValues = {
@@ -37,6 +37,7 @@ export function useAddCvProjectForm({
   onSuccess,
 }: UseCreateCvProjectFormOptions) {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const {
     formData,

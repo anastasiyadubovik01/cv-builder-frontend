@@ -5,7 +5,7 @@ import {
   REMOVE_CV_PROJECT_MUTATION,
   type ApiCvProject,
 } from '@/api/cv-projects';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import { handleFormError } from '@/lib/error/errorHandler';
 
 type RemoveCvProjectData = {
@@ -28,6 +28,7 @@ type UseRemoveCvProjectOptions = {
 
 export function useRemoveCvProject(options: UseRemoveCvProjectOptions = {}) {
   const { t } = useTranslation();
+  const toast = useToast();
   const [removeCvProject, { loading }] = useMutation<
     RemoveCvProjectData,
     RemoveCvProjectVariables

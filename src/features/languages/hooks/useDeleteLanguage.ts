@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 
 import { DELETE_LANGUAGE_MUTATION } from '@/api/languages';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import { handleFormError } from '@/lib/error/errorHandler';
 
 type UseDeleteLanguageOptions = {
@@ -13,6 +13,7 @@ export function useDeleteLanguage({
   onSuccess,
 }: UseDeleteLanguageOptions = {}) {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const [deleteLanguage, { loading }] = useMutation(DELETE_LANGUAGE_MUTATION);
 

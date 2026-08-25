@@ -1,5 +1,5 @@
 import type { TFunction } from 'i18next';
-import { toast } from '@/components/ui/sonner';
+import { toast as sonnerToast } from 'sonner';
 import { mapServerError } from '@/lib/error/errorMapper';
 
 interface HandleFormErrorOptions {
@@ -18,7 +18,9 @@ export function handleFormError(
   if (fieldErrorKeys.includes(translationKey) && setFieldError) {
     setFieldError(translationKey);
   } else {
-    toast.error(t(translationKey));
+    sonnerToast.error(t('toast.error'), {
+      description: t(translationKey),
+    });
   }
 
   if (context) {
