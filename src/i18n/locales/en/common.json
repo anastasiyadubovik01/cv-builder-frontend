@@ -169,10 +169,8 @@
         "position": "Position"
       },
       "memberSince": "A member since {{date}}",
-      "updateSuccess": "Success",
-      "updateSuccessDescription": "Profile updated successfully",
-      "updateError": "Error",
-      "updateErrorDescription": "Failed to update profile"
+      "updateSuccess": "Profile updated successfully",
+      "updateError": "Failed to update profile"
     },
     "create": {
       "button": "Create user",
@@ -428,6 +426,7 @@
     "addProject": "ADD PROJECT",
     "search": "Search",
     "emptyState": "No projects found",
+    "noAdded": "No projects added yet",
     "loadError": "Failed to load projects",
     "present": "Present",
     "tillNow": "Till now",
@@ -509,6 +508,12 @@
       "confirm": "Confirm",
       "cancel": "Cancel"
     }
+  },
+  "toast": {
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Info"
   },
 
   "months": {

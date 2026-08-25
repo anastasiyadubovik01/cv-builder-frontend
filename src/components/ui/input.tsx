@@ -71,6 +71,7 @@ function Input({
             'disabled:border-[var(--input-disabled-border)]',
             'disabled:bg-[var(--input-disabled-bg)]',
             'disabled:text-[var(--input-disabled-foreground)]',
+            'disabled:placeholder:text-[var(--input-disabled-foreground)]',
 
             // Invalid
             'aria-invalid:border-destructive',

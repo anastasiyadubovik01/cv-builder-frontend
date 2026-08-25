@@ -14,6 +14,7 @@ import type {
 } from '@/features/cvs/types';
 import { UpdateCvProjectModal } from '@/features/cvs/components/modals/UpdateCvProjectModal';
 import { RemoveCvProjectModal } from '@/features/cvs/components/modals/RemoveCvProjectModal';
+import { capitalizeFirstLetter } from '@/lib/helpers/formatters';
 
 type CvProjectsTableProps = {
   cvId: string;
@@ -50,8 +51,8 @@ export function CvProjectsTable({
   } | null>(null);
 
   const emptyStateMessage = hasSearchQuery
-    ? t('projects.noResults', 'No projects found')
-    : t('projects.emptyState', 'No projects added yet');
+    ? t('projects.emptyState', 'No projects found')
+    : t('projects.noAdded', 'No projects added yet');
 
   const columns: DataTableColumn<CvProject, CvProjectSortField>[] = [
     {
@@ -159,7 +160,7 @@ export function CvProjectsTable({
                 <div className="flex flex-wrap items-center gap-2">
                   {parsedResponsibilities.map((resp, idx) => (
                     <Badge variant="secondary" key={`${resp}-${idx}`}>
-                      {resp}
+                      {capitalizeFirstLetter(resp)}
                     </Badge>
                   ))}
                 </div>

@@ -16,6 +16,7 @@ import { CalendarIcon } from '@/components/icons/calendar-icon';
 interface DatePickerProps {
   value?: string;
   onChange: (dateString: string) => void;
+  onBlur?: () => void;
   placeholder: string;
   error?: string;
   required?: boolean;
@@ -25,6 +26,7 @@ interface DatePickerProps {
 export function DatePicker({
   value,
   onChange,
+  onBlur,
   placeholder,
   error,
   required,
@@ -44,8 +46,15 @@ export function DatePicker({
     setOpen(false);
   };
 
+  const handleOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen);
+    if (!isOpen) {
+      onBlur?.();
+    }
+  };
+
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger>
         <div className={cn('relative w-full cursor-pointer', className)}>
           <Input

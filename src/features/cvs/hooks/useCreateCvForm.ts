@@ -4,7 +4,7 @@ import { handleFormError } from '@/lib/error/errorHandler';
 import { CREATE_CV_MUTATION } from '@/api/cvs';
 import { type CreateCvFormValues, createCvSchema } from '@/lib/validations/cv';
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 
 const INITIAL_VALUES: CreateCvFormValues = {
   name: '',
@@ -22,11 +22,13 @@ export function useCreateCvForm({
   onSuccess,
 }: UseCreateCvFormOptions = {}) {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const {
     formData,
     errors,
     validateForm,
+    validateField,
     handleChange,
     setFormData,
     clearErrors,
@@ -36,6 +38,7 @@ export function useCreateCvForm({
   });
 
   const [createCv, { loading }] = useMutation(CREATE_CV_MUTATION);
+  const isValid = createCvSchema.safeParse(formData).success;
 
   const handleSubmit = async (): Promise<boolean> => {
     if (!validateForm()) {
@@ -84,7 +87,8 @@ export function useCreateCvForm({
     formData,
     errors,
     loading,
-    validateForm,
+    isValid,
+    validateField,
     handleChange,
     handleSubmit,
     resetForm,

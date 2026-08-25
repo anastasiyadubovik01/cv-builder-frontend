@@ -2,11 +2,12 @@ import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 
 import { DELETE_SKILL_MUTATION } from '@/api/skills';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import { handleFormError } from '@/lib/error/errorHandler';
 
 export function useDeleteSkill() {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const [deleteSkill] = useMutation(DELETE_SKILL_MUTATION);
 

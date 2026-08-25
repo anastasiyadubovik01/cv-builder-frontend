@@ -9,7 +9,7 @@ import {
   createCvProjectSchema,
 } from '@/lib/validations/cv-project';
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import { handleFormError } from '@/lib/error/errorHandler';
 
 const INITIAL_VALUES: CreateCvProjectInputValues = {
@@ -37,6 +37,7 @@ export function useAddCvProjectForm({
   onSuccess,
 }: UseCreateCvProjectFormOptions) {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const {
     formData,
@@ -70,6 +71,8 @@ export function useAddCvProjectForm({
 
   const catalogProjects: ApiProject[] = projectsData?.projects?.items || [];
   const positions = positionsData?.positions?.items || [];
+
+  const isValid = createCvProjectSchema.safeParse(formData).success;
 
   const handleProjectSelect = (selectedProjectId: string) => {
     const project = catalogProjects.find((p) => p.id === selectedProjectId);
@@ -154,7 +157,7 @@ export function useAddCvProjectForm({
     formData,
     errors,
     loading: mutationLoading || projectsLoading || positionsLoading,
-    isValid: true,
+    isValid,
     catalogProjects,
     positions,
     handleChange,

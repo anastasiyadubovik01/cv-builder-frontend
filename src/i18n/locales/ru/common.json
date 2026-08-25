@@ -168,10 +168,8 @@
         "position": "Должность"
       },
       "memberSince": "Участник с {{date}}",
-      "updateSuccess": "Успешно",
-      "updateSuccessDescription": "Профиль успешно обновлён",
-      "updateError": "Ошибка",
-      "updateErrorDescription": "Не удалось обновить профиль"
+      "updateSuccess": "Профиль успешно обновлён",
+      "updateError": "Не удалось обновить профиль"
     },
     "create": {
       "button": "Создать пользователя",
@@ -429,6 +427,7 @@
     "addProject": "ДОБАВИТЬ ПРОЕКТ",
     "search": "Поиск",
     "emptyState": "Проекты не найдены",
+    "noAdded": "Проекты ещё не добавлены",
     "loadError": "Не удалось загрузить проекты",
     "present": "По настоящее время",
     "tillNow": "По настоящее время",
@@ -510,6 +509,12 @@
       "confirm": "Подтвердить",
       "cancel": "Отмена"
     }
+  },
+  "toast": {
+    "success": "Успех",
+    "error": "Ошибка",
+    "warning": "Предупреждение",
+    "info": "Информация"
   },
 
   "months": {

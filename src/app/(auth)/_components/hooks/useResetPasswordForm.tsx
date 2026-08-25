@@ -1,7 +1,6 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
-import { toast } from '@/components/ui/sonner';
 import { RESET_PASSWORD_MUTATION, LOGIN_MUTATION } from '@/api/auth';
 import { setAuthCookies } from '@/app/actions/auth';
 import { handleFormError } from '@/lib/error/errorHandler';
@@ -11,6 +10,7 @@ import {
 } from '@/lib/validations/auth';
 import { getEmailFromJwt } from '@/lib/helpers/jwt';
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
+import { useToast } from '@/components/ui/sonner';
 
 const INITIAL_VALUES: ResetPasswordFormValues = {
   newPassword: '',
@@ -22,6 +22,7 @@ export function useResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const resetToken = searchParams.get('token');
+  const toast = useToast();
 
   const { formData, errors, validateForm, handleChange } =
     useValidatedForm<ResetPasswordFormValues>({

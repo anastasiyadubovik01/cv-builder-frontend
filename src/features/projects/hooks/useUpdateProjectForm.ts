@@ -7,7 +7,7 @@ import {
   createProjectSchema,
 } from '@/lib/validations/project';
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
-import { toast } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import type { Project } from '../types';
 
 type UseUpdateProjectFormOptions = {
@@ -38,6 +38,7 @@ export function useUpdateProjectForm({
   onSuccess,
 }: UseUpdateProjectFormOptions) {
   const { t } = useTranslation();
+  const toast = useToast();
 
   const initialValues = getProjectInitialValues(
     project,
