@@ -14,6 +14,7 @@ import type {
 } from '@/features/cvs/types';
 import { UpdateCvProjectModal } from '@/features/cvs/components/modals/UpdateCvProjectModal';
 import { RemoveCvProjectModal } from '@/features/cvs/components/modals/RemoveCvProjectModal';
+import { capitalizeFirstLetter } from '@/lib/helpers/formatters';
 
 type CvProjectsTableProps = {
   cvId: string;
@@ -159,7 +160,7 @@ export function CvProjectsTable({
                 <div className="flex flex-wrap items-center gap-2">
                   {parsedResponsibilities.map((resp, idx) => (
                     <Badge variant="secondary" key={`${resp}-${idx}`}>
-                      {resp}
+                      {capitalizeFirstLetter(resp)}
                     </Badge>
                   ))}
                 </div>
