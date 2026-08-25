@@ -12,11 +12,10 @@ export function useValidatedForm<T extends Record<string, string>>({
 }: UseFormOptions<T>) {
   const [formData, setFormData] = useState<T>(initialValues);
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
-  // Переносим отслеживание отправки внутрь валидатора
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const validateForm = (): boolean => {
-    setIsSubmitted(true); // Форма была отправлена — включаем 'живую' валидацию
+    setIsSubmitted(true);
     const result = schema.safeParse(formData);
 
     if (!result.success) {
