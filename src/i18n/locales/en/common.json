@@ -422,6 +422,7 @@
     "addProject": "ADD PROJECT",
     "search": "Search",
     "emptyState": "No projects found",
+    "noAdded": "No projects added yet",
     "loadError": "Failed to load projects",
     "present": "Present",
     "tillNow": "Till now",

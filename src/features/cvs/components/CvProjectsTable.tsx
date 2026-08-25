@@ -50,8 +50,8 @@ export function CvProjectsTable({
   } | null>(null);
 
   const emptyStateMessage = hasSearchQuery
-    ? t('projects.noResults', 'No projects found')
-    : t('projects.emptyState', 'No projects added yet');
+    ? t('projects.emptyState', 'No projects found')
+    : t('projects.noAdded', 'No projects added yet');
 
   const columns: DataTableColumn<CvProject, CvProjectSortField>[] = [
     {
