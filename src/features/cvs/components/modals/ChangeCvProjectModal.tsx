@@ -141,11 +141,6 @@ export function ChangeCvProjectModal({
                   setFieldValue('projectId', value);
                 }
               }}
-              onOpenChange={(isOpen) => {
-                if (!isOpen) {
-                  validateField('projectId');
-                }
-              }}
             >
               <SelectTrigger
                 label={t('projects.name', 'Name')}
@@ -153,6 +148,7 @@ export function ChangeCvProjectModal({
                 error={errors.projectId ? t(errors.projectId) : undefined}
                 aria-label={t('projects.name', 'Name')}
                 aria-invalid={Boolean(errors.projectId)}
+                onBlur={() => validateField('projectId')}
               >
                 <SelectValue placeholder={t('projects.name', 'Name')} />
               </SelectTrigger>
@@ -184,6 +180,7 @@ export function ChangeCvProjectModal({
             required
             error={errors.startDate ? t(errors.startDate) : undefined}
           />
+
           <DatePicker
             value={formData.endDate}
             onChange={handleDateSelect('endDate')}

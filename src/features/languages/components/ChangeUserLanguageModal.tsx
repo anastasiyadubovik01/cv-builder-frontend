@@ -1,5 +1,6 @@
 'use client';
 
+import * as React from 'react';
 import type { TFunction } from 'i18next';
 import type { ReactNode } from 'react';
 
@@ -36,9 +37,13 @@ type ChangeUserLanguageModalProps = {
   setFieldValue: (
     field: keyof AddUserLanguageFormValues,
     value: string,
+    options?: {
+      shouldValidate?: boolean;
+    },
   ) => void;
 
   validateField: (field: keyof AddUserLanguageFormValues) => boolean;
+
   handleSubmit: () => Promise<boolean>;
   t: TFunction;
 };
@@ -89,7 +94,14 @@ export function ChangeUserLanguageModal({
             disabled={languageDisabled}
             onValueChange={(value) => {
               if (value) {
-                setFieldValue('languageName', value);
+                setFieldValue('languageName', value, {
+                  shouldValidate: true,
+                });
+              }
+            }}
+            onOpenChange={(isOpen) => {
+              if (!isOpen) {
+                validateField('languageName');
               }
             }}
           >
@@ -99,7 +111,6 @@ export function ChangeUserLanguageModal({
               error={errors.languageName ? t(errors.languageName) : undefined}
               aria-label={t('users.languages.language')}
               aria-invalid={Boolean(errors.languageName)}
-              onBlur={() => validateField('languageName')}
             >
               <SelectValue placeholder={t('users.languages.language')} />
             </SelectTrigger>
@@ -120,7 +131,14 @@ export function ChangeUserLanguageModal({
             value={formData.proficiency}
             onValueChange={(value) => {
               if (value) {
-                setFieldValue('proficiency', value);
+                setFieldValue('proficiency', value, {
+                  shouldValidate: true,
+                });
+              }
+            }}
+            onOpenChange={(isOpen) => {
+              if (!isOpen) {
+                validateField('proficiency');
               }
             }}
           >
@@ -130,7 +148,6 @@ export function ChangeUserLanguageModal({
               error={errors.proficiency ? t(errors.proficiency) : undefined}
               aria-label={t('users.languages.proficiency')}
               aria-invalid={Boolean(errors.proficiency)}
-              onBlur={() => validateField('proficiency')}
             >
               <SelectValue placeholder={t('users.languages.proficiency')} />
             </SelectTrigger>

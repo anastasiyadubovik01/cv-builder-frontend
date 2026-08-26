@@ -59,14 +59,22 @@ export function useValidatedForm<T extends Record<string, string>>({
   };
 
   const validateField = (field: keyof T, updatedData?: T): boolean => {
-    const dataToValidate = updatedData || formData;
+    const dataToValidate = updatedData ?? formData;
+
     const result = schema.safeParse(dataToValidate);
 
     if (result.success) {
-      setErrors((prev) => ({
-        ...prev,
-        [field]: undefined,
-      }));
+      setErrors((prev) => {
+        if (!(field in prev)) {
+          return prev;
+        }
+
+        const next = { ...prev };
+        delete next[field];
+
+        return next;
+      });
+
       return true;
     }
 
@@ -74,10 +82,17 @@ export function useValidatedForm<T extends Record<string, string>>({
       (item) => String(item.path[0]) === String(field),
     );
 
-    setErrors((prev) => ({
-      ...prev,
-      [field]: issue?.message,
-    }));
+    setErrors((prev) => {
+      const next = { ...prev };
+
+      if (issue) {
+        next[field] = issue.message;
+      } else {
+        delete next[field];
+      }
+
+      return next;
+    });
 
     return !issue;
   };

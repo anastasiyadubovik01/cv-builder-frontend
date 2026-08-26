@@ -50,8 +50,16 @@ export type ChangeUserModalProps = {
     field: keyof CreateUserFormValues,
   ) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 
-  setFieldValue: (field: keyof CreateUserFormValues, value: string) => void;
+  setFieldValue: (
+    field: keyof CreateUserFormValues,
+    value: string,
+    options?: {
+      shouldValidate?: boolean;
+    },
+  ) => void;
+
   validateField: (field: keyof CreateUserFormValues) => boolean;
+
   handleSubmit: () => Promise<boolean>;
   t: (key: string) => string;
 };
@@ -148,7 +156,14 @@ export function ChangeUserModal({
             value={formData.departmentId}
             onValueChange={(value) => {
               if (value) {
-                setFieldValue('departmentId', value);
+                setFieldValue('departmentId', value, {
+                  shouldValidate: true,
+                });
+              }
+            }}
+            onOpenChange={(isOpen) => {
+              if (!isOpen) {
+                validateField('departmentId');
               }
             }}
           >
@@ -158,7 +173,6 @@ export function ChangeUserModal({
               error={errors.departmentId ? t(errors.departmentId) : undefined}
               aria-label={t('users.create.department')}
               aria-invalid={Boolean(errors.departmentId)}
-              onBlur={() => validateField('departmentId')}
             >
               <SelectValue placeholder={t('users.create.department')} />
             </SelectTrigger>
@@ -179,7 +193,14 @@ export function ChangeUserModal({
             value={formData.positionId}
             onValueChange={(value) => {
               if (value) {
-                setFieldValue('positionId', value);
+                setFieldValue('positionId', value, {
+                  shouldValidate: true,
+                });
+              }
+            }}
+            onOpenChange={(isOpen) => {
+              if (!isOpen) {
+                validateField('positionId');
               }
             }}
           >
@@ -189,7 +210,6 @@ export function ChangeUserModal({
               error={errors.positionId ? t(errors.positionId) : undefined}
               aria-label={t('users.create.position')}
               aria-invalid={Boolean(errors.positionId)}
-              onBlur={() => validateField('positionId')}
             >
               <SelectValue placeholder={t('users.create.position')} />
             </SelectTrigger>
@@ -210,7 +230,14 @@ export function ChangeUserModal({
             value={formData.role}
             onValueChange={(value) => {
               if (value) {
-                setFieldValue('role', value);
+                setFieldValue('role', value, {
+                  shouldValidate: true,
+                });
+              }
+            }}
+            onOpenChange={(isOpen) => {
+              if (!isOpen) {
+                validateField('role');
               }
             }}
           >
@@ -220,7 +247,6 @@ export function ChangeUserModal({
               error={errors.role ? t(errors.role) : undefined}
               aria-label={t('users.create.role')}
               aria-invalid={Boolean(errors.role)}
-              onBlur={() => validateField('role')}
             >
               <SelectValue placeholder={t('users.create.role')} />
             </SelectTrigger>
