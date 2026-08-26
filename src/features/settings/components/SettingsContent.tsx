@@ -1,5 +1,6 @@
 'use client';
 
+import { useTheme } from '@/providers/ThemeProvider';
 import { useChangeLanguage, useT } from 'next-i18next/client';
 
 import {
@@ -10,7 +11,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-import { useTheme, type ThemePreference } from '@/providers/ThemeProvider';
 import { ChangePasswordForm } from './ChangePasswordForm';
 
 export function SettingsContent() {
@@ -21,6 +21,14 @@ export function SettingsContent() {
     light: t('settings.themes.light'),
     dark: t('settings.themes.dark'),
     system: t('settings.themes.system'),
+  };
+
+  const handleThemeChange = (value: string | null) => {
+    if (value !== 'light' && value !== 'dark' && value !== 'system') {
+      return;
+    }
+
+    setTheme(value);
   };
 
   const languages = [
@@ -48,10 +56,7 @@ export function SettingsContent() {
   return (
     <div className="mx-auto w-full max-w-[852px] px-6 pt-10">
       <div className="flex flex-col gap-8">
-        <Select
-          value={theme}
-          onValueChange={(value) => setTheme(value as ThemePreference)}
-        >
+        <Select value={theme} onValueChange={handleThemeChange}>
           <SelectTrigger label={t('settings.theme')}>
             <SelectValue>{themeLabels[theme]}</SelectValue>
           </SelectTrigger>
