@@ -23,6 +23,14 @@ export const DEFAULT_ERROR_MAPPING: ErrorMapping = {
     'projects.errors.projectHasBeenAdded',
   [SERVER_ERROR_CODES.DEPARTMENT_IS_IN_USE]: 'departments.errors.inUse',
   [SERVER_ERROR_CODES.POSITION_IS_IN_USE]: 'positions.errors.inUse',
+  [SERVER_ERROR_CODES.OLD_PASSWORD_INCORRECT]:
+    'settings.validation.currentPasswordIncorrect',
+
+  [SERVER_ERROR_CODES.OLD_PASSWORD_SAME_NEW_PASSWORD]:
+    'settings.validation.samePassword',
+
+  [SERVER_ERROR_CODES.CONFIRM_PASSWORD_MISMATCH]:
+    'settings.validation.passwordsDoNotMatch',
 
   // Пока не протестированы конкретные имена ошибок
   [SERVER_ERROR_CODES.EXPIRED_OTP]: 'auth.errors.expiredOtp',

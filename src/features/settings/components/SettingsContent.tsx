@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/select';
 
 import { useTheme, type ThemePreference } from '@/providers/ThemeProvider';
+import { ChangePasswordForm } from './ChangePasswordForm';
 
 export function SettingsContent() {
   const { t, i18n } = useT('common');
@@ -45,7 +46,7 @@ export function SettingsContent() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-[780px] px-6 pt-10">
+    <div className="mx-auto w-full max-w-[852px] px-6 pt-10">
       <div className="flex flex-col gap-8">
         <Select
           value={theme}
@@ -81,6 +82,12 @@ export function SettingsContent() {
             ))}
           </SelectContent>
         </Select>
+
+        <div className="mt-10">
+          <h2 className="mb-6 text-base">{t('settings.changePassword')}</h2>
+
+          <ChangePasswordForm />
+        </div>
       </div>
     </div>
   );

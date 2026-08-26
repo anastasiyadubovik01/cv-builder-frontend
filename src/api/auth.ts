@@ -145,3 +145,30 @@ export const UPDATE_TOKEN_MUTATION = gql`
     }
   }
 `;
+
+export interface ChangePasswordInput {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface ChangePasswordData {
+  changePassword: {
+    id: string;
+  };
+}
+
+export interface ChangePasswordVariables {
+  args: ChangePasswordInput;
+}
+
+export const CHANGE_PASSWORD_MUTATION: TypedDocumentNode<
+  ChangePasswordData,
+  ChangePasswordVariables
+> = gql`
+  mutation ChangePassword($args: ChangePasswordInput!) {
+    changePassword(args: $args) {
+      id
+    }
+  }
+`;

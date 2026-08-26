@@ -472,10 +472,30 @@
     "title": "Настройки",
     "theme": "Тема",
     "language": "Язык",
+    "changePassword": "Изменить пароль",
+    "password": "Пароль",
+    "newPassword": "Новый пароль",
+    "confirmPassword": "Подтвердите пароль",
+    "change": "ИЗМЕНИТЬ",
+
     "themes": {
       "light": "Светлая",
       "dark": "Темная",
       "system": "Настройки устройства"
+    },
+
+    "validation": {
+      "passwordRequired": "Введите текущий пароль",
+      "newPasswordRequired": "Введите новый пароль",
+      "confirmPasswordRequired": "Подтвердите новый пароль",
+      "passwordMinLength": "Пароль должен содержать минимум 6 символов",
+      "passwordsDoNotMatch": "Пароли не совпадают",
+      "currentPasswordIncorrect": "Текущий пароль указан неверно",
+      "samePassword": "Новый пароль должен отличаться от текущего"
+    },
+
+    "notifications": {
+      "passwordChanged": "Пароль успешно изменён"
     }
   },
 

@@ -1,0 +1,557 @@
+{
+  "cancel": "Abbrechen",
+  "update": "Aktualisieren",
+  "verifyEmail": "E-Mail bestätigen",
+  "retry": "ERNEUT VERSUCHEN",
+
+  "auth": {
+    "signIn": {
+      "title": "Anmelden",
+      "description": "Melden Sie sich an, um fortzufahren",
+      "heading": "Willkommen zurück",
+      "subheading": "Hallo wieder! Melden Sie sich an, um fortzufahren",
+      "button": "Anmelden",
+      "forgotPassword": "Passwort vergessen",
+      "emailPlaceholder": "E-Mail",
+      "passwordPlaceholder": "Passwort",
+      "confirmPasswordPlaceholder": "Passwort bestätigen"
+    },
+    "signUp": {
+      "title": "Registrieren",
+      "description": "Registrieren Sie sich, um fortzufahren",
+      "heading": "Jetzt registrieren",
+      "subheading": "Willkommen! Registrieren Sie sich, um fortzufahren",
+      "button": "Konto erstellen",
+      "haveAccount": "Ich habe bereits ein Konto",
+      "emailPlaceholder": "E-Mail",
+      "passwordPlaceholder": "Passwort",
+      "confirmPasswordPlaceholder": "Passwort bestätigen"
+    },
+    "forgotPassword": {
+      "title": "Passwort vergessen",
+      "description": "Wir senden Ihnen eine E-Mail mit weiteren Anweisungen",
+      "heading": "Passwort vergessen",
+      "subheading": "Wir senden Ihnen eine E-Mail mit weiteren Anweisungen",
+      "button": "Passwort zurücksetzen",
+      "cancel": "Abbrechen",
+      "successMessage": "E-Mail gesendet!"
+    },
+    "resetPassword": {
+      "title": "Passwort zurücksetzen",
+      "description": "Geben Sie ein neues Passwort ein und bestätigen Sie es",
+      "heading": "Passwort zurücksetzen",
+      "subheading": "Geben Sie ein neues Passwort ein und bestätigen Sie es",
+      "button": "Absenden",
+      "goToSignIn": "Zur Anmeldung",
+      "successMessage": "Passwort erfolgreich zurückgesetzt!"
+    },
+    "emailVerification": {
+      "title": "E-Mail-Bestätigung",
+      "description": "Geben Sie den Bestätigungscode ein, den wir an Ihre E-Mail gesendet haben",
+      "heading": "E-Mail-Bestätigung",
+      "subheading": "Geben Sie den Bestätigungscode ein, den wir an Ihre E-Mail gesendet haben",
+      "button": "Bestätigen",
+      "later": "Später"
+    },
+    "tabs": {
+      "signIn": "Anmelden",
+      "signUp": "Registrieren"
+    },
+    "validation": {
+      "email": {
+        "required": "E-Mail ist erforderlich",
+        "invalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein"
+      },
+      "password": {
+        "required": "Passwort ist erforderlich",
+        "minLength": "Das Passwort muss mindestens 6 Zeichen lang sein"
+      },
+      "confirmPassword": {
+        "required": "Passwortbestätigung ist erforderlich",
+        "match": "Die Passwörter stimmen nicht überein"
+      },
+      "otp": {
+        "required": "Bestätigungscode ist erforderlich",
+        "length": "Bitte geben Sie einen gültigen 6-stelligen Code ein"
+      }
+    },
+    "errors": {
+      "userAlreadyExists": "Ein Konto mit dieser E-Mail-Adresse existiert bereits",
+      "failedToSendEmail": "Kein Konto mit dieser E-Mail-Adresse gefunden",
+      "invalidCredentials": "Ungültige E-Mail-Adresse oder ungültiges Passwort",
+      "unauthorized": "Nicht autorisiert",
+      "invalidOtp": "Ungültiger Bestätigungscode",
+      "expiredOtp": "Der Bestätigungscode ist abgelaufen",
+      "expiredResetToken": "Dieser Link zum Zurücksetzen des Passworts ist abgelaufen",
+      "authRefreshFailed": "Die Sitzung ist abgelaufen. Bitte melden Sie sich erneut an",
+      "unknownError": "Etwas ist schiefgelaufen. Bitte versuchen Sie es später erneut"
+    }
+  },
+
+  "sidebar": {
+    "employees": "Mitarbeiter",
+    "skills": "Fähigkeiten",
+    "languages": "Sprachen",
+    "cvs": "Lebensläufe",
+    "departments": "Abteilungen",
+    "positions": "Positionen",
+    "projects": "Projekte",
+    "collapse": "Seitenleiste einklappen",
+    "expand": "Seitenleiste ausklappen",
+    "profile": "Profil",
+    "settings": "Einstellungen",
+    "logout": "Abmelden"
+  },
+
+  "errors": {
+    "notFound": {
+      "title": "Hmm...",
+      "descriptionFirst": "Dies scheint nicht die Seite zu sein, nach der Sie gesucht haben.",
+      "descriptionSecond": "Kehren wir zurück.",
+      "goBack": "ZURÜCK"
+    },
+    "device": {
+      "title": "Hoppla",
+      "descriptionFirst": "Diese App wird auf Mobilgeräten nicht unterstützt.",
+      "descriptionSecond": "Bitte öffnen Sie sie auf einem Desktop oder Tablet."
+    },
+    "noInternet": {
+      "title": "Hoppla",
+      "descriptionFirst": "Etwas ist schiefgelaufen. Wir arbeiten bereits an einer Lösung.",
+      "descriptionSecond": "Bitte versuchen Sie es erneut oder gehen Sie zurück."
+    }
+  },
+
+  "users": {
+    "title": "Mitarbeiter",
+    "search": "Suchen",
+    "noResults": "Keine Ergebnisse",
+    "loadError": "Benutzer konnten nicht geladen werden",
+    "table": {
+      "firstName": "Vorname",
+      "lastName": "Nachname",
+      "email": "E-Mail",
+      "department": "Abteilung",
+      "position": "Position"
+    },
+    "details": {
+      "tabs": {
+        "profile": "Profil",
+        "skills": "Fähigkeiten",
+        "languages": "Sprachen",
+        "cvs": "Lebensläufe"
+      },
+
+      "loadError": "Profilinformationen konnten nicht geladen werden",
+      "notAssigned": "Nicht zugewiesen",
+
+      "validation": {
+        "firstNameRequired": "Vorname ist erforderlich",
+        "lastNameRequired": "Nachname ist erforderlich",
+        "departmentRequired": "Abteilung ist erforderlich",
+        "positionRequired": "Position ist erforderlich",
+        "firstNameMaxLength": "Der Vorname darf höchstens 100 Zeichen lang sein",
+        "lastNameMaxLength": "Der Nachname darf höchstens 100 Zeichen lang sein"
+      },
+      "avatar": {
+        "upload": "Avatarbild hochladen",
+        "uploading": "Wird hochgeladen...",
+        "hint": "png, jpg oder gif, maximal 0,5 MB",
+        "invalidType": "Nur PNG-, JPG- und GIF-Dateien sind erlaubt",
+        "tooLarge": "Das Bild darf nicht größer als 0,5 MB sein",
+        "uploadSuccess": "Avatar erfolgreich aktualisiert",
+        "uploadError": "Avatar konnte nicht hochgeladen werden"
+      },
+      "fields": {
+        "firstName": "Vorname",
+        "lastName": "Nachname",
+        "department": "Abteilung",
+        "position": "Position"
+      },
+      "memberSince": "Mitglied seit {{date}}",
+      "updateSuccess": "Profil erfolgreich aktualisiert",
+      "updateError": "Profil konnte nicht aktualisiert werden"
+    },
+    "create": {
+      "button": "Benutzer erstellen",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "firstName": "Vorname",
+      "lastName": "Nachname",
+      "department": "Abteilung",
+      "position": "Position",
+      "role": "Rolle",
+      "success": "Benutzer erfolgreich erstellt",
+      "error": "Benutzer konnte nicht erstellt werden"
+    },
+    "update": {
+      "success": "Benutzer erfolgreich aktualisiert"
+    },
+    "roles": {
+      "employee": "Mitarbeiter",
+      "admin": "Administrator"
+    },
+    "validation": {
+      "email": {
+        "required": "E-Mail ist erforderlich",
+        "invalid": "Ungültige E-Mail-Adresse"
+      },
+      "password": {
+        "required": "Passwort ist erforderlich",
+        "minLength": "Mindestens 6 Zeichen"
+      },
+      "firstName": {
+        "required": "Vorname ist erforderlich"
+      },
+      "lastName": {
+        "required": "Nachname ist erforderlich"
+      },
+      "department": {
+        "required": "Abteilung ist erforderlich"
+      },
+      "position": {
+        "required": "Position ist erforderlich"
+      },
+      "role": {
+        "required": "Rolle ist erforderlich"
+      }
+    },
+    "notifications": {
+      "deleteSuccess": "Benutzer erfolgreich gelöscht"
+    },
+    "languages": {
+      "language": "Sprache",
+      "proficiency": "Sprachniveau",
+      "add": "Sprache hinzufügen",
+      "addSuccess": "Sprache erfolgreich hinzugefügt",
+      "validation": {
+        "languageRequired": "Sprache ist erforderlich",
+        "proficiencyRequired": "Sprachniveau ist erforderlich"
+      },
+      "current": "Aktuelle Sprachen",
+      "empty": "Keine Sprachen vorhanden",
+      "loadError": "Sprachen konnten nicht geladen werden",
+      "updateSuccess": "Sprache erfolgreich aktualisiert",
+      "remove": "Sprachen entfernen",
+      "removeSelected": "Entfernen ({{count}})",
+      "removeSuccess": "Sprachen erfolgreich entfernt",
+      "removeDialog": {
+        "title": "Sprachen entfernen",
+        "description_one": "Möchten Sie wirklich {{count}} Sprache entfernen?",
+        "description_other": "Möchten Sie wirklich {{count}} Sprachen entfernen?"
+      }
+    }
+  },
+
+  "skills": {
+    "skill": "Fähigkeit",
+    "mastery": "Beherrschungsgrad",
+    "add": "Fähigkeit hinzufügen",
+    "remove": "Fähigkeiten entfernen",
+    "empty": "Keine Fähigkeiten vorhanden",
+    "loadError": "Fähigkeiten konnten nicht geladen werden",
+    "uncategorized": "Sonstige",
+    "addSuccess": "Fähigkeit erfolgreich hinzugefügt",
+    "validation": {
+      "skillRequired": "Fähigkeit ist erforderlich",
+      "masteryRequired": "Beherrschungsgrad ist erforderlich"
+    },
+    "removeSelected": "Entfernen ({{count}})",
+    "removeSuccess": "Fähigkeiten erfolgreich entfernt",
+    "removeDialog": {
+      "title": "Fähigkeiten entfernen",
+      "description": "Möchten Sie wirklich {{count}} Fähigkeiten entfernen?"
+    },
+    "updateSuccess": "Fähigkeit erfolgreich aktualisiert",
+    "admin": {
+      "search": "Suchen",
+      "create": "Fähigkeit erstellen",
+      "name": "Name",
+      "type": "Typ",
+      "category": "Kategorie",
+      "empty": "Keine Fähigkeiten gefunden",
+      "loadError": "Fähigkeiten konnten nicht geladen werden",
+      "validation": {
+        "nameRequired": "Fähigkeit ist erforderlich",
+        "categoryRequired": "Kategorie ist erforderlich",
+        "duplicate": "Fähigkeit existiert bereits"
+      },
+      "notifications": {
+        "createSuccess": "Fähigkeit erfolgreich erstellt",
+        "updateSuccess": "Fähigkeit erfolgreich aktualisiert",
+        "deleteSuccess": "Fähigkeit erfolgreich gelöscht",
+        "removedSuccess": "Fähigkeit erfolgreich entfernt"
+      }
+    }
+  },
+
+  "languages": {
+    "admin": {
+      "search": "Suchen",
+      "name": "Name",
+      "iso": "ISO",
+      "nativeName": "Name in der Muttersprache",
+      "empty": "Keine Sprachen gefunden",
+      "loadError": "Sprachen konnten nicht geladen werden",
+      "create": "Sprache erstellen",
+      "validation": {
+        "nameRequired": "Sprachname ist erforderlich",
+        "isoRequired": "ISO-Code ist erforderlich",
+        "isoMaxLength": "Der ISO-Code darf höchstens 2 Zeichen lang sein",
+        "nativeNameRequired": "Name in der Muttersprache ist erforderlich",
+        "duplicateName": "Sprache existiert bereits",
+        "duplicateIso": "ISO-Code existiert bereits"
+      },
+      "notifications": {
+        "createSuccess": "Sprache erfolgreich erstellt",
+        "updateSuccess": "Sprache erfolgreich aktualisiert",
+        "deleteSuccess": "Sprache erfolgreich gelöscht"
+      }
+    }
+  },
+
+  "departments": {
+    "title": "Abteilungen",
+    "search": "Suchen",
+    "name": "Name",
+    "empty": "Keine Abteilungen gefunden",
+    "loadError": "Abteilungen konnten nicht geladen werden",
+    "create": "Abteilung erstellen",
+    "validation": {
+      "nameRequired": "Abteilungsname ist erforderlich",
+      "duplicateName": "Abteilung existiert bereits"
+    },
+    "notifications": {
+      "createSuccess": "Abteilung erfolgreich erstellt",
+      "updateSuccess": "Abteilung erfolgreich aktualisiert",
+      "deleteSuccess": "Abteilung erfolgreich gelöscht"
+    },
+    "errors": {
+      "inUse": "Die Abteilung kann nicht gelöscht werden, da sie derzeit verwendet wird"
+    }
+  },
+
+  "positions": {
+    "title": "Positionen",
+    "search": "Suchen",
+    "name": "Position",
+    "create": "Position erstellen",
+    "empty": "Keine Positionen gefunden",
+    "loadError": "Positionen konnten nicht geladen werden",
+    "validation": {
+      "nameRequired": "Positionsname ist erforderlich",
+      "duplicateName": "Position existiert bereits"
+    },
+    "notifications": {
+      "createSuccess": "Position erfolgreich erstellt",
+      "updateSuccess": "Position erfolgreich aktualisiert",
+      "deleteSuccess": "Position erfolgreich gelöscht"
+    },
+    "errors": {
+      "inUse": "Die Position kann nicht gelöscht werden, da sie derzeit verwendet wird"
+    }
+  },
+
+  "cvs": {
+    "name": "Name",
+    "education": "Ausbildung",
+    "employee": "Mitarbeiter",
+    "description": "Beschreibung",
+
+    "search": "Suchen",
+    "createCv": "Lebenslauf erstellen",
+    "notFound": "Lebenslauf nicht gefunden",
+    "loadError": "Lebensläufe konnten nicht geladen werden",
+    "detailsLoadError": "Details des Lebenslaufs konnten nicht geladen werden",
+    "emptyState": {
+      "admin": "Keine Lebensläufe gefunden",
+      "employee": "Sie haben noch keine Lebensläufe"
+    },
+    "noResults": "Keine Lebensläufe gefunden",
+    "preview": {
+      "exportPdf": "PDF exportieren",
+      "education": "Ausbildung",
+      "languageProficiency": "Sprachniveau",
+      "domains": "Bereiche",
+      "projects": "Projekte",
+      "projectRoles": "Projektrollen",
+      "period": "Zeitraum",
+      "responsibilities": "Verantwortlichkeiten",
+      "environment": "Umgebung",
+      "professionalSkills": "Berufliche Fähigkeiten",
+      "table": {
+        "skills": "Fähigkeiten",
+        "experienceInYears": "Erfahrung in Jahren",
+        "lastUsed": "Zuletzt verwendet"
+      },
+      "loadError": "Lebenslaufvorschau konnte nicht geladen werden",
+      "exportSuccess": "PDF erfolgreich erstellt"
+    },
+    "tabs": {
+      "details": "Details",
+      "skills": "Fähigkeiten",
+      "projects": "Projekte",
+      "preview": "Vorschau"
+    },
+    "validation": {
+      "name": {
+        "required": "Name ist erforderlich",
+        "maxLength": "Der Name darf höchstens 255 Zeichen lang sein"
+      },
+      "education": {
+        "required": "Ausbildung ist erforderlich",
+        "maxLength": "Die Ausbildung darf höchstens 255 Zeichen lang sein"
+      },
+      "description": {
+        "required": "Beschreibung ist erforderlich"
+      }
+    },
+    "notifications": {
+      "createSuccess": "Der Lebenslauf wurde erfolgreich erstellt!",
+      "updateSuccess": "Der Lebenslauf wurde erfolgreich aktualisiert!",
+      "deleteSuccess": "Der Lebenslauf wurde erfolgreich gelöscht!"
+    }
+  },
+
+  "projects": {
+    "title": "Projekte",
+    "name": "Name",
+    "domain": "Bereich",
+    "startDate": "Startdatum",
+    "endDate": "Enddatum",
+    "description": "Beschreibung",
+    "environment": "Umgebung",
+    "roles": "Rollen",
+    "responsibilities": "Verantwortlichkeiten",
+    "addProject": "PROJEKT HINZUFÜGEN",
+    "search": "Suchen",
+    "emptyState": "Keine Projekte gefunden",
+    "noAdded": "Noch keine Projekte hinzugefügt",
+    "loadError": "Projekte konnten nicht geladen werden",
+    "present": "Aktuell",
+    "tillNow": "Bis heute",
+    "createProject": "Projekt erstellen",
+    "actions": {
+      "create": "ERSTELLEN",
+      "cancel": "ABBRECHEN"
+    },
+    "validation": {
+      "projectRequired": "Projekt ist erforderlich",
+      "startDateRequired": "Startdatum ist erforderlich",
+      "endDateRequired": "Enddatum ist erforderlich",
+      "rolesRequired": "Mindestens eine Rolle muss ausgewählt werden",
+      "endDateMustBeLater": "Das Enddatum darf nicht vor dem Startdatum liegen",
+      "startDateWithinProject": "Das Startdatum muss innerhalb der Projektdauer liegen",
+      "endDateWithinProject": "Das Enddatum muss innerhalb der Projektdauer liegen",
+      "endDateRequiredForFinishedProject": "Das Enddatum ist erforderlich, da das Projekt bereits beendet ist"
+    },
+    "errors": {
+      "nameRequired": "Projektname ist erforderlich",
+      "nameMaxLength": "Der Projektname darf höchstens 100 Zeichen lang sein",
+      "domainRequired": "Bereich ist erforderlich",
+      "domainMaxLength": "Der Bereich darf höchstens 100 Zeichen lang sein",
+      "startDateRequired": "Startdatum ist erforderlich",
+      "endDateRequired": "Enddatum ist erforderlich",
+      "endDateMustBeLater": "Das Enddatum muss nach dem Startdatum liegen",
+      "descriptionRequired": "Beschreibung ist erforderlich",
+      "descriptionMaxLength": "Die Beschreibung darf höchstens 2000 Zeichen lang sein",
+      "projectHasBeenAdded": "Das Projekt wurde bereits hinzugefügt"
+    },
+    "notifications": {
+      "createSuccess": "Projekt erfolgreich erstellt",
+      "updateSuccess": "Projekt erfolgreich aktualisiert",
+      "deleteSuccess": "Projekt erfolgreich gelöscht",
+      "addCvProjectSuccess": "Projekt erfolgreich zum Lebenslauf hinzugefügt",
+      "updateCvProjectSuccess": "Lebenslaufprojekt erfolgreich aktualisiert",
+      "removeCvProjectSuccess": "Projekt erfolgreich aus dem Lebenslauf entfernt"
+    }
+  },
+
+  "settings": {
+    "title": "Einstellungen",
+    "theme": "Design",
+    "language": "Sprache",
+    "changePassword": "Passwort ändern",
+    "password": "Passwort",
+    "newPassword": "Neues Passwort",
+    "confirmPassword": "Passwort bestätigen",
+    "change": "ÄNDERN",
+
+    "themes": {
+      "light": "Hell",
+      "dark": "Dunkel",
+      "system": "Geräteeinstellungen"
+    },
+
+    "validation": {
+      "passwordRequired": "Passwort ist erforderlich",
+      "newPasswordRequired": "Neues Passwort ist erforderlich",
+      "confirmPasswordRequired": "Passwortbestätigung ist erforderlich",
+      "passwordMinLength": "Das Passwort muss mindestens 6 Zeichen lang sein",
+      "passwordsDoNotMatch": "Die Passwörter stimmen nicht überein",
+      "currentPasswordIncorrect": "Das aktuelle Passwort ist falsch",
+      "samePassword": "Das neue Passwort muss sich vom aktuellen Passwort unterscheiden"
+    },
+
+    "notifications": {
+      "passwordChanged": "Passwort wurde erfolgreich geändert"
+    }
+  },
+
+  "dialogs": {
+    "delete": {
+      "title": "Löschen ",
+      "description": "Möchten Sie wirklich löschen: ",
+      "confirm": "Bestätigen",
+      "cancel": "Abbrechen"
+    },
+    "actions": {
+      "create": "Erstellen",
+      "add": "Hinzufügen",
+      "update": "Aktualisieren",
+      "delete": "Löschen",
+      "remove": "Entfernen",
+      "view": "Anzeigen",
+      "edit": "Bearbeiten"
+    },
+    "itemTypes": {
+      "user": "Benutzer",
+      "skill": "Fähigkeit",
+      "language": "Sprache",
+      "cv": "Lebenslauf",
+      "cvProject": "Lebenslaufprojekt",
+      "department": "Abteilung",
+      "position": "Position",
+      "project": "Projekt"
+    },
+    "common": {
+      "confirm": "Bestätigen",
+      "cancel": "Abbrechen"
+    }
+  },
+
+  "toast": {
+    "success": "Erfolg",
+    "error": "Fehler",
+    "warning": "Warnung",
+    "info": "Information"
+  },
+
+  "months": {
+    "january": "Januar",
+    "february": "Februar",
+    "march": "März",
+    "april": "April",
+    "may": "Mai",
+    "june": "Juni",
+    "july": "Juli",
+    "august": "August",
+    "september": "September",
+    "october": "Oktober",
+    "november": "November",
+    "december": "Dezember"
+  },
+  "weekdays": {
+    "short": ["S", "M", "D", "M", "D", "F", "S"]
+  }
+}

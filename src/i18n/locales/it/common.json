@@ -1,0 +1,557 @@
+{
+  "cancel": "Annulla",
+  "update": "Aggiorna",
+  "verifyEmail": "Verifica email",
+  "retry": "RIPROVA",
+
+  "auth": {
+    "signIn": {
+      "title": "Accedi",
+      "description": "Accedi per continuare",
+      "heading": "Bentornato",
+      "subheading": "Ciao di nuovo! Accedi per continuare",
+      "button": "Accedi",
+      "forgotPassword": "Password dimenticata",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Password",
+      "confirmPasswordPlaceholder": "Conferma password"
+    },
+    "signUp": {
+      "title": "Registrati",
+      "description": "Registrati per continuare",
+      "heading": "Registrati ora",
+      "subheading": "Benvenuto! Registrati per continuare",
+      "button": "Crea account",
+      "haveAccount": "Ho già un account",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Password",
+      "confirmPasswordPlaceholder": "Conferma password"
+    },
+    "forgotPassword": {
+      "title": "Password dimenticata",
+      "description": "Ti invieremo un'email con ulteriori istruzioni",
+      "heading": "Password dimenticata",
+      "subheading": "Ti invieremo un'email con ulteriori istruzioni",
+      "button": "Reimposta password",
+      "cancel": "Annulla",
+      "successMessage": "Email inviata!"
+    },
+    "resetPassword": {
+      "title": "Reimposta password",
+      "description": "Inserisci una nuova password e confermala",
+      "heading": "Reimposta password",
+      "subheading": "Inserisci una nuova password e confermala",
+      "button": "Invia",
+      "goToSignIn": "Vai all'accesso",
+      "successMessage": "Password reimpostata con successo!"
+    },
+    "emailVerification": {
+      "title": "Verifica email",
+      "description": "Inserisci il codice di verifica che abbiamo inviato alla tua email",
+      "heading": "Verifica email",
+      "subheading": "Inserisci il codice di verifica che abbiamo inviato alla tua email",
+      "button": "Conferma",
+      "later": "Più tardi"
+    },
+    "tabs": {
+      "signIn": "Accedi",
+      "signUp": "Registrati"
+    },
+    "validation": {
+      "email": {
+        "required": "L'email è obbligatoria",
+        "invalid": "Inserisci un indirizzo email valido"
+      },
+      "password": {
+        "required": "La password è obbligatoria",
+        "minLength": "La password deve contenere almeno 6 caratteri"
+      },
+      "confirmPassword": {
+        "required": "La conferma della password è obbligatoria",
+        "match": "Le password non corrispondono"
+      },
+      "otp": {
+        "required": "Il codice di verifica è obbligatorio",
+        "length": "Inserisci un codice valido di 6 cifre"
+      }
+    },
+    "errors": {
+      "userAlreadyExists": "Esiste già un account con questa email",
+      "failedToSendEmail": "Nessun account trovato con questo indirizzo email",
+      "invalidCredentials": "Email o password non valide",
+      "unauthorized": "Non autorizzato",
+      "invalidOtp": "Codice di verifica non valido",
+      "expiredOtp": "Il codice di verifica è scaduto",
+      "expiredResetToken": "Questo link per reimpostare la password è scaduto",
+      "authRefreshFailed": "La sessione è scaduta. Accedi di nuovo",
+      "unknownError": "Qualcosa è andato storto. Riprova più tardi"
+    }
+  },
+
+  "sidebar": {
+    "employees": "Dipendenti",
+    "skills": "Competenze",
+    "languages": "Lingue",
+    "cvs": "CV",
+    "departments": "Dipartimenti",
+    "positions": "Posizioni",
+    "projects": "Progetti",
+    "collapse": "Comprimi barra laterale",
+    "expand": "Espandi barra laterale",
+    "profile": "Profilo",
+    "settings": "Impostazioni",
+    "logout": "Esci"
+  },
+
+  "errors": {
+    "notFound": {
+      "title": "Hmm...",
+      "descriptionFirst": "Questa non sembra essere la pagina che stavi cercando.",
+      "descriptionSecond": "Torniamo sulla strada giusta.",
+      "goBack": "INDIETRO"
+    },
+    "device": {
+      "title": "Ops",
+      "descriptionFirst": "Questa app non è supportata sui dispositivi mobili.",
+      "descriptionSecond": "Aprila su un computer o tablet per continuare."
+    },
+    "noInternet": {
+      "title": "Ops",
+      "descriptionFirst": "Qualcosa è andato storto. Stiamo già lavorando per risolvere il problema.",
+      "descriptionSecond": "Riprova o torna indietro."
+    }
+  },
+
+  "users": {
+    "title": "Dipendenti",
+    "search": "Cerca",
+    "noResults": "Nessun risultato",
+    "loadError": "Impossibile caricare gli utenti",
+    "table": {
+      "firstName": "Nome",
+      "lastName": "Cognome",
+      "email": "Email",
+      "department": "Dipartimento",
+      "position": "Posizione"
+    },
+    "details": {
+      "tabs": {
+        "profile": "Profilo",
+        "skills": "Competenze",
+        "languages": "Lingue",
+        "cvs": "CV"
+      },
+
+      "loadError": "Impossibile caricare le informazioni del profilo",
+      "notAssigned": "Non assegnato",
+
+      "validation": {
+        "firstNameRequired": "Il nome è obbligatorio",
+        "lastNameRequired": "Il cognome è obbligatorio",
+        "departmentRequired": "Il dipartimento è obbligatorio",
+        "positionRequired": "La posizione è obbligatoria",
+        "firstNameMaxLength": "Il nome deve contenere al massimo 100 caratteri",
+        "lastNameMaxLength": "Il cognome deve contenere al massimo 100 caratteri"
+      },
+      "avatar": {
+        "upload": "Carica immagine avatar",
+        "uploading": "Caricamento...",
+        "hint": "png, jpg o gif non oltre 0,5 MB",
+        "invalidType": "Sono consentiti solo file PNG, JPG e GIF",
+        "tooLarge": "L'immagine non deve superare 0,5 MB",
+        "uploadSuccess": "Avatar aggiornato con successo",
+        "uploadError": "Impossibile caricare l'avatar"
+      },
+      "fields": {
+        "firstName": "Nome",
+        "lastName": "Cognome",
+        "department": "Dipartimento",
+        "position": "Posizione"
+      },
+      "memberSince": "Membro dal {{date}}",
+      "updateSuccess": "Profilo aggiornato con successo",
+      "updateError": "Impossibile aggiornare il profilo"
+    },
+    "create": {
+      "button": "Crea utente",
+      "email": "Email",
+      "password": "Password",
+      "firstName": "Nome",
+      "lastName": "Cognome",
+      "department": "Dipartimento",
+      "position": "Posizione",
+      "role": "Ruolo",
+      "success": "Utente creato con successo",
+      "error": "Impossibile creare l'utente"
+    },
+    "update": {
+      "success": "Utente aggiornato con successo"
+    },
+    "roles": {
+      "employee": "Dipendente",
+      "admin": "Amministratore"
+    },
+    "validation": {
+      "email": {
+        "required": "L'email è obbligatoria",
+        "invalid": "Indirizzo email non valido"
+      },
+      "password": {
+        "required": "La password è obbligatoria",
+        "minLength": "Minimo 6 caratteri"
+      },
+      "firstName": {
+        "required": "Il nome è obbligatorio"
+      },
+      "lastName": {
+        "required": "Il cognome è obbligatorio"
+      },
+      "department": {
+        "required": "Il dipartimento è obbligatorio"
+      },
+      "position": {
+        "required": "La posizione è obbligatoria"
+      },
+      "role": {
+        "required": "Il ruolo è obbligatorio"
+      }
+    },
+    "notifications": {
+      "deleteSuccess": "Utente eliminato con successo"
+    },
+    "languages": {
+      "language": "Lingua",
+      "proficiency": "Livello linguistico",
+      "add": "Aggiungi lingua",
+      "addSuccess": "Lingua aggiunta con successo",
+      "validation": {
+        "languageRequired": "La lingua è obbligatoria",
+        "proficiencyRequired": "Il livello linguistico è obbligatorio"
+      },
+      "current": "Lingue attuali",
+      "empty": "Nessuna lingua",
+      "loadError": "Impossibile caricare le lingue",
+      "updateSuccess": "Lingua aggiornata con successo",
+      "remove": "Rimuovi lingue",
+      "removeSelected": "Rimuovi ({{count}})",
+      "removeSuccess": "Lingue rimosse con successo",
+      "removeDialog": {
+        "title": "Rimuovi lingue",
+        "description_one": "Sei sicuro di voler rimuovere {{count}} lingua?",
+        "description_other": "Sei sicuro di voler rimuovere {{count}} lingue?"
+      }
+    }
+  },
+
+  "skills": {
+    "skill": "Competenza",
+    "mastery": "Livello di padronanza",
+    "add": "Aggiungi competenza",
+    "remove": "Rimuovi competenze",
+    "empty": "Nessuna competenza",
+    "loadError": "Impossibile caricare le competenze",
+    "uncategorized": "Altro",
+    "addSuccess": "Competenza aggiunta con successo",
+    "validation": {
+      "skillRequired": "La competenza è obbligatoria",
+      "masteryRequired": "Il livello di padronanza è obbligatorio"
+    },
+    "removeSelected": "Rimuovi ({{count}})",
+    "removeSuccess": "Competenze rimosse con successo",
+    "removeDialog": {
+      "title": "Rimuovi competenze",
+      "description": "Sei sicuro di voler rimuovere {{count}} competenze?"
+    },
+    "updateSuccess": "Competenza aggiornata con successo",
+    "admin": {
+      "search": "Cerca",
+      "create": "Crea competenza",
+      "name": "Nome",
+      "type": "Tipo",
+      "category": "Categoria",
+      "empty": "Nessuna competenza trovata",
+      "loadError": "Impossibile caricare le competenze",
+      "validation": {
+        "nameRequired": "La competenza è obbligatoria",
+        "categoryRequired": "La categoria è obbligatoria",
+        "duplicate": "La competenza esiste già"
+      },
+      "notifications": {
+        "createSuccess": "Competenza creata con successo",
+        "updateSuccess": "Competenza aggiornata con successo",
+        "deleteSuccess": "Competenza eliminata con successo",
+        "removedSuccess": "Competenza rimossa con successo"
+      }
+    }
+  },
+
+  "languages": {
+    "admin": {
+      "search": "Cerca",
+      "name": "Nome",
+      "iso": "ISO",
+      "nativeName": "Nome nativo",
+      "empty": "Nessuna lingua trovata",
+      "loadError": "Impossibile caricare le lingue",
+      "create": "Crea lingua",
+      "validation": {
+        "nameRequired": "Il nome della lingua è obbligatorio",
+        "isoRequired": "Il codice ISO è obbligatorio",
+        "isoMaxLength": "Il codice ISO non deve superare 2 caratteri",
+        "nativeNameRequired": "Il nome nativo è obbligatorio",
+        "duplicateName": "La lingua esiste già",
+        "duplicateIso": "Il codice ISO esiste già"
+      },
+      "notifications": {
+        "createSuccess": "Lingua creata con successo",
+        "updateSuccess": "Lingua aggiornata con successo",
+        "deleteSuccess": "Lingua eliminata con successo"
+      }
+    }
+  },
+
+  "departments": {
+    "title": "Dipartimenti",
+    "search": "Cerca",
+    "name": "Nome",
+    "empty": "Nessun dipartimento trovato",
+    "loadError": "Impossibile caricare i dipartimenti",
+    "create": "Crea dipartimento",
+    "validation": {
+      "nameRequired": "Il nome del dipartimento è obbligatorio",
+      "duplicateName": "Il dipartimento esiste già"
+    },
+    "notifications": {
+      "createSuccess": "Dipartimento creato con successo",
+      "updateSuccess": "Dipartimento aggiornato con successo",
+      "deleteSuccess": "Dipartimento eliminato con successo"
+    },
+    "errors": {
+      "inUse": "Il dipartimento non può essere eliminato perché è attualmente in uso"
+    }
+  },
+
+  "positions": {
+    "title": "Posizioni",
+    "search": "Cerca",
+    "name": "Posizione",
+    "create": "Crea posizione",
+    "empty": "Nessuna posizione trovata",
+    "loadError": "Impossibile caricare le posizioni",
+    "validation": {
+      "nameRequired": "Il nome della posizione è obbligatorio",
+      "duplicateName": "La posizione esiste già"
+    },
+    "notifications": {
+      "createSuccess": "Posizione creata con successo",
+      "updateSuccess": "Posizione aggiornata con successo",
+      "deleteSuccess": "Posizione eliminata con successo"
+    },
+    "errors": {
+      "inUse": "La posizione non può essere eliminata perché è attualmente in uso"
+    }
+  },
+
+  "cvs": {
+    "name": "Nome",
+    "education": "Istruzione",
+    "employee": "Dipendente",
+    "description": "Descrizione",
+
+    "search": "Cerca",
+    "createCv": "Crea CV",
+    "notFound": "CV non trovato",
+    "loadError": "Impossibile caricare i CV",
+    "detailsLoadError": "Impossibile caricare i dettagli del CV",
+    "emptyState": {
+      "admin": "Nessun CV trovato",
+      "employee": "Non hai ancora CV"
+    },
+    "noResults": "Nessun CV trovato",
+    "preview": {
+      "exportPdf": "Esporta PDF",
+      "education": "Istruzione",
+      "languageProficiency": "Livello linguistico",
+      "domains": "Domini",
+      "projects": "Progetti",
+      "projectRoles": "Ruoli nel progetto",
+      "period": "Periodo",
+      "responsibilities": "Responsabilità",
+      "environment": "Ambiente",
+      "professionalSkills": "Competenze professionali",
+      "table": {
+        "skills": "Competenze",
+        "experienceInYears": "Esperienza in anni",
+        "lastUsed": "Ultimo utilizzo"
+      },
+      "loadError": "Impossibile caricare l'anteprima del CV",
+      "exportSuccess": "PDF generato con successo"
+    },
+    "tabs": {
+      "details": "Dettagli",
+      "skills": "Competenze",
+      "projects": "Progetti",
+      "preview": "Anteprima"
+    },
+    "validation": {
+      "name": {
+        "required": "Il nome è obbligatorio",
+        "maxLength": "Il nome deve contenere al massimo 255 caratteri"
+      },
+      "education": {
+        "required": "L'istruzione è obbligatoria",
+        "maxLength": "L'istruzione deve contenere al massimo 255 caratteri"
+      },
+      "description": {
+        "required": "La descrizione è obbligatoria"
+      }
+    },
+    "notifications": {
+      "createSuccess": "Il CV è stato creato con successo!",
+      "updateSuccess": "Il CV è stato aggiornato con successo!",
+      "deleteSuccess": "Il CV è stato eliminato con successo!"
+    }
+  },
+
+  "projects": {
+    "title": "Progetti",
+    "name": "Nome",
+    "domain": "Dominio",
+    "startDate": "Data di inizio",
+    "endDate": "Data di fine",
+    "description": "Descrizione",
+    "environment": "Ambiente",
+    "roles": "Ruoli",
+    "responsibilities": "Responsabilità",
+    "addProject": "AGGIUNGI PROGETTO",
+    "search": "Cerca",
+    "emptyState": "Nessun progetto trovato",
+    "noAdded": "Nessun progetto aggiunto",
+    "loadError": "Impossibile caricare i progetti",
+    "present": "Presente",
+    "tillNow": "Fino ad ora",
+    "createProject": "Crea progetto",
+    "actions": {
+      "create": "CREA",
+      "cancel": "ANNULLA"
+    },
+    "validation": {
+      "projectRequired": "Il progetto è obbligatorio",
+      "startDateRequired": "La data di inizio è obbligatoria",
+      "endDateRequired": "La data di fine è obbligatoria",
+      "rolesRequired": "È necessario selezionare almeno un ruolo",
+      "endDateMustBeLater": "La data di fine non può essere precedente alla data di inizio",
+      "startDateWithinProject": "La data di inizio deve rientrare nella durata del progetto",
+      "endDateWithinProject": "La data di fine deve rientrare nella durata del progetto",
+      "endDateRequiredForFinishedProject": "La data di fine è obbligatoria perché il progetto è già terminato"
+    },
+    "errors": {
+      "nameRequired": "Il nome del progetto è obbligatorio",
+      "nameMaxLength": "Il nome del progetto non deve superare 100 caratteri",
+      "domainRequired": "Il dominio è obbligatorio",
+      "domainMaxLength": "Il dominio non deve superare 100 caratteri",
+      "startDateRequired": "La data di inizio è obbligatoria",
+      "endDateRequired": "La data di fine è obbligatoria",
+      "endDateMustBeLater": "La data di fine deve essere successiva alla data di inizio",
+      "descriptionRequired": "La descrizione è obbligatoria",
+      "descriptionMaxLength": "La descrizione non deve superare 2000 caratteri",
+      "projectHasBeenAdded": "Il progetto è già stato aggiunto"
+    },
+    "notifications": {
+      "createSuccess": "Progetto creato con successo",
+      "updateSuccess": "Progetto aggiornato con successo",
+      "deleteSuccess": "Progetto eliminato con successo",
+      "addCvProjectSuccess": "Progetto aggiunto al CV con successo",
+      "updateCvProjectSuccess": "Progetto del CV aggiornato con successo",
+      "removeCvProjectSuccess": "Progetto rimosso dal CV con successo"
+    }
+  },
+
+  "settings": {
+    "title": "Impostazioni",
+    "theme": "Tema",
+    "language": "Lingua",
+    "changePassword": "Cambia password",
+    "password": "Password",
+    "newPassword": "Nuova password",
+    "confirmPassword": "Conferma password",
+    "change": "CAMBIA",
+
+    "themes": {
+      "light": "Chiaro",
+      "dark": "Scuro",
+      "system": "Impostazioni del dispositivo"
+    },
+
+    "validation": {
+      "passwordRequired": "La password è obbligatoria",
+      "newPasswordRequired": "La nuova password è obbligatoria",
+      "confirmPasswordRequired": "La conferma della password è obbligatoria",
+      "passwordMinLength": "La password deve contenere almeno 6 caratteri",
+      "passwordsDoNotMatch": "Le password non corrispondono",
+      "currentPasswordIncorrect": "La password attuale non è corretta",
+      "samePassword": "La nuova password deve essere diversa da quella attuale"
+    },
+
+    "notifications": {
+      "passwordChanged": "Password modificata con successo"
+    }
+  },
+
+  "dialogs": {
+    "delete": {
+      "title": "Elimina ",
+      "description": "Sei sicuro di voler eliminare ",
+      "confirm": "Conferma",
+      "cancel": "Annulla"
+    },
+    "actions": {
+      "create": "Crea",
+      "add": "Aggiungi",
+      "update": "Aggiorna",
+      "delete": "Elimina",
+      "remove": "Rimuovi",
+      "view": "Visualizza",
+      "edit": "Modifica"
+    },
+    "itemTypes": {
+      "user": "utente",
+      "skill": "competenza",
+      "language": "lingua",
+      "cv": "CV",
+      "cvProject": "progetto CV",
+      "department": "dipartimento",
+      "position": "posizione",
+      "project": "progetto"
+    },
+    "common": {
+      "confirm": "Conferma",
+      "cancel": "Annulla"
+    }
+  },
+
+  "toast": {
+    "success": "Successo",
+    "error": "Errore",
+    "warning": "Avviso",
+    "info": "Informazione"
+  },
+
+  "months": {
+    "january": "Gennaio",
+    "february": "Febbraio",
+    "march": "Marzo",
+    "april": "Aprile",
+    "may": "Maggio",
+    "june": "Giugno",
+    "july": "Luglio",
+    "august": "Agosto",
+    "september": "Settembre",
+    "october": "Ottobre",
+    "november": "Novembre",
+    "december": "Dicembre"
+  },
+  "weekdays": {
+    "short": ["D", "L", "M", "M", "G", "V", "S"]
+  }
+}

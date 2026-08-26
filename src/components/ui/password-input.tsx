@@ -34,6 +34,7 @@ function PasswordInput({
         type="button"
         variant="icon"
         disabled={disabled}
+        aria-label={showPassword ? 'Hide password' : 'Show password'}
         onClick={() => setShowPassword(!showPassword)}
         className={cn(
           'absolute top-1/2 right-[6px] size-10 -translate-y-1/2 bg-transparent',

@@ -471,10 +471,30 @@
     "title": "Settings",
     "theme": "Theme",
     "language": "Language",
+    "changePassword": "Change password",
+    "password": "Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "change": "CHANGE",
+
     "themes": {
       "light": "Light",
       "dark": "Dark",
       "system": "Device settings"
+    },
+
+    "validation": {
+      "passwordRequired": "Password is required",
+      "newPasswordRequired": "New password is required",
+      "confirmPasswordRequired": "Confirm password is required",
+      "passwordMinLength": "Password must be at least 6 characters long",
+      "passwordsDoNotMatch": "Passwords do not match",
+      "currentPasswordIncorrect": "Current password is incorrect",
+      "samePassword": "New password must be different from current password"
+    },
+
+    "notifications": {
+      "passwordChanged": "Password changed successfully"
     }
   },
 

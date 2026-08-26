@@ -1,0 +1,557 @@
+{
+  "cancel": "Annuler",
+  "update": "Mettre à jour",
+  "verifyEmail": "Vérifier l’e-mail",
+  "retry": "RÉESSAYER",
+
+  "auth": {
+    "signIn": {
+      "title": "Se connecter",
+      "description": "Connectez-vous pour continuer",
+      "heading": "Bon retour",
+      "subheading": "Bonjour à nouveau ! Connectez-vous pour continuer",
+      "button": "Se connecter",
+      "forgotPassword": "Mot de passe oublié",
+      "emailPlaceholder": "E-mail",
+      "passwordPlaceholder": "Mot de passe",
+      "confirmPasswordPlaceholder": "Confirmer le mot de passe"
+    },
+    "signUp": {
+      "title": "S’inscrire",
+      "description": "Inscrivez-vous pour continuer",
+      "heading": "Inscrivez-vous maintenant",
+      "subheading": "Bienvenue ! Inscrivez-vous pour continuer",
+      "button": "Créer un compte",
+      "haveAccount": "J’ai déjà un compte",
+      "emailPlaceholder": "E-mail",
+      "passwordPlaceholder": "Mot de passe",
+      "confirmPasswordPlaceholder": "Confirmer le mot de passe"
+    },
+    "forgotPassword": {
+      "title": "Mot de passe oublié",
+      "description": "Nous vous enverrons un e-mail avec les instructions",
+      "heading": "Mot de passe oublié",
+      "subheading": "Nous vous enverrons un e-mail avec les instructions",
+      "button": "Réinitialiser le mot de passe",
+      "cancel": "Annuler",
+      "successMessage": "E-mail envoyé !"
+    },
+    "resetPassword": {
+      "title": "Réinitialiser le mot de passe",
+      "description": "Saisissez un nouveau mot de passe et confirmez-le",
+      "heading": "Réinitialiser le mot de passe",
+      "subheading": "Saisissez un nouveau mot de passe et confirmez-le",
+      "button": "Envoyer",
+      "goToSignIn": "Aller à la connexion",
+      "successMessage": "Mot de passe réinitialisé avec succès !"
+    },
+    "emailVerification": {
+      "title": "Vérification de l’e-mail",
+      "description": "Saisissez le code de vérification envoyé à votre e-mail",
+      "heading": "Vérification de l’e-mail",
+      "subheading": "Saisissez le code de vérification envoyé à votre e-mail",
+      "button": "Confirmer",
+      "later": "Plus tard"
+    },
+    "tabs": {
+      "signIn": "Connexion",
+      "signUp": "Inscription"
+    },
+    "validation": {
+      "email": {
+        "required": "L’e-mail est requis",
+        "invalid": "Veuillez saisir une adresse e-mail valide"
+      },
+      "password": {
+        "required": "Le mot de passe est requis",
+        "minLength": "Le mot de passe doit contenir au moins 6 caractères"
+      },
+      "confirmPassword": {
+        "required": "La confirmation du mot de passe est requise",
+        "match": "Les mots de passe ne correspondent pas"
+      },
+      "otp": {
+        "required": "Le code de vérification est requis",
+        "length": "Veuillez saisir un code valide à 6 chiffres"
+      }
+    },
+    "errors": {
+      "userAlreadyExists": "Un compte avec cet e-mail existe déjà",
+      "failedToSendEmail": "Aucun compte trouvé avec cette adresse e-mail",
+      "invalidCredentials": "E-mail ou mot de passe incorrect",
+      "unauthorized": "Non autorisé",
+      "invalidOtp": "Code de vérification incorrect",
+      "expiredOtp": "Le code de vérification a expiré",
+      "expiredResetToken": "Ce lien de réinitialisation du mot de passe a expiré",
+      "authRefreshFailed": "La session a expiré. Veuillez vous reconnecter",
+      "unknownError": "Une erreur est survenue. Veuillez réessayer plus tard"
+    }
+  },
+
+  "sidebar": {
+    "employees": "Employés",
+    "skills": "Compétences",
+    "languages": "Langues",
+    "cvs": "CV",
+    "departments": "Départements",
+    "positions": "Postes",
+    "projects": "Projets",
+    "collapse": "Réduire la barre latérale",
+    "expand": "Développer la barre latérale",
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "logout": "Déconnexion"
+  },
+
+  "errors": {
+    "notFound": {
+      "title": "Hmm...",
+      "descriptionFirst": "Cette page ne semble pas être celle que vous recherchiez.",
+      "descriptionSecond": "Revenons sur la bonne voie.",
+      "goBack": "RETOUR"
+    },
+    "device": {
+      "title": "Oups",
+      "descriptionFirst": "Cette application n’est pas prise en charge sur les appareils mobiles.",
+      "descriptionSecond": "Veuillez l’ouvrir sur un ordinateur ou une tablette pour continuer."
+    },
+    "noInternet": {
+      "title": "Oups",
+      "descriptionFirst": "Une erreur est survenue. Nous travaillons déjà à sa résolution.",
+      "descriptionSecond": "Veuillez réessayer ou revenir en arrière."
+    }
+  },
+
+  "users": {
+    "title": "Employés",
+    "search": "Rechercher",
+    "noResults": "Aucun résultat",
+    "loadError": "Impossible de charger les utilisateurs",
+    "table": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "E-mail",
+      "department": "Département",
+      "position": "Poste"
+    },
+    "details": {
+      "tabs": {
+        "profile": "Profil",
+        "skills": "Compétences",
+        "languages": "Langues",
+        "cvs": "CV"
+      },
+
+      "loadError": "Impossible de charger les informations du profil",
+      "notAssigned": "Non attribué",
+
+      "validation": {
+        "firstNameRequired": "Le prénom est requis",
+        "lastNameRequired": "Le nom est requis",
+        "departmentRequired": "Le département est requis",
+        "positionRequired": "Le poste est requis",
+        "firstNameMaxLength": "Le prénom doit contenir au maximum 100 caractères",
+        "lastNameMaxLength": "Le nom doit contenir au maximum 100 caractères"
+      },
+      "avatar": {
+        "upload": "Télécharger une image d’avatar",
+        "uploading": "Téléchargement...",
+        "hint": "png, jpg ou gif de 0,5 Mo maximum",
+        "invalidType": "Seuls les fichiers PNG, JPG et GIF sont autorisés",
+        "tooLarge": "L’image ne doit pas dépasser 0,5 Mo",
+        "uploadSuccess": "Avatar mis à jour avec succès",
+        "uploadError": "Impossible de télécharger l’avatar"
+      },
+      "fields": {
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "department": "Département",
+        "position": "Poste"
+      },
+      "memberSince": "Membre depuis le {{date}}",
+      "updateSuccess": "Profil mis à jour avec succès",
+      "updateError": "Impossible de mettre à jour le profil"
+    },
+    "create": {
+      "button": "Créer un utilisateur",
+      "email": "E-mail",
+      "password": "Mot de passe",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "department": "Département",
+      "position": "Poste",
+      "role": "Rôle",
+      "success": "Utilisateur créé avec succès",
+      "error": "Impossible de créer l’utilisateur"
+    },
+    "update": {
+      "success": "Utilisateur mis à jour avec succès"
+    },
+    "roles": {
+      "employee": "Employé",
+      "admin": "Administrateur"
+    },
+    "validation": {
+      "email": {
+        "required": "L’e-mail est requis",
+        "invalid": "Adresse e-mail invalide"
+      },
+      "password": {
+        "required": "Le mot de passe est requis",
+        "minLength": "Minimum 6 caractères"
+      },
+      "firstName": {
+        "required": "Le prénom est requis"
+      },
+      "lastName": {
+        "required": "Le nom est requis"
+      },
+      "department": {
+        "required": "Le département est requis"
+      },
+      "position": {
+        "required": "Le poste est requis"
+      },
+      "role": {
+        "required": "Le rôle est requis"
+      }
+    },
+    "notifications": {
+      "deleteSuccess": "Utilisateur supprimé avec succès"
+    },
+    "languages": {
+      "language": "Langue",
+      "proficiency": "Niveau de langue",
+      "add": "Ajouter une langue",
+      "addSuccess": "Langue ajoutée avec succès",
+      "validation": {
+        "languageRequired": "La langue est requise",
+        "proficiencyRequired": "Le niveau de langue est requis"
+      },
+      "current": "Langues actuelles",
+      "empty": "Aucune langue",
+      "loadError": "Impossible de charger les langues",
+      "updateSuccess": "Langue mise à jour avec succès",
+      "remove": "Supprimer des langues",
+      "removeSelected": "Supprimer ({{count}})",
+      "removeSuccess": "Langues supprimées avec succès",
+      "removeDialog": {
+        "title": "Supprimer des langues",
+        "description_one": "Êtes-vous sûr de vouloir supprimer {{count}} langue ?",
+        "description_other": "Êtes-vous sûr de vouloir supprimer {{count}} langues ?"
+      }
+    }
+  },
+
+  "skills": {
+    "skill": "Compétence",
+    "mastery": "Niveau de maîtrise",
+    "add": "Ajouter une compétence",
+    "remove": "Supprimer des compétences",
+    "empty": "Aucune compétence",
+    "loadError": "Impossible de charger les compétences",
+    "uncategorized": "Autre",
+    "addSuccess": "Compétence ajoutée avec succès",
+    "validation": {
+      "skillRequired": "La compétence est requise",
+      "masteryRequired": "Le niveau de maîtrise est requis"
+    },
+    "removeSelected": "Supprimer ({{count}})",
+    "removeSuccess": "Compétences supprimées avec succès",
+    "removeDialog": {
+      "title": "Supprimer des compétences",
+      "description": "Êtes-vous sûr de vouloir supprimer {{count}} compétences ?"
+    },
+    "updateSuccess": "Compétence mise à jour avec succès",
+    "admin": {
+      "search": "Rechercher",
+      "create": "Créer une compétence",
+      "name": "Nom",
+      "type": "Type",
+      "category": "Catégorie",
+      "empty": "Aucune compétence trouvée",
+      "loadError": "Impossible de charger les compétences",
+      "validation": {
+        "nameRequired": "La compétence est requise",
+        "categoryRequired": "La catégorie est requise",
+        "duplicate": "La compétence existe déjà"
+      },
+      "notifications": {
+        "createSuccess": "Compétence créée avec succès",
+        "updateSuccess": "Compétence mise à jour avec succès",
+        "deleteSuccess": "Compétence supprimée avec succès",
+        "removedSuccess": "Compétence retirée avec succès"
+      }
+    }
+  },
+
+  "languages": {
+    "admin": {
+      "search": "Rechercher",
+      "name": "Nom",
+      "iso": "ISO",
+      "nativeName": "Nom natif",
+      "empty": "Aucune langue trouvée",
+      "loadError": "Impossible de charger les langues",
+      "create": "Créer une langue",
+      "validation": {
+        "nameRequired": "Le nom de la langue est requis",
+        "isoRequired": "Le code ISO est requis",
+        "isoMaxLength": "Le code ISO ne doit pas dépasser 2 caractères",
+        "nativeNameRequired": "Le nom natif est requis",
+        "duplicateName": "La langue existe déjà",
+        "duplicateIso": "Le code ISO existe déjà"
+      },
+      "notifications": {
+        "createSuccess": "Langue créée avec succès",
+        "updateSuccess": "Langue mise à jour avec succès",
+        "deleteSuccess": "Langue supprimée avec succès"
+      }
+    }
+  },
+
+  "departments": {
+    "title": "Départements",
+    "search": "Rechercher",
+    "name": "Nom",
+    "empty": "Aucun département trouvé",
+    "loadError": "Impossible de charger les départements",
+    "create": "Créer un département",
+    "validation": {
+      "nameRequired": "Le nom du département est requis",
+      "duplicateName": "Le département existe déjà"
+    },
+    "notifications": {
+      "createSuccess": "Département créé avec succès",
+      "updateSuccess": "Département mis à jour avec succès",
+      "deleteSuccess": "Département supprimé avec succès"
+    },
+    "errors": {
+      "inUse": "Le département ne peut pas être supprimé car il est actuellement utilisé"
+    }
+  },
+
+  "positions": {
+    "title": "Postes",
+    "search": "Rechercher",
+    "name": "Poste",
+    "create": "Créer un poste",
+    "empty": "Aucun poste trouvé",
+    "loadError": "Impossible de charger les postes",
+    "validation": {
+      "nameRequired": "Le nom du poste est requis",
+      "duplicateName": "Le poste existe déjà"
+    },
+    "notifications": {
+      "createSuccess": "Poste créé avec succès",
+      "updateSuccess": "Poste mis à jour avec succès",
+      "deleteSuccess": "Poste supprimé avec succès"
+    },
+    "errors": {
+      "inUse": "Le poste ne peut pas être supprimé car il est actuellement utilisé"
+    }
+  },
+
+  "cvs": {
+    "name": "Nom",
+    "education": "Formation",
+    "employee": "Employé",
+    "description": "Description",
+
+    "search": "Rechercher",
+    "createCv": "Créer un CV",
+    "notFound": "CV introuvable",
+    "loadError": "Impossible de charger les CV",
+    "detailsLoadError": "Impossible de charger les détails du CV",
+    "emptyState": {
+      "admin": "Aucun CV trouvé",
+      "employee": "Vous n’avez encore aucun CV"
+    },
+    "noResults": "Aucun CV trouvé",
+    "preview": {
+      "exportPdf": "Exporter en PDF",
+      "education": "Formation",
+      "languageProficiency": "Niveau de langue",
+      "domains": "Domaines",
+      "projects": "Projets",
+      "projectRoles": "Rôles dans le projet",
+      "period": "Période",
+      "responsibilities": "Responsabilités",
+      "environment": "Environnement",
+      "professionalSkills": "Compétences professionnelles",
+      "table": {
+        "skills": "Compétences",
+        "experienceInYears": "Expérience en années",
+        "lastUsed": "Dernière utilisation"
+      },
+      "loadError": "Impossible de charger l’aperçu du CV",
+      "exportSuccess": "PDF généré avec succès"
+    },
+    "tabs": {
+      "details": "Détails",
+      "skills": "Compétences",
+      "projects": "Projets",
+      "preview": "Aperçu"
+    },
+    "validation": {
+      "name": {
+        "required": "Le nom est requis",
+        "maxLength": "Le nom doit contenir au maximum 255 caractères"
+      },
+      "education": {
+        "required": "La formation est requise",
+        "maxLength": "La formation doit contenir au maximum 255 caractères"
+      },
+      "description": {
+        "required": "La description est requise"
+      }
+    },
+    "notifications": {
+      "createSuccess": "Le CV a été créé avec succès !",
+      "updateSuccess": "Le CV a été mis à jour avec succès !",
+      "deleteSuccess": "Le CV a été supprimé avec succès !"
+    }
+  },
+
+  "projects": {
+    "title": "Projets",
+    "name": "Nom",
+    "domain": "Domaine",
+    "startDate": "Date de début",
+    "endDate": "Date de fin",
+    "description": "Description",
+    "environment": "Environnement",
+    "roles": "Rôles",
+    "responsibilities": "Responsabilités",
+    "addProject": "AJOUTER UN PROJET",
+    "search": "Rechercher",
+    "emptyState": "Aucun projet trouvé",
+    "noAdded": "Aucun projet ajouté",
+    "loadError": "Impossible de charger les projets",
+    "present": "Présent",
+    "tillNow": "Jusqu’à présent",
+    "createProject": "Créer un projet",
+    "actions": {
+      "create": "CRÉER",
+      "cancel": "ANNULER"
+    },
+    "validation": {
+      "projectRequired": "Le projet est requis",
+      "startDateRequired": "La date de début est requise",
+      "endDateRequired": "La date de fin est requise",
+      "rolesRequired": "Au moins un rôle doit être sélectionné",
+      "endDateMustBeLater": "La date de fin ne peut pas être antérieure à la date de début",
+      "startDateWithinProject": "La date de début doit être comprise dans la durée du projet",
+      "endDateWithinProject": "La date de fin doit être comprise dans la durée du projet",
+      "endDateRequiredForFinishedProject": "La date de fin est requise car le projet est déjà terminé"
+    },
+    "errors": {
+      "nameRequired": "Le nom du projet est requis",
+      "nameMaxLength": "Le nom du projet ne doit pas dépasser 100 caractères",
+      "domainRequired": "Le domaine est requis",
+      "domainMaxLength": "Le domaine ne doit pas dépasser 100 caractères",
+      "startDateRequired": "La date de début est requise",
+      "endDateRequired": "La date de fin est requise",
+      "endDateMustBeLater": "La date de fin doit être postérieure à la date de début",
+      "descriptionRequired": "La description est requise",
+      "descriptionMaxLength": "La description ne doit pas dépasser 2000 caractères",
+      "projectHasBeenAdded": "Le projet a déjà été ajouté"
+    },
+    "notifications": {
+      "createSuccess": "Le projet a été créé avec succès",
+      "updateSuccess": "Le projet a été mis à jour avec succès",
+      "deleteSuccess": "Le projet a été supprimé avec succès",
+      "addCvProjectSuccess": "Le projet a été ajouté au CV avec succès",
+      "updateCvProjectSuccess": "Le projet du CV a été mis à jour avec succès",
+      "removeCvProjectSuccess": "Le projet a été retiré du CV avec succès"
+    }
+  },
+
+  "settings": {
+    "title": "Paramètres",
+    "theme": "Thème",
+    "language": "Langue",
+    "changePassword": "Changer le mot de passe",
+    "password": "Mot de passe",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "change": "MODIFIER",
+
+    "themes": {
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Paramètres de l’appareil"
+    },
+
+    "validation": {
+      "passwordRequired": "Le mot de passe est requis",
+      "newPasswordRequired": "Le nouveau mot de passe est requis",
+      "confirmPasswordRequired": "La confirmation du mot de passe est requise",
+      "passwordMinLength": "Le mot de passe doit contenir au moins 6 caractères",
+      "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+      "currentPasswordIncorrect": "Le mot de passe actuel est incorrect",
+      "samePassword": "Le nouveau mot de passe doit être différent du mot de passe actuel"
+    },
+
+    "notifications": {
+      "passwordChanged": "Mot de passe modifié avec succès"
+    }
+  },
+
+  "dialogs": {
+    "delete": {
+      "title": "Supprimer ",
+      "description": "Êtes-vous sûr de vouloir supprimer ",
+      "confirm": "Confirmer",
+      "cancel": "Annuler"
+    },
+    "actions": {
+      "create": "Créer",
+      "add": "Ajouter",
+      "update": "Mettre à jour",
+      "delete": "Supprimer",
+      "remove": "Retirer",
+      "view": "Voir",
+      "edit": "Modifier"
+    },
+    "itemTypes": {
+      "user": "utilisateur",
+      "skill": "compétence",
+      "language": "langue",
+      "cv": "CV",
+      "cvProject": "projet du CV",
+      "department": "département",
+      "position": "poste",
+      "project": "projet"
+    },
+    "common": {
+      "confirm": "Confirmer",
+      "cancel": "Annuler"
+    }
+  },
+
+  "toast": {
+    "success": "Succès",
+    "error": "Erreur",
+    "warning": "Avertissement",
+    "info": "Information"
+  },
+
+  "months": {
+    "january": "Janvier",
+    "february": "Février",
+    "march": "Mars",
+    "april": "Avril",
+    "may": "Mai",
+    "june": "Juin",
+    "july": "Juillet",
+    "august": "Août",
+    "september": "Septembre",
+    "october": "Octobre",
+    "november": "Novembre",
+    "december": "Décembre"
+  },
+  "weekdays": {
+    "short": ["D", "L", "M", "M", "J", "V", "S"]
+  }
+}
