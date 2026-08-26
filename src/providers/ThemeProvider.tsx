@@ -4,7 +4,7 @@ import {
   createContext,
   useContext,
   useEffect,
-  useState,
+  useSyncExternalStore,
   type ReactNode,
 } from 'react';
 
@@ -17,27 +17,52 @@ type ThemeContextValue = {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-function applyTheme(theme: ThemePreference) {
-  const root = document.documentElement;
+const THEME_KEY = 'theme';
+const THEME_EVENT = 'theme-change';
 
-  const shouldUseDark =
+function getTheme(): ThemePreference {
+  const savedTheme = localStorage.getItem(THEME_KEY);
+
+  if (
+    savedTheme === 'light' ||
+    savedTheme === 'dark' ||
+    savedTheme === 'system'
+  ) {
+    return savedTheme;
+  }
+
+  return 'system';
+}
+
+function getServerTheme(): ThemePreference {
+  return 'system';
+}
+
+function subscribe(callback: () => void) {
+  window.addEventListener('storage', callback);
+  window.addEventListener(THEME_EVENT, callback);
+
+  return () => {
+    window.removeEventListener('storage', callback);
+    window.removeEventListener(THEME_EVENT, callback);
+  };
+}
+
+function applyTheme(theme: ThemePreference) {
+  const isDark =
     theme === 'dark' ||
     (theme === 'system' &&
       window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-  root.classList.toggle('dark', shouldUseDark);
+  document.documentElement.classList.toggle('dark', isDark);
 }
 
-export function ThemeProvider({
-  children,
-  initialTheme,
-}: {
-  children: ReactNode;
-  initialTheme: ThemePreference;
-}) {
-  const [theme, setThemeState] = useState<ThemePreference>(initialTheme);
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const theme = useSyncExternalStore(subscribe, getTheme, getServerTheme);
 
   useEffect(() => {
+    applyTheme(theme);
+
     if (theme !== 'system') return;
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -54,11 +79,8 @@ export function ThemeProvider({
   }, [theme]);
 
   const setTheme = (newTheme: ThemePreference) => {
-    setThemeState(newTheme);
-
-    document.cookie = `theme=${newTheme}; path=/; max-age=31536000; samesite=lax`;
-
-    applyTheme(newTheme);
+    localStorage.setItem(THEME_KEY, newTheme);
+    window.dispatchEvent(new Event(THEME_EVENT));
   };
 
   return (

@@ -1,6 +1,6 @@
 'use client';
 
-import { useTheme } from 'next-themes';
+import { useTheme } from '@/providers/ThemeProvider';
 import { useTranslation } from 'react-i18next';
 import {
   toast as sonnerToast,
@@ -9,7 +9,7 @@ import {
 } from 'sonner';
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = 'system' } = useTheme();
+  const { theme } = useTheme();
 
   return (
     <Sonner
