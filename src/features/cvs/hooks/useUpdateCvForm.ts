@@ -1,10 +1,6 @@
-import { useTranslation } from 'react-i18next';
-import { useMutation } from '@apollo/client/react';
 import { UPDATE_CV_MUTATION } from '@/api/cvs';
-import { createCvSchema, type CreateCvFormValues } from '@/lib/validations/cv';
-import { useValidatedForm } from '@/components/hooks/useValidatedForm';
-import { useToast } from '@/components/ui/sonner';
-import { handleFormError } from '@/lib/error/errorHandler';
+import { type CreateCvFormValues } from '@/lib/validations/cv';
+import { useCvForm } from '@/features/cvs/hooks/useCvForm';
 
 type UseUpdateCvFormOptions = {
   cvId: string;
@@ -17,73 +13,15 @@ export function useUpdateCvForm({
   initialValues,
   onSuccess,
 }: UseUpdateCvFormOptions) {
-  const { t } = useTranslation();
-  const toast = useToast();
-
-  const {
-    formData,
-    errors,
-    validateForm,
-    validateField,
-    handleChange,
-    setFormData,
-    clearErrors,
-  } = useValidatedForm<CreateCvFormValues>({
+  return useCvForm({
+    mutation: UPDATE_CV_MUTATION,
     initialValues,
-    schema: createCvSchema,
+    successMessageKey: 'cvs.notifications.updateSuccess',
+    defaultSuccessMessage: 'CV was successfully updated!',
+    errorContext: 'Update CV',
+    buildVariables: (values) => ({
+      cv: { cvId, ...values },
+    }),
+    onSuccess,
   });
-
-  const [updateCv, { loading }] = useMutation(UPDATE_CV_MUTATION);
-  const isValid = createCvSchema.safeParse(formData).success;
-
-  const handleSubmit = async (): Promise<boolean> => {
-    if (!validateForm()) {
-      return false;
-    }
-
-    try {
-      await updateCv({
-        variables: {
-          cv: {
-            cvId,
-            name: formData.name.trim(),
-            education: formData.education.trim(),
-            description: formData.description.trim(),
-          },
-        },
-      });
-
-      clearErrors();
-
-      toast.success(
-        t('cvs.notifications.updateSuccess', 'CV was successfully updated!'),
-      );
-
-      await onSuccess?.();
-      return true;
-    } catch (err) {
-      handleFormError(err, {
-        t,
-        context: 'Update CV',
-      });
-      return false;
-    }
-  };
-
-  const resetForm = () => {
-    setFormData(initialValues);
-    clearErrors();
-  };
-
-  return {
-    formData,
-    errors,
-    loading,
-    isValid,
-    validateField,
-    handleChange,
-    handleSubmit,
-    resetForm,
-    t,
-  };
 }

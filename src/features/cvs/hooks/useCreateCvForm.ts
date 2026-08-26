@@ -1,10 +1,6 @@
-import { useTranslation } from 'react-i18next';
-import { useMutation } from '@apollo/client/react';
-import { handleFormError } from '@/lib/error/errorHandler';
 import { CREATE_CV_MUTATION } from '@/api/cvs';
-import { type CreateCvFormValues, createCvSchema } from '@/lib/validations/cv';
-import { useValidatedForm } from '@/components/hooks/useValidatedForm';
-import { useToast } from '@/components/ui/sonner';
+import { type CreateCvFormValues } from '@/lib/validations/cv';
+import { useCvForm } from './useCvForm';
 
 const INITIAL_VALUES: CreateCvFormValues = {
   name: '',
@@ -21,77 +17,23 @@ export function useCreateCvForm({
   userId,
   onSuccess,
 }: UseCreateCvFormOptions = {}) {
-  const { t } = useTranslation();
-  const toast = useToast();
-
-  const {
-    formData,
-    errors,
-    validateForm,
-    validateField,
-    handleChange,
-    setFormData,
-    clearErrors,
-  } = useValidatedForm<CreateCvFormValues>({
+  const form = useCvForm({
+    mutation: CREATE_CV_MUTATION,
     initialValues: INITIAL_VALUES,
-    schema: createCvSchema,
+    successMessageKey: 'cvs.notifications.createSuccess',
+    defaultSuccessMessage: 'CV has been successfully created',
+    errorContext: 'Create CV',
+    buildVariables: (values) => ({
+      cv: { ...values, userId: userId || undefined },
+    }),
+    onSuccess,
   });
 
-  const [createCv, { loading }] = useMutation(CREATE_CV_MUTATION);
-  const isValid = createCvSchema.safeParse(formData).success;
-
-  const handleSubmit = async (): Promise<boolean> => {
-    if (!validateForm()) {
-      return false;
-    }
-
-    try {
-      await createCv({
-        variables: {
-          cv: {
-            name: formData.name.trim(),
-            education: formData.education.trim(),
-            description: formData.description.trim(),
-            userId: userId || undefined,
-          },
-        },
-      });
-
-      setFormData(INITIAL_VALUES);
-      clearErrors();
-
-      toast.success(
-        t(
-          'cvs.notifications.createSuccess',
-          'CV has been successfully created',
-        ),
-      );
-
-      await onSuccess?.();
-      return true;
-    } catch (err) {
-      handleFormError(err, {
-        t,
-        context: 'Create CV',
-      });
-      return false;
-    }
+  const handleSubmit = async () => {
+    const ok = await form.handleSubmit();
+    if (ok) form.resetForm();
+    return ok;
   };
 
-  const resetForm = () => {
-    setFormData(INITIAL_VALUES);
-    clearErrors();
-  };
-
-  return {
-    formData,
-    errors,
-    loading,
-    isValid,
-    validateField,
-    handleChange,
-    handleSubmit,
-    resetForm,
-    t,
-  };
+  return { ...form, handleSubmit };
 }
