@@ -34,24 +34,35 @@ export function DatePicker({
 }: DatePickerProps) {
   const [open, setOpen] = React.useState(false);
 
+  const wasOpenRef = React.useRef(false);
   const selectedDate = value ? parseISO(value) : undefined;
   const formattedValue = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : '';
 
   const handleSelect = (date?: Date) => {
-    if (!date) {
-      onChange('');
-    } else {
-      onChange(format(date, 'yyyy-MM-dd'));
+    const newValue = date ? format(date, 'yyyy-MM-dd') : '';
+    onChange(newValue);
+    if (open) {
+      wasOpenRef.current = true;
     }
     setOpen(false);
   };
 
   const handleOpenChange = (isOpen: boolean) => {
     setOpen(isOpen);
-    if (!isOpen) {
-      onBlur?.();
-    }
   };
+
+  React.useEffect(() => {
+    if (!open && wasOpenRef.current) {
+      onBlur?.();
+      wasOpenRef.current = false;
+    }
+  }, [open, onBlur]);
+
+  React.useEffect(() => {
+    if (open) {
+      wasOpenRef.current = false;
+    }
+  }, [open]);
 
   return (
     <Popover open={open} onOpenChange={handleOpenChange}>
