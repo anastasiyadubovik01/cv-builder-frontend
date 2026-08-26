@@ -1,9 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery } from '@apollo/client/react';
-
-import { PROJECTS_QUERY, type ApiProject } from '@/api/projects';
-import { POSITIONS_QUERY, type PositionsQueryResponse } from '@/api/positions';
+import { useMutation } from '@apollo/client/react';
 import {
   UPDATE_CV_PROJECT_MUTATION,
   type ApiCvProject,
@@ -17,14 +14,17 @@ import {
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
 import { useToast } from '@/components/ui/sonner';
 import { handleFormError } from '@/lib/error/errorHandler';
+import { useCvProjectForm } from './useCvProjectForm';
+import {
+  formatArrayToCommaSeparated,
+  parseCommaSeparated,
+} from '@/lib/helpers/formatters';
 
 type UseUpdateCvProjectFormOptions = {
   cvId: string;
   project: ApiCvProject;
   onSuccess?: () => void | Promise<void>;
 };
-
-const LIMIT = 1000;
 
 export function useUpdateCvProjectForm({
   cvId,
@@ -33,28 +33,20 @@ export function useUpdateCvProjectForm({
 }: UseUpdateCvProjectFormOptions) {
   const { t } = useTranslation();
   const toast = useToast();
+  const { catalogProjects, positions, loadingCatalog } = useCvProjectForm();
 
   const initialValues: UpdateCvProjectInputValues = useMemo(() => {
     const realProjectId = project.project?.id || '';
-
-    const envString = Array.isArray(project.environment)
-      ? project.environment.join(', ')
-      : project.environment || project.project?.environment?.join(', ') || '';
-
-    const rolesString = Array.isArray(project.roles)
-      ? project.roles.join(', ')
-      : '';
-
-    const responsibilitiesString = Array.isArray(project.responsibilities)
-      ? project.responsibilities.join(', ')
-      : '';
+    const envString = formatArrayToCommaSeparated(
+      project.environment || project.project?.environment,
+    );
 
     return {
       projectId: realProjectId,
       startDate: project.start_date || project.project?.start_date || '',
       endDate: project.end_date || project.project?.end_date || '',
-      roles: rolesString,
-      responsibilities: responsibilitiesString,
+      roles: formatArrayToCommaSeparated(project.roles),
+      responsibilities: formatArrayToCommaSeparated(project.responsibilities),
       domain: project.domain || project.project?.domain || '',
       description: project.description || project.project?.description || '',
       environment: envString,
@@ -77,25 +69,10 @@ export function useUpdateCvProjectForm({
     schema: createCvProjectSchema,
   });
 
-  const { data: projectsData, loading: projectsLoading } = useQuery(
-    PROJECTS_QUERY,
-    {
-      variables: { params: { limit: LIMIT } },
-    },
-  );
-
-  const { data: positionsData, loading: positionsLoading } =
-    useQuery<PositionsQueryResponse>(POSITIONS_QUERY, {
-      variables: { params: { limit: LIMIT } },
-    });
-
   const [updateCvProject, { loading: mutationLoading }] = useMutation<
     UpdateCvProjectData,
     UpdateCvProjectVars
   >(UPDATE_CV_PROJECT_MUTATION);
-
-  const catalogProjects: ApiProject[] = projectsData?.projects?.items || [];
-  const positions = positionsData?.positions?.items || [];
 
   const isDirty = useMemo(() => {
     return (
@@ -111,25 +88,7 @@ export function useUpdateCvProjectForm({
   const isValid = isDirty && isSchemaValid;
 
   const handleSubmit = async (): Promise<boolean> => {
-    if (!isValid) {
-      return false;
-    }
-
-    if (!validateForm()) {
-      return false;
-    }
-
-    const rolesArray = formData.roles
-      .split(',')
-      .map((item) => item.trim())
-      .filter(Boolean);
-
-    const responsibilitiesArray = formData.responsibilities
-      ? formData.responsibilities
-          .split(',')
-          .map((item) => item.trim())
-          .filter(Boolean)
-      : [];
+    if (!isValid || !validateForm()) return false;
 
     try {
       await updateCvProject({
@@ -138,9 +97,9 @@ export function useUpdateCvProjectForm({
             cvId,
             projectId: formData.projectId,
             start_date: formData.startDate.trim(),
-            end_date: formData.endDate ? formData.endDate.trim() : null,
-            roles: rolesArray,
-            responsibilities: responsibilitiesArray,
+            end_date: formData.endDate?.trim() || null,
+            roles: parseCommaSeparated(formData.roles),
+            responsibilities: parseCommaSeparated(formData.responsibilities),
           },
         },
       });
@@ -157,10 +116,7 @@ export function useUpdateCvProjectForm({
       await onSuccess?.();
       return true;
     } catch (err) {
-      handleFormError(err, {
-        t,
-        context: 'Update CV Project',
-      });
+      handleFormError(err, { t, context: 'Update CV Project' });
       return false;
     }
   };
@@ -173,7 +129,7 @@ export function useUpdateCvProjectForm({
   return {
     formData,
     errors,
-    loading: mutationLoading || projectsLoading || positionsLoading,
+    loading: mutationLoading || loadingCatalog,
     isValid,
     catalogProjects,
     positions,
