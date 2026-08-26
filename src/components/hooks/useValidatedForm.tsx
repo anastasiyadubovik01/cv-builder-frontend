@@ -12,8 +12,10 @@ export function useValidatedForm<T extends Record<string, string>>({
 }: UseFormOptions<T>) {
   const [formData, setFormData] = useState<T>(initialValues);
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const validateForm = (): boolean => {
+    setIsSubmitted(true);
     const result = schema.safeParse(formData);
 
     if (!result.success) {
@@ -45,9 +47,10 @@ export function useValidatedForm<T extends Record<string, string>>({
     options?: { shouldValidate?: boolean },
   ) => {
     setFormData((prev) => {
-      const nextState = { ...prev, [field]: value };
+      const nextState: T = { ...prev, [field]: value };
+      const validate = options?.shouldValidate ?? isSubmitted;
 
-      if (options?.shouldValidate !== false) {
+      if (validate) {
         validateField(field, nextState);
       }
 
@@ -68,7 +71,7 @@ export function useValidatedForm<T extends Record<string, string>>({
     }
 
     const issue = result.error.issues.find(
-      (item) => item.path[0] === String(field),
+      (item) => String(item.path[0]) === String(field),
     );
 
     setErrors((prev) => ({
@@ -94,6 +97,8 @@ export function useValidatedForm<T extends Record<string, string>>({
     setFormData,
     errors,
     setErrors,
+    isSubmitted,
+    setIsSubmitted,
     validateForm,
     validateField,
     setFieldValue,

@@ -8,79 +8,115 @@ import {
 import { HttpLink, ApolloLink, Observable } from '@apollo/client';
 import { CombinedGraphQLErrors } from '@apollo/client/errors';
 import { ErrorLink } from '@apollo/client/link/error';
+import { SetContextLink } from '@apollo/client/link/context';
 import React from 'react';
-import type { Subscription } from 'rxjs';
 import { getAccessToken } from '@/lib/auth/tokenUtils';
 import { refreshAuthTokensAction, logoutAction } from '@/app/actions/auth';
 import { AuthRefreshError } from '@/lib/error/errors';
+import {
+  createAuthHeader,
+  isUnauthenticatedError,
+  isIgnoredAuthOperation,
+} from '@/lib/auth/authUtils';
 
 const REFRESHED_OPERATION_CONTEXT = 'tokenRefreshed';
-const UNAUTHENTICATED_CODE = 'UNAUTHENTICATED';
 
-const IGNORED_AUTH_OPERATIONS = ['Login', 'SignUp', 'UpdateToken'];
+class TokenRefreshQueue {
+  private isRefreshing = false;
+  private pendingRequests: Array<(success: boolean) => void> = [];
 
-function makeClient() {
-  let isRefreshing = false;
-  let pendingRequests: Array<(success: boolean) => void> = [];
+  private processQueue(success: boolean) {
+    this.pendingRequests.forEach((callback) => callback(success));
+    this.pendingRequests = [];
+  }
 
-  const processQueue = (success: boolean) => {
-    pendingRequests.forEach((callback) => callback(success));
-    pendingRequests = [];
-  };
-
-  const redirectToLogin = () => {
+  public redirectToLogin() {
     if (typeof window !== 'undefined') {
       logoutAction().finally(() => {
         window.location.replace('/sign-in');
       });
     }
-  };
+  }
 
+  public handleRefresh(onSuccess: () => void, onError: (err: unknown) => void) {
+    if (!this.isRefreshing) {
+      this.isRefreshing = true;
+
+      refreshAuthTokensAction()
+        .then((refreshed) => {
+          this.isRefreshing = false;
+          this.processQueue(refreshed);
+          if (!refreshed) {
+            this.redirectToLogin();
+            onError(new AuthRefreshError());
+            return;
+          }
+          onSuccess();
+        })
+        .catch((err: unknown) => {
+          this.isRefreshing = false;
+          this.processQueue(false);
+          this.redirectToLogin();
+          onError(err);
+        });
+    } else {
+      this.pendingRequests.push((success: boolean) => {
+        if (success) {
+          onSuccess();
+        } else {
+          this.redirectToLogin();
+          onError(new AuthRefreshError());
+        }
+      });
+    }
+  }
+}
+
+const tokenRefreshQueue = new TokenRefreshQueue();
+
+const applyCurrentTokenToOperation = (operation: ApolloLink.Operation) => {
+  const token = getAccessToken();
+  operation.setContext(
+    ({ headers = {} }: { headers?: Record<string, string> }) => ({
+      headers: {
+        ...headers,
+        ...createAuthHeader(token),
+      },
+    }),
+  );
+};
+
+function makeClient() {
   const httpLink = new HttpLink({
     uri: process.env.NEXT_PUBLIC_GRAPHQL_URL,
     credentials: 'include',
   });
 
-  const setAuthHeader = (operation: ApolloLink.Operation) => {
+  const authLink = new SetContextLink((prevContext) => {
     const token = getAccessToken();
+    const headers = prevContext.headers || {};
+    const customAuth = headers.authorization || headers.Authorization;
 
-    operation.setContext(
-      ({ headers = {} }: { headers?: Record<string, string> }) => {
-        const customAuth = headers.authorization || headers.Authorization;
-        const authHeader = customAuth || (token ? `Bearer ${token}` : '');
-        return {
-          headers: {
-            ...headers,
-            ...(authHeader ? { authorization: authHeader } : {}),
-          },
-        };
+    return {
+      headers: {
+        ...headers,
+        ...(customAuth
+          ? { authorization: customAuth }
+          : createAuthHeader(token)),
       },
-    );
-  };
-
-  // Access token to the request
-  const authLink = new ApolloLink((operation, forward) => {
-    setAuthHeader(operation);
-    return forward(operation);
+    };
   });
 
   const errorLink = new ErrorLink(({ error, operation, forward }) => {
     if (!CombinedGraphQLErrors.is(error)) return;
-
-    const isUnauthenticated = error.errors.some(
-      (graphQLError) => graphQLError.extensions?.code === UNAUTHENTICATED_CODE,
-    );
-    if (!isUnauthenticated) return;
-
-    const isAuthOperation = IGNORED_AUTH_OPERATIONS.includes(
-      operation.operationName as string,
-    );
-    if (isAuthOperation) return;
+    if (!isUnauthenticatedError(error.errors)) return;
+    if (isIgnoredAuthOperation(operation.operationName)) return;
 
     const alreadyRefreshed =
       operation.getContext()[REFRESHED_OPERATION_CONTEXT] === true;
+
     if (alreadyRefreshed) {
-      redirectToLogin();
+      tokenRefreshQueue.redirectToLogin();
       return;
     }
 
@@ -89,40 +125,17 @@ function makeClient() {
     });
 
     return new Observable<ApolloLink.Result>((observer) => {
-      let subscription: Subscription | undefined;
+      let subscription: { unsubscribe: () => void } | undefined;
 
-      if (!isRefreshing) {
-        isRefreshing = true;
+      const retryOperation = () => {
+        applyCurrentTokenToOperation(operation);
+        subscription = forward(operation).subscribe(observer);
+      };
 
-        refreshAuthTokensAction()
-          .then((refreshed) => {
-            isRefreshing = false;
-            processQueue(refreshed);
-            if (!refreshed) {
-              redirectToLogin();
-              observer.error(new AuthRefreshError());
-              return;
-            }
-            setAuthHeader(operation);
-            subscription = forward(operation).subscribe(observer);
-          })
-          .catch((err: unknown) => {
-            isRefreshing = false;
-            processQueue(false);
-            redirectToLogin();
-            observer.error(err);
-          });
-      } else {
-        pendingRequests.push((success: boolean) => {
-          if (success) {
-            setAuthHeader(operation);
-            subscription = forward(operation).subscribe(observer);
-          } else {
-            redirectToLogin();
-            observer.error(new AuthRefreshError());
-          }
-        });
-      }
+      tokenRefreshQueue.handleRefresh(
+        () => retryOperation(),
+        (err) => observer.error(err),
+      );
 
       return () => {
         subscription?.unsubscribe();

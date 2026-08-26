@@ -1,12 +1,10 @@
 'use client';
 
 import { useQuery } from '@apollo/client/react';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
 import { CV_QUERY } from '@/api/cvs';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
-import { cn } from '@/lib/utils';
+import { NavTabs, NavTabItem } from '@/components/ui/nav-tabs';
 
 type CvDetailsNavigationProps = {
   cvId: string;
@@ -26,84 +24,55 @@ export function CvDetailsNavigation({
   const pathname = usePathname();
 
   const { data } = useQuery(CV_QUERY, {
-    variables: {
-      cvId,
-    },
+    variables: { cvId },
   });
 
   const cvName = data?.cv?.name || cvId;
 
-  const tabs = [
+  const tabs: NavTabItem[] = [
     {
       key: 'details',
       label: labels.details,
       href: `/cvs/${cvId}`,
+      exact: true,
     },
     {
       key: 'skills',
       label: labels.skills,
       href: `/cvs/${cvId}/skills`,
+      exact: false,
     },
     {
       key: 'projects',
       label: labels.projects,
       href: `/cvs/${cvId}/projects`,
+      exact: false,
     },
     {
       key: 'preview',
       label: labels.preview,
       href: `/cvs/${cvId}/preview`,
+      exact: false,
     },
   ];
 
   const activeTab =
-    tabs.find((tab) => {
-      if (tab.key === 'details') {
-        return pathname === `/cvs/${cvId}`;
-      }
-      return pathname.startsWith(tab.href);
-    }) ?? tabs[0];
+    tabs.find((tab) =>
+      tab.exact ? pathname === tab.href : pathname.startsWith(tab.href),
+    ) ?? tabs[0];
 
   return (
     <>
       <Breadcrumbs
         items={[
-          {
-            label: labels.cvs,
-            href: '/cvs',
-          },
-          {
-            label: cvName,
-            accent: true,
-          },
-          {
-            label: activeTab.label,
-          },
+          { label: labels.cvs, href: '/cvs' },
+          { label: cvName, accent: true },
+          { label: activeTab.label },
         ]}
       />
 
       <div className="px-5">
-        <nav className="flex h-12">
-          {tabs.map((tab) => {
-            const isActive = tab.key === activeTab.key;
-
-            return (
-              <Link
-                key={tab.key}
-                href={tab.href}
-                className={cn(
-                  'flex h-12 w-[150px] items-center justify-center',
-                  'text-[14px] leading-[18px] font-semibold tracking-[0.4px] uppercase',
-                  isActive
-                    ? 'border-b-2 border-destructive text-destructive'
-                    : 'text-foreground',
-                )}
-              >
-                {tab.label}
-              </Link>
-            );
-          })}
-        </nav>
+        <NavTabs items={tabs} />
       </div>
     </>
   );

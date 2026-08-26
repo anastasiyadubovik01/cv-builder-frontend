@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { useEmailVerificationForm } from '@/app/(auth)/_components/hooks/useEmailVerificationForm';
+import { useEmailVerificationForm } from '@/features/auth/hooks/useEmailVerificationForm';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { DigitsInputOTP } from '@/components/ui/digits-input-otp';
 import { cn } from '@/lib/utils';
