@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ChangeCvProjectModal } from '../../modals/ChangeCvProjectModal';
+import { ChangeCvProjectModal } from './ChangeCvProjectModal';
 import { useAddCvProjectForm } from '../hooks/useAddCvProjectForm';
 
 type CreateCvProjectModalProps = {
