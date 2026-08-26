@@ -13,6 +13,7 @@ import {
   CategoryMetric,
 } from '@/features/cvs/utils/calculateSkillsCategoryMetrics';
 import { formatPeriodDate } from '@/lib/helpers/date';
+import { capitalizeFirstLetter } from '@/lib/helpers/formatters';
 
 type CvPreviewContentProps = {
   cvId: string;
@@ -227,7 +228,7 @@ export function CvPreviewContent({ cvId }: CvPreviewContentProps) {
                           </h2>
                           <ul className="mt-[10px] list-disc pl-5 leading-relaxed marker:text-[12px]">
                             {project.responsibilities.map((resp, idx) => (
-                              <li key={idx}>{resp}</li>
+                              <li key={idx}>{capitalizeFirstLetter(resp)}</li>
                             ))}
                           </ul>
                         </div>
