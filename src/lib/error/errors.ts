@@ -9,6 +9,9 @@ export const SERVER_ERROR_CODES = {
   PROJECT_HAS_BEEN_ADDED: 'projectHasBeenAdded',
   DEPARTMENT_IS_IN_USE: 'cannotDeleteDepartmentInUse',
   POSITION_IS_IN_USE: 'cannotDeletePositionInUse',
+  OLD_PASSWORD_INCORRECT: 'oldPasswordIncorrect',
+  OLD_PASSWORD_SAME_NEW_PASSWORD: 'oldPasswordSameNewPassword',
+  CONFIRM_PASSWORD_MISMATCH: 'confirmPasswordMismatch',
 
   // Пока не протестированы конкретные имена ошибок
   EXPIRED_OTP: 'expiredOtp',
