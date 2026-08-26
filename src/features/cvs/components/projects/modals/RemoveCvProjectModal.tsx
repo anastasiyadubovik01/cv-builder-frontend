@@ -5,7 +5,7 @@ import {
   DeleteDialog,
   type DeleteDialogProps,
 } from '@/components/dialogs/DeleteDialog';
-import { useRemoveCvProject } from '../../hooks/useRemoveCvProject';
+import { useRemoveCvProject } from '../hooks/useRemoveCvProject';
 
 export interface DeleteCvProjectModalProps extends Omit<
   DeleteDialogProps,

@@ -1,4 +1,4 @@
-import { CvPreviewContent } from '@/features/cvs/components/CvPreviewContent';
+import { CvPreviewContent } from '@/features/cvs/components/preview/CvPreviewContent';
 
 interface CvPreviewPageProps {
   params: Promise<{

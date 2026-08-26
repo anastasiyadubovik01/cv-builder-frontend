@@ -2,8 +2,8 @@
 
 import React from 'react';
 import type { ApiCvProject } from '@/api/cv-projects';
-import { ChangeCvProjectModal } from './ChangeCvProjectModal';
-import { useUpdateCvProjectForm } from '@/features/cvs/hooks/useUpdateCvProjectForm';
+import { ChangeCvProjectModal } from '../../modals/ChangeCvProjectModal';
+import { useUpdateCvProjectForm } from '@/features/cvs/components/projects/hooks/useUpdateCvProjectForm';
 
 type UpdateCvProjectModalProps = {
   cvId: string;

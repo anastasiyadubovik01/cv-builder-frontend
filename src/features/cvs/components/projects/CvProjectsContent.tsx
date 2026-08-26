@@ -8,8 +8,8 @@ import { PlusIcon } from '@/components/icons/plus-icon';
 import { Button } from '@/components/ui/button';
 import { LoadingOverlay } from '@/components/ui/loading-overlay';
 import { SearchInput } from '@/components/ui/search-input';
-import { CvProjectsTable } from '@/features/cvs/components/CvProjectsTable';
-import { AddCvProjectModal } from '@/features/cvs/components/modals/AddCvProjectModal';
+import { CvProjectsTable } from '@/features/cvs/components/projects/CvProjectsTable';
+import { AddCvProjectModal } from '@/features/cvs/components/projects/modals/AddCvProjectModal';
 
 import type {
   CvProject,

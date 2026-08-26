@@ -13,7 +13,7 @@ import { LoadingOverlay } from '@/components/ui/loading-overlay';
 import { SkillMasteryProgress } from '@/features/skills/components/SkillMasteryProgress';
 import { AddCvSkillModal } from '@/features/cvs/components/modals/AddCvSkillModal';
 import { UpdateCvSkillModal } from '@/features/cvs/components/modals/UpdateCvSkillModal';
-import { RemoveCvSkillsModal } from '@/features/cvs/components/modals/RemoveCvSkillsModal';
+import { RemoveCvSkillsModal } from '@/features/cvs/components/skills/modals/RemoveCvSkillsModal';
 
 type CvSkillsContentProps = {
   cvId: string;

@@ -7,7 +7,7 @@ import { CV_PREVIEW_QUERY } from '@/api/cv-preview';
 import { SKILLS_QUERY } from '@/api/skills';
 import { Button } from '@/components/ui/button';
 import { LoadingOverlay } from '@/components/ui/loading-overlay';
-import { useExportCvPdf } from '@/features/cvs/hooks/useExportCvPdf';
+import { useExportCvPdf } from '@/features/cvs/components/preview/hooks/useExportCvPdf';
 import {
   calculateSkillsCategoryMetrics,
   CategoryMetric,

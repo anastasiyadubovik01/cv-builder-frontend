@@ -1,7 +1,7 @@
 'use client';
 
 import { DeleteCountDialog } from '@/components/dialogs/DeleteCountDialog';
-import { useRemoveCvSkills } from '@/features/cvs/hooks/useRemoveCvSkills';
+import { useRemoveCvSkills } from '@/features/cvs/components/skills/hooks/useRemoveCvSkills';
 
 type RemoveCvSkillsModalProps = {
   cvId: string;

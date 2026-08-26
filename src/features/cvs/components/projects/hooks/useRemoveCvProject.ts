@@ -2,7 +2,7 @@ import {
   REMOVE_CV_PROJECT_MUTATION,
   type ApiCvProject,
 } from '@/api/cv-projects';
-import { useDeleteEntity } from '../../../components/hooks/useDeleteEntity';
+import { useDeleteEntity } from '@/components/hooks/useDeleteEntity';
 
 type RemoveCvProjectData = {
   removeCvProject: { id: string; projects: ApiCvProject[] };

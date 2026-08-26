@@ -1,4 +1,4 @@
-import { CvSkillsContent } from '@/features/cvs/components/CvSkillsContent';
+import { CvSkillsContent } from '@/features/cvs/components/skills/CvSkillsContent';
 
 type CvSkillsPageProps = {
   params: Promise<{

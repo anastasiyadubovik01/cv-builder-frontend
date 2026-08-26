@@ -1,5 +1,5 @@
 import { DELETE_CV_SKILL_MUTATION } from '@/api/cv-skills';
-import { useDeleteEntity } from '../../../components/hooks/useDeleteEntity';
+import { useDeleteEntity } from '@/components/hooks/useDeleteEntity';
 
 type UseRemoveCvSkillsProps = {
   cvId: string;

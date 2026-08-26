@@ -1,5 +1,5 @@
 import { DELETE_CV_MUTATION } from '@/api/cvs';
-import { useDeleteEntity } from '../../../components/hooks/useDeleteEntity';
+import { useDeleteEntity } from '@/components/hooks/useDeleteEntity';
 
 type DeleteCvData = {
   deleteCv: { affected: number };
