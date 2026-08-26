@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { useForgotPasswordForm } from '@/app/(auth)/_components/hooks/useForgotPasswordForm';
+import { useForgotPasswordForm } from '@/features/auth/hooks/useForgotPasswordForm';
 import { Input } from '@/components/ui/input';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';

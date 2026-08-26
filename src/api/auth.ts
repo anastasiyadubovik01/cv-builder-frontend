@@ -136,6 +136,7 @@ export const FORGOT_PASSWORD_MUTATION: TypedDocumentNode<
   }
 `;
 
+// Fetch is used in proxy.ts instead of this mutation
 export const UPDATE_TOKEN_MUTATION = gql`
   mutation UpdateToken {
     updateToken {
