@@ -13,12 +13,12 @@ import {
   CategoryMetric,
 } from '@/features/cvs/utils/calculateSkillsCategoryMetrics';
 import { formatPeriodDate } from '@/lib/helpers/date';
+import { capitalizeFirstLetter } from '@/lib/helpers/formatters';
 
 type CvPreviewContentProps = {
   cvId: string;
 };
 
-const NO_DATA_CHAR = '-';
 const DEFAULT_FILENAME = 'cv-preview';
 
 export function CvPreviewContent({ cvId }: CvPreviewContentProps) {
@@ -42,11 +42,18 @@ export function CvPreviewContent({ cvId }: CvPreviewContentProps) {
   const user = cv?.user;
   const profile = user?.profile;
 
+  const hasRequiredData = Boolean(
+    cv &&
+    (profile?.full_name || profile?.first_name || profile?.last_name) &&
+    user?.position?.name &&
+    cv.projects?.length > 0,
+  );
+
   const {
     containerRef,
     handleExport,
     loading: exportLoading,
-  } = useExportCvPdf(cv?.name ?? DEFAULT_FILENAME);
+  } = useExportCvPdf(cv?.name && hasRequiredData ? cv.name : DEFAULT_FILENAME);
 
   if (cvLoading) return <LoadingOverlay />;
 
@@ -63,12 +70,27 @@ export function CvPreviewContent({ cvId }: CvPreviewContentProps) {
     );
   }
 
+  if (!hasRequiredData) {
+    return (
+      <div className="flex flex-col items-center gap-4 pt-10">
+        <p className="text-sm text-muted-foreground">
+          {t('cvs.preview.emptyState', 'CV preview is not available')}
+        </p>
+        <Button
+          variant="secondary"
+          disabled
+          className="no-print w-[160px] h-[40px]"
+        >
+          {t('cvs.preview.exportPdf', 'Export PDF')}
+        </Button>
+      </div>
+    );
+  }
+
   const fullName =
     profile?.full_name ||
-    [profile?.first_name, profile?.last_name].filter(Boolean).join(' ') ||
-    NO_DATA_CHAR;
-
-  const positionName = user?.position?.name ?? NO_DATA_CHAR;
+    [profile?.first_name, profile?.last_name].filter(Boolean).join(' ');
+  const positionName = user?.position?.name;
 
   const uniqueDomains = Array.from(
     new Set(cv.projects.map((p) => p.domain).filter(Boolean)),
@@ -227,7 +249,7 @@ export function CvPreviewContent({ cvId }: CvPreviewContentProps) {
                           </h2>
                           <ul className="mt-[10px] list-disc pl-5 leading-relaxed marker:text-[12px]">
                             {project.responsibilities.map((resp, idx) => (
-                              <li key={idx}>{resp}</li>
+                              <li key={idx}>{capitalizeFirstLetter(resp)}</li>
                             ))}
                           </ul>
                         </div>
