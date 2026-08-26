@@ -32,14 +32,24 @@ type ChangeUserSkillModalProps = {
   loading: boolean;
   isValid: boolean;
 
-  setFieldValue: (field: keyof AddSkillFormValues, value: string) => void;
+  setFieldValue: (
+    field: keyof AddSkillFormValues,
+    value: string,
+    options?: {
+      shouldValidate?: boolean;
+    },
+  ) => void;
 
   validateField: (field: keyof AddSkillFormValues) => boolean;
+
   handleSubmit: () => Promise<boolean>;
   t: (key: string) => string;
 };
 
-const masteryItems: { value: Mastery; label: string }[] = [
+const masteryItems: {
+  value: Mastery;
+  label: string;
+}[] = [
   { value: 'Novice', label: 'Novice' },
   { value: 'Advanced', label: 'Advanced' },
   { value: 'Competent', label: 'Competent' },
@@ -88,7 +98,14 @@ export function ChangeSkillModal({
             disabled={skillDisabled}
             onValueChange={(value) => {
               if (value) {
-                setFieldValue('skillName', value);
+                setFieldValue('skillName', value, {
+                  shouldValidate: true,
+                });
+              }
+            }}
+            onOpenChange={(isOpen) => {
+              if (!isOpen) {
+                validateField('skillName');
               }
             }}
           >
@@ -98,7 +115,6 @@ export function ChangeSkillModal({
               error={errors.skillName ? t(errors.skillName) : undefined}
               aria-label={t('skills.skill')}
               aria-invalid={Boolean(errors.skillName)}
-              onBlur={() => validateField('skillName')}
             >
               <SelectValue placeholder={t('skills.skill')} />
             </SelectTrigger>
@@ -119,7 +135,14 @@ export function ChangeSkillModal({
             value={formData.mastery}
             onValueChange={(value) => {
               if (value) {
-                setFieldValue('mastery', value);
+                setFieldValue('mastery', value, {
+                  shouldValidate: true,
+                });
+              }
+            }}
+            onOpenChange={(isOpen) => {
+              if (!isOpen) {
+                validateField('mastery');
               }
             }}
           >
@@ -129,7 +152,6 @@ export function ChangeSkillModal({
               error={errors.mastery ? t(errors.mastery) : undefined}
               aria-label={t('skills.mastery')}
               aria-invalid={Boolean(errors.mastery)}
-              onBlur={() => validateField('mastery')}
             >
               <SelectValue placeholder={t('skills.mastery')} />
             </SelectTrigger>

@@ -37,9 +37,16 @@ type ChangeSkillModalProps = {
   isValid: boolean;
   isDuplicate: boolean;
 
-  setFieldValue: (field: keyof AdminSkillFormValues, value: string) => void;
+  setFieldValue: (
+    field: keyof AdminSkillFormValues,
+    value: string,
+    options?: {
+      shouldValidate?: boolean;
+    },
+  ) => void;
 
   validateField: (field: keyof AdminSkillFormValues) => boolean;
+
   handleSubmit: () => Promise<boolean>;
   t: TFunction;
 };
@@ -105,7 +112,14 @@ export function ChangeSkillAdminModal({
             value={formData.categoryId}
             onValueChange={(value) => {
               if (value) {
-                setFieldValue('categoryId', value);
+                setFieldValue('categoryId', value, {
+                  shouldValidate: true,
+                });
+              }
+            }}
+            onOpenChange={(isOpen) => {
+              if (!isOpen) {
+                validateField('categoryId');
               }
             }}
           >
@@ -115,7 +129,6 @@ export function ChangeSkillAdminModal({
               error={errors.categoryId ? t(errors.categoryId) : undefined}
               aria-label={t('skills.admin.category')}
               aria-invalid={Boolean(errors.categoryId)}
-              onBlur={() => validateField('categoryId')}
             >
               <SelectValue placeholder={t('skills.admin.category')} />
             </SelectTrigger>
