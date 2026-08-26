@@ -1,7 +1,6 @@
 'use client';
 
 import { useChangeLanguage, useT } from 'next-i18next/client';
-import { useState } from 'react';
 
 import {
   Select,
