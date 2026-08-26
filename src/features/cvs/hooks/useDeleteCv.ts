@@ -1,67 +1,32 @@
-import { useMutation } from '@apollo/client/react';
-import { useTranslation } from 'react-i18next';
-
 import { DELETE_CV_MUTATION } from '@/api/cvs';
-import { useToast } from '@/components/ui/sonner';
-import { handleFormError } from '@/lib/error/errorHandler';
+import { useDeleteEntity } from '../../../components/hooks/useDeleteEntity';
 
 type DeleteCvData = {
-  deleteCv: {
-    affected: number;
-  };
+  deleteCv: { affected: number };
 };
 
 type DeleteCvVariables = {
-  cv: {
-    cvId: string;
-  };
+  cv: { cvId: string };
 };
 
 type UseDeleteCvOptions = {
-  onSuccess?: () => void;
+  onSuccess?: () => void | Promise<void>;
 };
 
 export function useDeleteCv(options: UseDeleteCvOptions = {}) {
-  const { t } = useTranslation();
-  const toast = useToast();
-  const [deleteCv, { loading }] = useMutation<DeleteCvData, DeleteCvVariables>(
-    DELETE_CV_MUTATION,
-  );
+  const { handleDelete, loading, t } = useDeleteEntity<
+    DeleteCvData,
+    DeleteCvVariables,
+    [cvId: string]
+  >({
+    mutation: DELETE_CV_MUTATION,
+    successMessageKey: 'cvs.notifications.deleteSuccess',
+    defaultSuccessMessage: 'The CV was successfully deleted!',
+    errorContext: 'Delete CV',
+    buildVariables: (cvId) => ({ cv: { cvId } }),
+    isSuccessCheck: (data) => Boolean(data?.deleteCv?.affected),
+    onSuccess: options.onSuccess,
+  });
 
-  const handleDelete = async (cvId: string): Promise<boolean> => {
-    try {
-      const response = await deleteCv({
-        variables: {
-          cv: {
-            cvId,
-          },
-        },
-      });
-
-      const isSuccess = Boolean(response.data?.deleteCv?.affected);
-
-      if (isSuccess) {
-        toast.success(
-          t(
-            'cvs.notifications.deleteSuccess',
-            'The CV was successfully deleted!',
-          ),
-        );
-        options.onSuccess?.();
-      }
-      return isSuccess;
-    } catch (err) {
-      handleFormError(err, {
-        t,
-        context: 'Delete CV',
-      });
-      return false;
-    }
-  };
-
-  return {
-    handleDelete,
-    loading,
-    t,
-  };
+  return { handleDelete, loading, t };
 }

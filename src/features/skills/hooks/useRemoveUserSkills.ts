@@ -1,59 +1,35 @@
-import { useMutation } from '@apollo/client/react';
-import { useTranslation } from 'react-i18next';
-
 import { DELETE_PROFILE_SKILL_MUTATION } from '@/api/skills';
-import { useToast } from '@/components/ui/sonner';
-import { handleFormError } from '@/lib/error/errorHandler';
+import { useDeleteEntity } from '@/components/hooks/useDeleteEntity';
 
 type UseRemoveUserSkillsOptions = {
   userId: string;
   onSuccess?: () => void | Promise<void>;
 };
 
+type RemoveUserSkillsVars = {
+  skill: { userId: string; name: string[] };
+};
+
 export function useRemoveUserSkills({
   userId,
   onSuccess,
 }: UseRemoveUserSkillsOptions) {
-  const { t } = useTranslation();
-  const toast = useToast();
+  const { handleDelete, loading, t } = useDeleteEntity<
+    unknown,
+    RemoveUserSkillsVars,
+    [names: string[]]
+  >({
+    mutation: DELETE_PROFILE_SKILL_MUTATION,
+    successMessageKey: 'skills.removeSuccess',
+    errorContext: 'Remove user skills',
+    buildVariables: (names) => ({ skill: { userId, name: names } }),
+    onSuccess,
+  });
 
-  const [deleteProfileSkill, { loading }] = useMutation(
-    DELETE_PROFILE_SKILL_MUTATION,
-  );
-
-  const handleRemove = async (names: string[]): Promise<boolean> => {
-    if (names.length === 0) {
-      return false;
-    }
-
-    try {
-      await deleteProfileSkill({
-        variables: {
-          skill: {
-            userId,
-            name: names,
-          },
-        },
-      });
-
-      await onSuccess?.();
-
-      toast.success(t('skills.removeSuccess'));
-
-      return true;
-    } catch (error) {
-      handleFormError(error, {
-        t,
-        context: 'Remove user skills',
-      });
-
-      return false;
-    }
+  const handleRemove = (names: string[]) => {
+    if (names.length === 0) return Promise.resolve(false);
+    return handleDelete(names);
   };
 
-  return {
-    handleRemove,
-    loading,
-    t,
-  };
+  return { handleRemove, loading, t };
 }

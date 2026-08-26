@@ -1,8 +1,5 @@
-import { useMutation } from '@apollo/client/react';
-import { useTranslation } from 'react-i18next';
 import { DELETE_CV_SKILL_MUTATION } from '@/api/cv-skills';
-import { handleFormError } from '@/lib/error/errorHandler';
-import { useToast } from '@/components/ui/sonner';
+import { useDeleteEntity } from '../../../components/hooks/useDeleteEntity';
 
 type UseRemoveCvSkillsProps = {
   cvId: string;
@@ -10,42 +7,23 @@ type UseRemoveCvSkillsProps = {
 };
 
 export function useRemoveCvSkills({ cvId, onSuccess }: UseRemoveCvSkillsProps) {
-  const { t } = useTranslation();
-  const toast = useToast();
-  const [deleteCvSkill, { loading }] = useMutation(DELETE_CV_SKILL_MUTATION);
+  const { handleDelete, loading, t } = useDeleteEntity<
+    unknown,
+    { skill: { cvId: string; name: string[] } },
+    [skillNames: string[]]
+  >({
+    mutation: DELETE_CV_SKILL_MUTATION,
+    successMessageKey: 'skills.notifications.removeSuccess',
+    defaultSuccessMessage: 'Skills removed successfully',
+    errorContext: 'Remove CV skills',
+    buildVariables: (skillNames) => ({ skill: { cvId, name: skillNames } }),
+    onSuccess,
+  });
 
-  const handleRemove = async (skillNames: string[]): Promise<boolean> => {
-    if (skillNames.length === 0) {
-      return false;
-    }
-
-    try {
-      await deleteCvSkill({
-        variables: {
-          skill: {
-            cvId,
-            name: skillNames,
-          },
-        },
-      });
-
-      toast.success(
-        t('skills.notifications.removeSuccess', 'Skills removed successfully'),
-      );
-      await onSuccess?.();
-      return true;
-    } catch (error) {
-      handleFormError(error, {
-        t,
-        context: 'Remove CV skills',
-      });
-      return false;
-    }
+  const handleRemove = (skillNames: string[]) => {
+    if (skillNames.length === 0) return Promise.resolve(false);
+    return handleDelete(skillNames);
   };
 
-  return {
-    handleRemove,
-    loading,
-    t,
-  };
+  return { handleRemove, loading, t };
 }
