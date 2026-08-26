@@ -385,6 +385,7 @@
         "lastUsed": "Last used"
       },
       "loadError": "Failed to load CV preview",
+      "emptyState": "CV preview is not available",
       "exportSuccess": "PDF successfully generated"
     },
     "tabs": {
