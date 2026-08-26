@@ -260,7 +260,7 @@
     "removeSuccess": "Skills removed successfully",
     "removeDialog": {
       "title": "Remove skills",
-      "description": "Are you sure you want to remove {{count}} skills?"
+      "description": "Are you sure you want to remove {{count}} skill(s)?"
     },
     "updateSuccess": "Skill updated successfully",
     "admin": {
