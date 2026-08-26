@@ -4,7 +4,8 @@ import { useState, type ComponentType, type SVGProps } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { useQuery } from '@apollo/client/react';
+import { useQuery, useApolloClient } from '@apollo/client/react';
+
 import { useT } from 'next-i18next/client';
 
 import { ME_QUERY } from '@/api/profile';
@@ -173,10 +174,13 @@ export function Sidebar({ role }: SidebarProps) {
     currentUser?.email?.[0]?.toUpperCase() ||
     '';
 
+  const client = useApolloClient();
+
   const handleLogout = async () => {
     setProfileMenuOpen(false);
 
     await logoutAction();
+    await client.clearStore();
 
     router.push('/sign-in');
     router.refresh();
