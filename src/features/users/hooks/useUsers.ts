@@ -45,6 +45,7 @@ export function useUsers() {
     SortField
   >({
     query: USERS_QUERY,
+    defaultSortBy: 'department',
     extractPaginatedData,
     filterItem,
     getSortValue,
