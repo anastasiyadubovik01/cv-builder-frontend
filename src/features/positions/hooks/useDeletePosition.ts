@@ -16,7 +16,7 @@ type UseDeletePositionOptions = {
 export function useDeletePosition({
   onSuccess,
 }: UseDeletePositionOptions = {}) {
-  const { handleDelete, loading, t } = useDeleteEntity<
+  const { handleDelete, loading } = useDeleteEntity<
     DeletePositionData,
     DeletePositionVars,
     [positionId: string]
@@ -29,5 +29,5 @@ export function useDeletePosition({
     onSuccess,
   });
 
-  return { handleDelete, loading, t };
+  return { handleDelete, loading };
 }

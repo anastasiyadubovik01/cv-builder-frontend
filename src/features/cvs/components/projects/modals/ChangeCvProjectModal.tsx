@@ -1,8 +1,6 @@
 'use client';
 
 import type { ChangeEvent, ReactNode } from 'react';
-import type { TFunction } from 'i18next';
-
 import type {
   createActionTitles,
   updateActionTitles,
@@ -23,6 +21,7 @@ import {
 import type { CreateCvProjectInputValues } from '@/lib/validations/cv-project';
 import type { ApiProject } from '@/api/projects';
 import type { Position } from '@/api/positions';
+import { useTranslation } from 'react-i18next';
 
 type SelectOption = {
   value: string;
@@ -55,7 +54,6 @@ export type ChangeCvProjectModalProps = {
   validateField: (field: keyof CreateCvProjectInputValues) => boolean;
   handleProjectSelect?: (projectId: string) => void;
   handleSubmit: () => Promise<boolean>;
-  t: TFunction;
 };
 
 export function ChangeCvProjectModal({
@@ -74,8 +72,8 @@ export function ChangeCvProjectModal({
   validateField,
   handleProjectSelect,
   handleSubmit,
-  t,
 }: ChangeCvProjectModalProps) {
+  const { t } = useTranslation();
   const isUpdate = type === 'Update';
 
   const projectItems: SelectOption[] = catalogProjects.map((p) => ({
@@ -126,7 +124,6 @@ export function ChangeCvProjectModal({
       onConfirm={handleSubmit}
       confirmDisabled={!isValid || loading}
       size="wide"
-      t={t}
     >
       <div className="flex flex-col gap-8">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

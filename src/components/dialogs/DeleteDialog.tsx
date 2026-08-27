@@ -18,6 +18,7 @@ import {
   getActionTranslation,
   getItemTypeTranslation,
 } from '@/components/dialogs/i18n';
+import { useTranslation } from 'react-i18next';
 
 export interface DeleteDialogProps {
   name: string;
@@ -25,7 +26,6 @@ export interface DeleteDialogProps {
   actionTitle?: deleteActionTitles;
   onConfirm: () => boolean | Promise<boolean> | void;
   trigger?: React.ReactNode;
-  t: (key: string) => string;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }
@@ -36,10 +36,10 @@ export function DeleteDialog({
   actionTitle = 'Delete',
   onConfirm,
   trigger,
-  t,
   open: externalOpen,
   onOpenChange: externalOnOpenChange,
 }: DeleteDialogProps) {
+  const { t } = useTranslation();
   const [internalOpen, setInternalOpen] = useState(false);
 
   const isControlled = externalOpen !== undefined;

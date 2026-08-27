@@ -14,7 +14,7 @@ export function useRemoveUserSkills({
   userId,
   onSuccess,
 }: UseRemoveUserSkillsOptions) {
-  const { handleDelete, loading, t } = useDeleteEntity<
+  const { handleDelete, loading } = useDeleteEntity<
     unknown,
     RemoveUserSkillsVars,
     [names: string[]]
@@ -31,5 +31,5 @@ export function useRemoveUserSkills({
     return handleDelete(names);
   };
 
-  return { handleRemove, loading, t };
+  return { handleRemove, loading };
 }

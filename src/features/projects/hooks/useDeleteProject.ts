@@ -14,7 +14,7 @@ type UseDeleteProjectOptions = {
 };
 
 export function useDeleteProject(options: UseDeleteProjectOptions = {}) {
-  const { handleDelete, loading, t } = useDeleteEntity<
+  const { handleDelete, loading } = useDeleteEntity<
     DeleteProjectData,
     DeleteProjectVars,
     [projectId: string]
@@ -32,5 +32,5 @@ export function useDeleteProject(options: UseDeleteProjectOptions = {}) {
     },
   });
 
-  return { handleDelete, loading, t };
+  return { handleDelete, loading };
 }

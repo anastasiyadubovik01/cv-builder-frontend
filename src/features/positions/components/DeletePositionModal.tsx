@@ -9,7 +9,7 @@ import { useDeletePosition } from '../hooks/useDeletePosition';
 
 type DeletePositionModalProps = Omit<
   DeleteDialogProps,
-  'itemType' | 'onConfirm' | 't'
+  'itemType' | 'onConfirm'
 > & {
   positionId: string;
   onSuccess?: () => void | Promise<void>;
@@ -21,7 +21,7 @@ export function DeletePositionModal({
   onSuccess,
   ...props
 }: DeletePositionModalProps) {
-  const { handleDelete, t } = useDeletePosition({
+  const { handleDelete } = useDeletePosition({
     onSuccess,
   });
 
@@ -31,7 +31,6 @@ export function DeletePositionModal({
       name={name}
       itemType="position"
       onConfirm={() => handleDelete(positionId)}
-      t={t}
     />
   );
 }

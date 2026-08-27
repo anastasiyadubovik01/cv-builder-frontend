@@ -6,7 +6,7 @@ type DeleteSkillVars = {
 };
 
 export function useDeleteSkill() {
-  const { handleDelete, loading, t } = useDeleteEntity<
+  const { handleDelete, loading } = useDeleteEntity<
     unknown,
     DeleteSkillVars,
     [skillId: string]
@@ -17,5 +17,5 @@ export function useDeleteSkill() {
     buildVariables: (skillId) => ({ skill: { skillId } }),
   });
 
-  return { handleDelete, loading, t };
+  return { handleDelete, loading };
 }

@@ -14,7 +14,7 @@ type UseDeleteUserOptions = {
 };
 
 export function useDeleteUser({ onSuccess }: UseDeleteUserOptions = {}) {
-  const { handleDelete, loading, t } = useDeleteEntity<
+  const { handleDelete, loading } = useDeleteEntity<
     DeleteUserData,
     DeleteUserVars,
     [userId: string]
@@ -28,5 +28,5 @@ export function useDeleteUser({ onSuccess }: UseDeleteUserOptions = {}) {
     onSuccess,
   });
 
-  return { handleDelete, loading, t };
+  return { handleDelete, loading };
 }

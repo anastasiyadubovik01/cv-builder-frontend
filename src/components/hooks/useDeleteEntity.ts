@@ -71,6 +71,5 @@ export function useDeleteEntity<
   return {
     handleDelete,
     loading,
-    t,
   };
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { ChangeEvent } from 'react';
-import type { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { ChangeDialog } from '@/components/dialogs/ChangeDialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -25,7 +25,6 @@ export interface ChangeCvModalProps {
   ) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   validateField: (field: keyof CreateCvFormValues) => boolean;
   handleSubmit: () => Promise<boolean>;
-  t: TFunction;
 }
 
 export function ChangeCvModal({
@@ -40,8 +39,8 @@ export function ChangeCvModal({
   handleChange,
   validateField,
   handleSubmit,
-  t,
 }: ChangeCvModalProps) {
+  const { t } = useTranslation();
   return (
     <ChangeDialog
       actionTitle={type}
@@ -49,7 +48,6 @@ export function ChangeCvModal({
       onConfirm={handleSubmit}
       confirmDisabled={!isValid || loading}
       trigger={trigger}
-      t={t}
       open={open}
       onOpenChange={onOpenChange}
     >

@@ -2,6 +2,7 @@
 
 import { DeleteCountDialog } from '@/components/dialogs/DeleteCountDialog';
 import { useRemoveUserLanguages } from '@/features/languages/hooks/useRemoveUserLanguages';
+import { useTranslation } from 'react-i18next';
 
 type RemoveUserLanguagesModalProps = {
   userId: string;
@@ -18,7 +19,8 @@ export function RemoveUserLanguagesModal({
   onOpenChange,
   onSuccess,
 }: RemoveUserLanguagesModalProps) {
-  const { handleRemove, loading, t } = useRemoveUserLanguages({
+  const { t } = useTranslation();
+  const { handleRemove, loading } = useRemoveUserLanguages({
     userId,
     onSuccess,
   });
@@ -33,7 +35,6 @@ export function RemoveUserLanguagesModal({
       })}
       confirmDisabled={loading}
       onConfirm={() => handleRemove(selectedLanguages)}
-      t={t}
     />
   );
 }

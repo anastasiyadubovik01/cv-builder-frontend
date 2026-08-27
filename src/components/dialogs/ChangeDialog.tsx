@@ -21,6 +21,7 @@ import {
   getActionTranslation,
   getItemTypeTranslation,
 } from '@/components/dialogs/i18n';
+import { useTranslation } from 'react-i18next';
 
 interface ChangeDialogProps {
   actionTitle: createActionTitles | updateActionTitles;
@@ -28,7 +29,6 @@ interface ChangeDialogProps {
   children: React.ReactNode;
   onConfirm: () => boolean | Promise<boolean>;
   trigger?: React.ReactNode;
-  t: (key: string) => string;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   confirmDisabled?: boolean;
@@ -41,12 +41,12 @@ export function ChangeDialog({
   children,
   onConfirm,
   trigger,
-  t,
   open: externalOpen,
   onOpenChange: externalOnOpenChange,
   confirmDisabled = false,
   size = 'default',
 }: ChangeDialogProps) {
+  const { t } = useTranslation();
   const [internalOpen, setInternalOpen] = useState(false);
 
   const isControlled = externalOpen !== undefined;

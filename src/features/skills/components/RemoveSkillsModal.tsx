@@ -2,6 +2,7 @@
 
 import { DeleteCountDialog } from '@/components/dialogs/DeleteCountDialog';
 import { useRemoveUserSkills } from '@/features/skills/hooks/useRemoveUserSkills';
+import { useTranslation } from 'react-i18next';
 
 type RemoveUserSkillsModalProps = {
   userId: string;
@@ -18,7 +19,8 @@ export function RemoveSkillsModal({
   onOpenChange,
   onSuccess,
 }: RemoveUserSkillsModalProps) {
-  const { handleRemove, loading, t } = useRemoveUserSkills({
+  const { t } = useTranslation();
+  const { handleRemove, loading } = useRemoveUserSkills({
     userId,
     onSuccess,
   });
@@ -33,7 +35,6 @@ export function RemoveSkillsModal({
       })}
       confirmDisabled={loading}
       onConfirm={() => handleRemove(selectedSkills)}
-      t={t}
     />
   );
 }

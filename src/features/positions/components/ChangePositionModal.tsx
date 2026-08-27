@@ -1,8 +1,6 @@
 'use client';
 
 import type { ChangeEvent, ReactNode } from 'react';
-import type { TFunction } from 'i18next';
-
 import { ChangeDialog } from '@/components/dialogs/ChangeDialog';
 import type {
   createActionTitles,
@@ -10,25 +8,21 @@ import type {
 } from '@/components/dialogs/types';
 import { Input } from '@/components/ui/input';
 import type { AdminPositionFormValues } from '@/lib/validations/admin-position';
+import { useTranslation } from 'react-i18next';
 
 type ChangePositionModalProps = {
   type: createActionTitles | updateActionTitles;
   trigger?: ReactNode;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-
   formData: AdminPositionFormValues;
   errors: Partial<Record<keyof AdminPositionFormValues, string>>;
   loading: boolean;
   duplicateName: boolean;
-
   handleChange: (
     field: keyof AdminPositionFormValues,
   ) => (event: ChangeEvent<HTMLInputElement>) => void;
-
   handleSubmit: () => Promise<boolean>;
-
-  t: TFunction;
 };
 
 export function ChangePositionModal({
@@ -42,8 +36,8 @@ export function ChangePositionModal({
   duplicateName,
   handleChange,
   handleSubmit,
-  t,
 }: ChangePositionModalProps) {
+  const { t } = useTranslation();
   return (
     <ChangeDialog
       actionTitle={type}
@@ -51,7 +45,6 @@ export function ChangePositionModal({
       onConfirm={handleSubmit}
       confirmDisabled={loading}
       trigger={trigger}
-      t={t}
       open={open}
       onOpenChange={onOpenChange}
     >
