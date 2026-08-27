@@ -1,8 +1,5 @@
 'use client';
 
-import { useTheme } from '@/providers/ThemeProvider';
-import { useChangeLanguage, useT } from 'next-i18next/client';
-
 import {
   Select,
   SelectContent,
@@ -10,55 +7,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
+import { useSettings } from '@/features/settings/hooks/useSettings';
 import { ChangePasswordForm } from './ChangePasswordForm';
 
 export function SettingsContent() {
-  const { t, i18n } = useT('common');
-  const { theme, setTheme } = useTheme();
-
-  const themeLabels = {
-    light: t('settings.themes.light'),
-    dark: t('settings.themes.dark'),
-    system: t('settings.themes.system'),
-  };
-
-  const handleThemeChange = (value: string | null) => {
-    if (value !== 'light' && value !== 'dark' && value !== 'system') {
-      return;
-    }
-
-    setTheme(value);
-  };
-
-  const languages = [
-    { value: 'en', label: 'English' },
-    { value: 'fr', label: 'French' },
-    { value: 'de', label: 'German' },
-    { value: 'it', label: 'Italian' },
-    { value: 'pl', label: 'Polish' },
-    { value: 'pt', label: 'Portuguese' },
-    { value: 'ru', label: 'Russian' },
-    { value: 'es', label: 'Spanish' },
-    { value: 'uk', label: 'Ukrainian' },
-  ];
-
-  const changeLanguage = useChangeLanguage();
-
-  const language = i18n.resolvedLanguage ?? i18n.language;
-
-  const handleLanguageChange = (value: string | null) => {
-    if (!value) return;
-
-    changeLanguage(value);
-  };
+  const {
+    t,
+    theme,
+    themeLabels,
+    languages,
+    language,
+    handleThemeChange,
+    handleLanguageChange,
+  } = useSettings();
 
   return (
     <div className="mx-auto w-full max-w-[852px] px-6 pt-10">
       <div className="flex flex-col gap-8">
         <Select value={theme} onValueChange={handleThemeChange}>
           <SelectTrigger label={t('settings.theme')}>
-            <SelectValue>{themeLabels[theme]}</SelectValue>
+            <SelectValue>
+              {themeLabels[theme as keyof typeof themeLabels]}
+            </SelectValue>
           </SelectTrigger>
 
           <SelectContent>

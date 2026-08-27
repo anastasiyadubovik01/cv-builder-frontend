@@ -12,7 +12,7 @@ export type ApiProject = {
   environment: string[];
 };
 
-type ProjectsData = {
+export type ProjectsData = {
   projects: {
     items: ApiProject[];
     total: number;

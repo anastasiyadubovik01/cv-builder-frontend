@@ -4,7 +4,6 @@ import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 
 import { CV_QUERY } from '@/api/cvs';
-import { Button } from '@/components/ui/button';
 import { LoadingOverlay } from '@/components/ui/loading-overlay';
 import { CvDetailsForm } from './CvDetailsForm';
 import { QueryErrorState } from '@/components/common/QueryErrorState';

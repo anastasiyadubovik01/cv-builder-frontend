@@ -26,7 +26,7 @@ export type ProfileSkill = {
   mastery: Mastery;
 };
 
-type SkillsData = {
+export type SkillsData = {
   skills: {
     items: ApiSkill[];
     total: number;

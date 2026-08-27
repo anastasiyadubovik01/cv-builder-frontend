@@ -16,7 +16,7 @@ export type ApiUser = {
   } | null;
 };
 
-type UsersData = {
+export type UsersData = {
   users: {
     items: ApiUser[];
     total: number;

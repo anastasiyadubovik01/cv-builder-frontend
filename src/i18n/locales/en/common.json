@@ -553,5 +553,8 @@
   },
   "weekdays": {
     "short": ["S", "M", "T", "W", "T", "F", "S"]
+  },
+  "common": {
+    "search": "Search"
   }
 }

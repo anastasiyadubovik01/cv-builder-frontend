@@ -6,7 +6,7 @@ export type ApiDepartment = {
   name: string;
 };
 
-type DepartmentsQueryData = {
+export type DepartmentsQueryData = {
   departments: {
     items: ApiDepartment[];
     total: number;

@@ -15,7 +15,7 @@ export type ProfileLanguage = {
   proficiency: Proficiency;
 };
 
-type LanguagesQueryData = {
+export type LanguagesQueryData = {
   languages: {
     items: ApiLanguage[];
     total: number;
