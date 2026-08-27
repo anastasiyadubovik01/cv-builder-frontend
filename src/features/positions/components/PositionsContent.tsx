@@ -1,21 +1,18 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  POSITIONS_QUERY,
-  type Position,
-  type PositionsQueryResponse,
-} from '@/api/positions';
 import { PlusIcon } from '@/components/icons/plus-icon';
 import { Button } from '@/components/ui/button';
 import { ContentLayout } from '@/components/common/ContentLayout';
-import { usePaginatedQuery } from '@/components/hooks/usePaginatedQuery';
+import { usePositions } from '@/features/positions/hooks/usePositions';
+
 import { CreatePositionModal } from './CreatePositionModal';
 import { DeletePositionModal } from './DeletePositionModal';
 import { PositionsTable } from './PositionsTable';
 import { UpdatePositionModal } from './UpdatePositionModal';
-import type { PositionSortField } from '../types';
+
+import type { Position } from '@/api/positions';
 
 export function PositionsContent() {
   const { t } = useTranslation();
@@ -23,29 +20,6 @@ export function PositionsContent() {
   const [editingPosition, setEditingPosition] = useState<Position | null>(null);
   const [deletingPosition, setDeletingPosition] = useState<Position | null>(
     null,
-  );
-
-  const extractPaginatedData = useCallback((data: PositionsQueryResponse) => {
-    if ('positions' in data && data.positions) {
-      return data.positions;
-    }
-    return { items: [], total: 0, total_pages: 0 };
-  }, []);
-
-  const filterItem = useCallback((position: Position, queryStr: string) => {
-    return position.name.toLowerCase().includes(queryStr);
-  }, []);
-
-  const getSortValue = useCallback(
-    (position: Position, field: PositionSortField) => {
-      switch (field) {
-        case 'name':
-          return position.name;
-        default:
-          return '';
-      }
-    },
-    [],
   );
 
   const {
@@ -64,18 +38,7 @@ export function PositionsContent() {
     setCurrentPage,
     setPageSize,
     handleRefresh,
-  } = usePaginatedQuery<
-    PositionsQueryResponse,
-    Record<string, unknown>,
-    Position,
-    PositionSortField
-  >({
-    query: POSITIONS_QUERY,
-    defaultSortBy: 'name',
-    extractPaginatedData,
-    filterItem,
-    getSortValue,
-  });
+  } = usePositions();
 
   return (
     <ContentLayout

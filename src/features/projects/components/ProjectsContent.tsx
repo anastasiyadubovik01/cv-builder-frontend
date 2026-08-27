@@ -1,52 +1,16 @@
 'use client';
 
-import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  PROJECTS_QUERY,
-  type ApiProject,
-  type ProjectsData,
-} from '@/api/projects';
 import { PlusIcon } from '@/components/icons/plus-icon';
 import { Button } from '@/components/ui/button';
 import { ContentLayout } from '@/components/common/ContentLayout';
-import { usePaginatedQuery } from '@/components/hooks/usePaginatedQuery';
 import { ProjectsTable } from './ProjectsTable';
-import type { Project, ProjectSortField } from '../types';
 import { CreateProjectModal } from '@/features/projects/components/modals/CreateProjectModal';
+import { useProjects } from '@/features/projects/hooks/useProjects';
+import type { Project } from '../types';
 
 export function ProjectsContent() {
   const { t } = useTranslation();
-
-  const extractPaginatedData = useCallback((data: ProjectsData) => {
-    if ('projects' in data && data.projects) {
-      return data.projects;
-    }
-    return { items: [], total: 0, total_pages: 0 };
-  }, []);
-
-  const filterItem = useCallback((project: ApiProject, queryStr: string) => {
-    const name = project.name.toLowerCase();
-    const domain = project.domain.toLowerCase();
-
-    return name.includes(queryStr) || domain.includes(queryStr);
-  }, []);
-
-  const getSortValue = useCallback(
-    (project: ApiProject, field: ProjectSortField) => {
-      switch (field) {
-        case 'name':
-          return project.name;
-        case 'startDate':
-          return project.start_date;
-        case 'endDate':
-          return project.end_date ?? '';
-        default:
-          return '';
-      }
-    },
-    [],
-  );
 
   const {
     paginatedItems: rawProjects,
@@ -63,18 +27,7 @@ export function ProjectsContent() {
     setCurrentPage,
     setPageSize,
     handleRefresh,
-  } = usePaginatedQuery<
-    ProjectsData,
-    Record<string, unknown>,
-    ApiProject,
-    ProjectSortField
-  >({
-    query: PROJECTS_QUERY,
-    defaultSortBy: 'name',
-    extractPaginatedData,
-    filterItem,
-    getSortValue,
-  });
+  } = useProjects();
 
   const projects: Project[] = rawProjects.map((p) => ({
     id: p.id,

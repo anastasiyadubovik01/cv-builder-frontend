@@ -1,23 +1,18 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  LANGUAGES_QUERY,
-  type ApiLanguage,
-  type LanguagesQueryData,
-} from '@/api/languages';
 import { PlusIcon } from '@/components/icons/plus-icon';
 import { Button } from '@/components/ui/button';
 import { ContentLayout } from '@/components/common/ContentLayout';
-import { usePaginatedQuery } from '@/components/hooks/usePaginatedQuery';
+import { useLanguages } from '@/features/languages/hooks/useLanguages';
 
 import { CreateLanguageModal } from './CreateLanguageModal';
 import { DeleteLanguageModal } from './DeleteLanguageModal';
 import { LanguagesTable } from './LanguagesTable';
 import { UpdateLanguageModal } from './UpdateLanguageModal';
 
-import type { LanguageSortField } from '../types';
+import type { ApiLanguage } from '@/api/languages';
 
 export function AdminLanguagesContent() {
   const { t } = useTranslation();
@@ -28,31 +23,6 @@ export function AdminLanguagesContent() {
 
   const [deletingLanguage, setDeletingLanguage] = useState<ApiLanguage | null>(
     null,
-  );
-
-  const extractPaginatedData = useCallback((data: LanguagesQueryData) => {
-    if ('languages' in data && data.languages) {
-      return data.languages;
-    }
-    return { items: [], total: 0, total_pages: 0 };
-  }, []);
-
-  const filterItem = useCallback((language: ApiLanguage, queryStr: string) => {
-    return language.name.toLowerCase().includes(queryStr);
-  }, []);
-
-  const getSortValue = useCallback(
-    (language: ApiLanguage, field: LanguageSortField) => {
-      switch (field) {
-        case 'name':
-          return language.name;
-        case 'iso2':
-          return language.iso2 ?? '';
-        default:
-          return '';
-      }
-    },
-    [],
   );
 
   const {
@@ -71,18 +41,7 @@ export function AdminLanguagesContent() {
     setCurrentPage,
     setPageSize,
     handleRefresh,
-  } = usePaginatedQuery<
-    LanguagesQueryData,
-    Record<string, unknown>,
-    ApiLanguage,
-    LanguageSortField
-  >({
-    query: LANGUAGES_QUERY,
-    defaultSortBy: 'name',
-    extractPaginatedData,
-    filterItem,
-    getSortValue,
-  });
+  } = useLanguages();
 
   return (
     <ContentLayout

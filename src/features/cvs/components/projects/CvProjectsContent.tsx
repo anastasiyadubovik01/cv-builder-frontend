@@ -1,19 +1,13 @@
 'use client';
 
-import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  CV_PROJECTS_QUERY,
-  type ApiCvProject,
-  type CvProjectsData,
-} from '@/api/cv-projects';
 import { PlusIcon } from '@/components/icons/plus-icon';
 import { Button } from '@/components/ui/button';
 import { ContentLayout } from '@/components/common/ContentLayout';
 import { CvProjectsTable } from '@/features/cvs/components/projects/CvProjectsTable';
 import { AddCvProjectModal } from '@/features/cvs/components/projects/modals/AddCvProjectModal';
-import type { CvProject, CvProjectSortField } from '@/features/cvs/types';
-import { usePaginatedQuery } from '@/components/hooks/usePaginatedQuery';
+import type { CvProject } from '@/features/cvs/types';
+import { useCvProjects } from '@/features/cvs/components/projects/hooks/useCvProjects';
 
 interface CvProjectsContentProps {
   cvId: string;
@@ -21,38 +15,6 @@ interface CvProjectsContentProps {
 
 export function CvProjectsContent({ cvId }: CvProjectsContentProps) {
   const { t } = useTranslation();
-
-  const extractPaginatedData = useCallback((data: CvProjectsData) => {
-    const projects = data?.cv?.projects ?? [];
-    return {
-      items: projects,
-      total: projects.length,
-      total_pages: 1,
-    };
-  }, []);
-
-  const filterItem = useCallback((p: ApiCvProject, queryStr: string) => {
-    const name = (p.name || p.project?.name || '').toLowerCase();
-    const domain = (p.domain || p.project?.domain || '').toLowerCase();
-
-    return name.includes(queryStr) || domain.includes(queryStr);
-  }, []);
-
-  const getSortValue = useCallback(
-    (p: ApiCvProject, field: CvProjectSortField) => {
-      switch (field) {
-        case 'name':
-          return p.name || p.project?.name || '';
-        case 'startDate':
-          return p.start_date || p.project?.start_date || '';
-        case 'endDate':
-          return p.end_date || p.project?.end_date || '';
-        default:
-          return '';
-      }
-    },
-    [],
-  );
 
   const {
     paginatedItems: rawProjects,
@@ -69,19 +31,7 @@ export function CvProjectsContent({ cvId }: CvProjectsContentProps) {
     setCurrentPage,
     setPageSize,
     handleRefresh,
-  } = usePaginatedQuery<
-    CvProjectsData,
-    { cvId: string },
-    ApiCvProject,
-    CvProjectSortField
-  >({
-    query: CV_PROJECTS_QUERY,
-    variables: { cvId },
-    defaultSortBy: 'name',
-    extractPaginatedData,
-    filterItem,
-    getSortValue,
-  });
+  } = useCvProjects(cvId);
 
   const projects: CvProject[] = rawProjects.map((p) => ({
     id: p.id,

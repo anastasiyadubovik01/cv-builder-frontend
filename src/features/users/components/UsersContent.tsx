@@ -1,18 +1,16 @@
 'use client';
 
-import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useApolloClient } from '@apollo/client/react';
 
-import { USERS_QUERY, type ApiUser, type UsersData } from '@/api/users';
 import { Button } from '@/components/ui/button';
 import { PlusIcon } from '@/components/icons/plus-icon';
 import { ContentLayout } from '@/components/common/ContentLayout';
-import { usePaginatedQuery } from '@/components/hooks/usePaginatedQuery';
 import { UsersTable } from '@/features/users/components/UsersTable';
 import { CreateUserModal } from './CreateUserModal';
+import { useUsers } from '@/features/users/hooks/useUsers';
 
-import type { SortField, User } from '@/features/users/types';
+import type { User } from '@/features/users/types';
 
 type UsersContentProps = {
   isAdmin: boolean;
@@ -21,40 +19,6 @@ type UsersContentProps = {
 export function UsersContent({ isAdmin }: UsersContentProps) {
   const { t } = useTranslation();
   const client = useApolloClient();
-
-  const extractPaginatedData = useCallback((data: UsersData) => {
-    if ('users' in data && data.users) {
-      return data.users;
-    }
-    return { items: [], total: 0, total_pages: 0 };
-  }, []);
-
-  const filterItem = useCallback((user: ApiUser, queryStr: string) => {
-    const firstName = user.profile.first_name?.toLowerCase() ?? '';
-    const lastName = user.profile.last_name?.toLowerCase() ?? '';
-    const email = user.email.toLowerCase();
-
-    return (
-      firstName.includes(queryStr) ||
-      lastName.includes(queryStr) ||
-      email.includes(queryStr)
-    );
-  }, []);
-
-  const getSortValue = useCallback((user: ApiUser, field: SortField) => {
-    switch (field) {
-      case 'firstName':
-        return user.profile.first_name ?? '';
-      case 'lastName':
-        return user.profile.last_name ?? '';
-      case 'department':
-        return user.department?.name ?? '';
-      case 'position':
-        return user.position?.name ?? '';
-      default:
-        return '';
-    }
-  }, []);
 
   const {
     paginatedItems: rawUsers,
@@ -71,15 +35,7 @@ export function UsersContent({ isAdmin }: UsersContentProps) {
     setCurrentPage,
     setPageSize,
     handleRefresh,
-  } = usePaginatedQuery<UsersData, Record<string, unknown>, ApiUser, SortField>(
-    {
-      query: USERS_QUERY,
-      defaultSortBy: 'department',
-      extractPaginatedData,
-      filterItem,
-      getSortValue,
-    },
-  );
+  } = useUsers();
 
   const users: User[] = rawUsers.map((user) => ({
     id: user.id,

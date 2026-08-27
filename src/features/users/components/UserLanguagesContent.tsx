@@ -1,14 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  LANGUAGES_QUERY,
-  USER_LANGUAGES_QUERY,
-  type ProfileLanguage,
-} from '@/api/languages';
+import type { ProfileLanguage } from '@/api/languages';
 import { DeleteIcon } from '@/components/icons/delete-icon';
 import { PlusIcon } from '@/components/icons/plus-icon';
 import { Button } from '@/components/ui/button';
@@ -17,6 +12,7 @@ import { AddUserLanguageModal } from '@/features/languages/components/AddUserLan
 import { LanguageProficiencyProgress } from '@/features/languages/components/LanguageProficiencyProgress';
 import { RemoveUserLanguagesModal } from '@/features/languages/components/RemoveUserLanguagesModal';
 import { UpdateUserLanguageModal } from '@/features/languages/components/UpdateUserLanguageModal';
+import { useUserLanguages } from '@/features/users/hooks/useUserLanguages';
 
 type UserLanguagesContentProps = {
   userId: string;
@@ -36,35 +32,13 @@ export function UserLanguagesContent({
     useState<ProfileLanguage | null>(null);
 
   const {
-    data: userData,
-    loading: userLoading,
-    error: userError,
-    refetch: refetchUserLanguages,
-  } = useQuery(USER_LANGUAGES_QUERY, {
-    variables: {
-      userId,
-    },
-  });
-
-  const {
-    data: languagesData,
-    loading: languagesLoading,
-    error: languagesError,
-    refetch: refetchLanguages,
-  } = useQuery(LANGUAGES_QUERY, {
-    variables: {
-      params: {
-        page: 1,
-        limit: 100,
-      },
-    },
-  });
-
-  const loading = userLoading || languagesLoading;
-  const error = userError || languagesError;
-
-  const profileLanguages = userData?.user.profile.languages ?? [];
-  const availableLanguages = languagesData?.languages.items ?? [];
+    profileLanguages,
+    availableLanguages,
+    loading,
+    error,
+    refetchUserLanguages,
+    handleRefresh,
+  } = useUserLanguages(userId);
 
   const selectableLanguages = availableLanguages.filter(
     (language) =>
@@ -97,16 +71,12 @@ export function UserLanguagesContent({
     setSelectedLanguages([]);
   };
 
-  const handleRetry = async () => {
-    await Promise.all([refetchUserLanguages(), refetchLanguages()]);
-  };
-
   return (
     <ContentLayout
       isLoading={loading}
-      hasError={Boolean(error)}
+      hasError={error}
       errorMessage={t('users.languages.loadError', 'Failed to load languages')}
-      onRetry={handleRetry}
+      onRetry={handleRefresh}
     >
       <div className="mx-auto w-full max-w-[760px] pt-8">
         {profileLanguages.length === 0 ? (

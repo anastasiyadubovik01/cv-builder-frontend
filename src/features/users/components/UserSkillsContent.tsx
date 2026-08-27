@@ -1,14 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
-
-import {
-  SKILLS_QUERY,
-  USER_SKILLS_QUERY,
-  type ProfileSkill,
-} from '@/api/skills';
+import type { ProfileSkill } from '@/api/skills';
 import { DeleteIcon } from '@/components/icons/delete-icon';
 import { PlusIcon } from '@/components/icons/plus-icon';
 import { Button } from '@/components/ui/button';
@@ -17,6 +11,7 @@ import { AddSkillModal } from '@/features/skills/components/AddSkillModal';
 import { RemoveSkillsModal } from '@/features/skills/components/RemoveSkillsModal';
 import { SkillMasteryProgress } from '@/features/skills/components/SkillMasteryProgress';
 import { UpdateSkillModal } from '@/features/skills/components/UpdateSkillModal';
+import { useUserSkills } from '@/features/users/hooks/useUserSkills';
 
 type UserSkillsContentProps = {
   userId: string;
@@ -34,45 +29,13 @@ export function UserSkillsContent({
   const [removeDialogOpen, setRemoveDialogOpen] = useState(false);
   const [editingSkill, setEditingSkill] = useState<ProfileSkill | null>(null);
 
-  const {
-    data: userData,
-    loading: userLoading,
-    error: userError,
-    refetch: refetchUser,
-  } = useQuery(USER_SKILLS_QUERY, {
-    variables: {
-      userId,
-    },
-  });
-
-  const {
-    data: skillsData,
-    loading: skillsLoading,
-    error: skillsError,
-    refetch: refetchSkills,
-  } = useQuery(SKILLS_QUERY, {
-    variables: {
-      params: {
-        page: 1,
-        limit: 100,
-      },
-    },
-  });
-
-  const loading = userLoading || skillsLoading;
-  const error = userError || skillsError;
-
-  const profileSkills = userData?.user.profile.skills ?? [];
-  const availableSkills = skillsData?.skills.items ?? [];
+  const { profileSkills, availableSkills, loading, error, handleRefetch } =
+    useUserSkills(userId);
 
   const selectableSkills = availableSkills.filter(
     (skill) =>
       !profileSkills.some((profileSkill) => profileSkill.name === skill.name),
   );
-
-  const handleRefetch = async () => {
-    await Promise.all([refetchUser(), refetchSkills()]);
-  };
 
   const handleSkillSelection = (skillName: string) => {
     setSelectedSkills((current) =>
@@ -126,7 +89,7 @@ export function UserSkillsContent({
   return (
     <ContentLayout
       isLoading={loading}
-      hasError={Boolean(error)}
+      hasError={error}
       errorMessage={t('skills.loadError', 'Failed to load skills')}
       onRetry={handleRefetch}
     >

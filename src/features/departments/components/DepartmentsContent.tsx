@@ -1,23 +1,18 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  DEPARTMENTS_QUERY,
-  type ApiDepartment,
-  type DepartmentsQueryData,
-} from '@/api/departments';
 import { PlusIcon } from '@/components/icons/plus-icon';
 import { Button } from '@/components/ui/button';
 import { ContentLayout } from '@/components/common/ContentLayout';
-import { usePaginatedQuery } from '@/components/hooks/usePaginatedQuery';
+import { useDepartments } from '@/features/departments/hooks/useDepartments';
 
 import { CreateDepartmentModal } from './CreateDepartmentModal';
 import { DepartmentsTable } from './DepartmentsTable';
 import { UpdateDepartmentModal } from './UpdateDepartmentModal';
 import { DeleteDepartmentModal } from './DeleteDepartmentModal';
 
-import type { DepartmentSortField } from '../types';
+import type { ApiDepartment } from '@/api/departments';
 
 export function DepartmentsContent() {
   const { t } = useTranslation();
@@ -27,32 +22,6 @@ export function DepartmentsContent() {
 
   const [deletingDepartment, setDeletingDepartment] =
     useState<ApiDepartment | null>(null);
-
-  const extractPaginatedData = useCallback((data: DepartmentsQueryData) => {
-    if ('departments' in data && data.departments) {
-      return data.departments;
-    }
-    return { items: [], total: 0, total_pages: 0 };
-  }, []);
-
-  const filterItem = useCallback(
-    (department: ApiDepartment, queryStr: string) => {
-      return department.name.toLowerCase().includes(queryStr);
-    },
-    [],
-  );
-
-  const getSortValue = useCallback(
-    (department: ApiDepartment, field: DepartmentSortField) => {
-      switch (field) {
-        case 'name':
-          return department.name;
-        default:
-          return '';
-      }
-    },
-    [],
-  );
 
   const {
     paginatedItems: departments,
@@ -70,18 +39,7 @@ export function DepartmentsContent() {
     setCurrentPage,
     setPageSize,
     handleRefresh,
-  } = usePaginatedQuery<
-    DepartmentsQueryData,
-    Record<string, unknown>,
-    ApiDepartment,
-    DepartmentSortField
-  >({
-    query: DEPARTMENTS_QUERY,
-    defaultSortBy: 'name',
-    extractPaginatedData,
-    filterItem,
-    getSortValue,
-  });
+  } = useDepartments();
 
   const handleEdit = (department: ApiDepartment) => {
     setEditingDepartment(department);

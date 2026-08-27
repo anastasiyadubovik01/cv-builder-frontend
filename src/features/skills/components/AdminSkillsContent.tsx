@@ -1,26 +1,17 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
-import { useQuery } from '@apollo/client/react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import {
-  SKILL_CATEGORIES_QUERY,
-  SKILLS_QUERY,
-  type ApiSkill,
-  type SkillsData,
-} from '@/api/skills';
-
 import { PlusIcon } from '@/components/icons/plus-icon';
 import { Button } from '@/components/ui/button';
 import { ContentLayout } from '@/components/common/ContentLayout';
-import { usePaginatedQuery } from '@/components/hooks/usePaginatedQuery';
 import { SkillsTable } from '@/features/skills/components/SkillsTable';
-import type { SkillSortField } from '@/features/skills/types';
-
 import { CreateSkillAdminModal } from '@/features/skills/components/CreateSkillAdminModal';
 import { DeleteSkillModal } from '@/features/skills/components/DeleteSkillModal';
 import { UpdateSkillAdminModal } from '@/features/skills/components/UpdateSkillAdminModal';
+import { useAdminSkills } from '@/features/skills/hooks/useAdminSkills';
+
+import type { ApiSkill } from '@/api/skills';
 
 export function AdminSkillsContent() {
   const { t } = useTranslation();
@@ -28,31 +19,9 @@ export function AdminSkillsContent() {
   const [editingSkill, setEditingSkill] = useState<ApiSkill | null>(null);
   const [deletingSkill, setDeletingSkill] = useState<ApiSkill | null>(null);
 
-  const extractPaginatedData = useCallback((data: SkillsData) => {
-    if ('skills' in data && data.skills) {
-      return data.skills;
-    }
-    return { items: [], total: 0, total_pages: 0 };
-  }, []);
-
-  const filterItem = useCallback((skill: ApiSkill, queryStr: string) => {
-    return skill.name.toLowerCase().includes(queryStr);
-  }, []);
-
-  const getSortValue = useCallback((skill: ApiSkill, field: SkillSortField) => {
-    switch (field) {
-      case 'name':
-        return skill.name;
-      default:
-        return '';
-    }
-  }, []);
-
   const {
     paginatedItems: skills,
     allItems: allSkills,
-    loading,
-    error,
     search,
     setSearch,
     sortBy,
@@ -64,70 +33,12 @@ export function AdminSkillsContent() {
     setCurrentPage,
     setPageSize,
     handleRefresh,
-  } = usePaginatedQuery<
-    SkillsData,
-    Record<string, unknown>,
-    ApiSkill,
-    SkillSortField
-  >({
-    query: SKILLS_QUERY,
-    defaultSortBy: 'name',
-    extractPaginatedData,
-    filterItem,
-    getSortValue,
-  });
-
-  const {
-    data: categoriesData,
-    loading: categoriesLoading,
-    error: categoriesError,
-    refetch: refetchCategories,
-  } = useQuery(SKILL_CATEGORIES_QUERY);
-
-  const categoryTypes = useMemo(() => {
-    const result: Record<string, string> = {};
-
-    for (const category of categoriesData?.skillCategories ?? []) {
-      if (category.parent) {
-        result[category.id] = category.parent.name;
-      }
-
-      for (const child of category.children) {
-        result[child.id] = category.name;
-      }
-    }
-
-    return result;
-  }, [categoriesData]);
-
-  const selectableCategories = useMemo(() => {
-    const result = new Map<string, { id: string; name: string }>();
-
-    for (const category of categoriesData?.skillCategories ?? []) {
-      if (category.children.length > 0) {
-        for (const child of category.children) {
-          result.set(child.id, {
-            id: child.id,
-            name: child.name,
-          });
-        }
-      } else {
-        result.set(category.id, {
-          id: category.id,
-          name: category.name,
-        });
-      }
-    }
-
-    return [...result.values()].sort((a, b) => a.name.localeCompare(b.name));
-  }, [categoriesData]);
-
-  const handleRetry = async () => {
-    await Promise.all([handleRefresh(), refetchCategories()]);
-  };
-
-  const hasError = Boolean(error) || Boolean(categoriesError);
-  const isLoading = loading || categoriesLoading;
+    categoryTypes,
+    selectableCategories,
+    isLoading,
+    hasError,
+    handleRetry,
+  } = useAdminSkills();
 
   return (
     <ContentLayout
