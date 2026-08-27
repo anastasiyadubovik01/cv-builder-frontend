@@ -1,4 +1,4 @@
-import { CvProjectsContent } from '@/features/cvs/components/CvProjectsContent';
+import { CvProjectsContent } from '@/features/cvs/components/projects/CvProjectsContent';
 
 interface CvProjectsPageProps {
   params: Promise<{

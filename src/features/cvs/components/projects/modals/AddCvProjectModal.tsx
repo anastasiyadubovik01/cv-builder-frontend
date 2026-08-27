@@ -1,33 +1,30 @@
 'use client';
 
 import React from 'react';
-import type { ApiCvProject } from '@/api/cv-projects';
 import { ChangeCvProjectModal } from './ChangeCvProjectModal';
-import { useUpdateCvProjectForm } from '@/features/cvs/hooks/useUpdateCvProjectForm';
+import { useAddCvProjectForm } from '../hooks/useAddCvProjectForm';
 
-type UpdateCvProjectModalProps = {
+type CreateCvProjectModalProps = {
   cvId: string;
-  project: ApiCvProject;
   trigger?: React.ReactNode;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   onSuccess?: () => void | Promise<void>;
 };
 
-export function UpdateCvProjectModal({
+export function AddCvProjectModal({
   cvId,
-  project,
   trigger,
   open,
   onOpenChange,
   onSuccess,
-}: UpdateCvProjectModalProps) {
-  const form = useUpdateCvProjectForm({ cvId, project, onSuccess });
+}: CreateCvProjectModalProps) {
+  const form = useAddCvProjectForm({ cvId, onSuccess });
 
   return (
     <ChangeCvProjectModal
       {...form}
-      type="Update"
+      type="Add"
       trigger={trigger}
       open={open}
       onOpenChange={onOpenChange}

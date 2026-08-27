@@ -21,6 +21,7 @@ import { UpdateDepartmentModal } from './UpdateDepartmentModal';
 import { DeleteDepartmentModal } from './DeleteDepartmentModal';
 
 import type { DepartmentSortField, SortDirection } from '../types';
+import { QueryErrorState } from '@/components/common/QueryErrorState';
 
 export function DepartmentsContent() {
   const { t } = useTranslation();
@@ -204,15 +205,10 @@ export function DepartmentsContent() {
 
       <div className="flex min-h-0 flex-1 flex-col px-5 pt-4">
         {hasError ? (
-          <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4">
-            <p className="text-base text-foreground">
-              {t('departments.loadError', 'Failed to load departments')}
-            </p>
-
-            <Button type="button" onClick={() => void handleRefresh()}>
-              {t('retry', 'Retry')}
-            </Button>
-          </div>
+          <QueryErrorState
+            message={t('departments.loadError', 'Failed to load departments')}
+            onRetry={handleRefresh}
+          />
         ) : (
           <>
             <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]">

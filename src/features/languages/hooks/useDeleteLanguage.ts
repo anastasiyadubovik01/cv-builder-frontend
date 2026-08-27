@@ -1,9 +1,13 @@
-import { useMutation } from '@apollo/client/react';
-import { useTranslation } from 'react-i18next';
-
 import { DELETE_LANGUAGE_MUTATION } from '@/api/languages';
-import { useToast } from '@/components/ui/sonner';
-import { handleFormError } from '@/lib/error/errorHandler';
+import { useDeleteEntity } from '@/components/hooks/useDeleteEntity';
+
+type DeleteLanguageData = {
+  deleteLanguage: { affected: number };
+};
+
+type DeleteLanguageVars = {
+  language: { languageId: string };
+};
 
 type UseDeleteLanguageOptions = {
   onSuccess?: () => void | Promise<void>;
@@ -12,45 +16,18 @@ type UseDeleteLanguageOptions = {
 export function useDeleteLanguage({
   onSuccess,
 }: UseDeleteLanguageOptions = {}) {
-  const { t } = useTranslation();
-  const toast = useToast();
+  const { handleDelete, loading, t } = useDeleteEntity<
+    DeleteLanguageData,
+    DeleteLanguageVars,
+    [languageId: string]
+  >({
+    mutation: DELETE_LANGUAGE_MUTATION,
+    successMessageKey: 'languages.admin.notifications.deleteSuccess',
+    errorContext: 'Delete Language',
+    buildVariables: (languageId) => ({ language: { languageId } }),
+    isSuccessCheck: (data) => Boolean(data?.deleteLanguage?.affected),
+    onSuccess,
+  });
 
-  const [deleteLanguage, { loading }] = useMutation(DELETE_LANGUAGE_MUTATION);
-
-  const handleDelete = async (languageId: string): Promise<boolean> => {
-    try {
-      const result = await deleteLanguage({
-        variables: {
-          language: {
-            languageId,
-          },
-        },
-      });
-
-      const isSuccess = Boolean(result.data?.deleteLanguage.affected);
-
-      if (!isSuccess) {
-        return false;
-      }
-
-      toast.success(t('languages.admin.notifications.deleteSuccess'));
-
-      await onSuccess?.();
-
-      return true;
-    } catch (error) {
-      handleFormError(error, {
-        t,
-        context: 'Delete Language',
-      });
-
-      return false;
-    }
-  };
-
-  return {
-    handleDelete,
-    loading,
-    t,
-  };
+  return { handleDelete, loading, t };
 }

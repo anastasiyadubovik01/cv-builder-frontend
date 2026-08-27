@@ -12,8 +12,8 @@ import type {
   CvProjectSortField,
   SortDirection,
 } from '@/features/cvs/types';
-import { UpdateCvProjectModal } from '@/features/cvs/components/modals/UpdateCvProjectModal';
-import { RemoveCvProjectModal } from '@/features/cvs/components/modals/RemoveCvProjectModal';
+import { UpdateCvProjectModal } from '@/features/cvs/components/projects/modals/UpdateCvProjectModal';
+import { RemoveCvProjectModal } from '@/features/cvs/components/projects/modals/RemoveCvProjectModal';
 import { capitalizeFirstLetter } from '@/lib/helpers/formatters';
 
 type CvProjectsTableProps = {

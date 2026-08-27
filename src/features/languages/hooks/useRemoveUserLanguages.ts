@@ -1,59 +1,35 @@
-import { useMutation } from '@apollo/client/react';
-import { useTranslation } from 'react-i18next';
-
 import { DELETE_PROFILE_LANGUAGE_MUTATION } from '@/api/languages';
-import { useToast } from '@/components/ui/sonner';
-import { handleFormError } from '@/lib/error/errorHandler';
+import { useDeleteEntity } from '@/components/hooks/useDeleteEntity';
 
 type UseRemoveUserLanguagesOptions = {
   userId: string;
   onSuccess?: () => void | Promise<void>;
 };
 
+type RemoveUserLanguagesVars = {
+  language: { userId: string; name: string[] };
+};
+
 export function useRemoveUserLanguages({
   userId,
   onSuccess,
 }: UseRemoveUserLanguagesOptions) {
-  const { t } = useTranslation();
-  const toast = useToast();
+  const { handleDelete, loading, t } = useDeleteEntity<
+    unknown,
+    RemoveUserLanguagesVars,
+    [names: string[]]
+  >({
+    mutation: DELETE_PROFILE_LANGUAGE_MUTATION,
+    successMessageKey: 'users.languages.removeSuccess',
+    errorContext: 'Remove user languages',
+    buildVariables: (names) => ({ language: { userId, name: names } }),
+    onSuccess,
+  });
 
-  const [deleteProfileLanguage, { loading }] = useMutation(
-    DELETE_PROFILE_LANGUAGE_MUTATION,
-  );
-
-  const handleRemove = async (names: string[]): Promise<boolean> => {
-    if (names.length === 0) {
-      return false;
-    }
-
-    try {
-      await deleteProfileLanguage({
-        variables: {
-          language: {
-            userId,
-            name: names,
-          },
-        },
-      });
-
-      await onSuccess?.();
-
-      toast.success(t('users.languages.removeSuccess'));
-
-      return true;
-    } catch (error) {
-      handleFormError(error, {
-        t,
-        context: 'Remove user languages',
-      });
-
-      return false;
-    }
+  const handleRemove = (names: string[]) => {
+    if (names.length === 0) return Promise.resolve(false);
+    return handleDelete(names);
   };
 
-  return {
-    handleRemove,
-    loading,
-    t,
-  };
+  return { handleRemove, loading, t };
 }

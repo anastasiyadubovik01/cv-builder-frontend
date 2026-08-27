@@ -1,45 +1,32 @@
-import { useMutation } from '@apollo/client/react';
-import { useTranslation } from 'react-i18next';
-
 import { DELETE_USER_MUTATION } from '@/api/users';
-import { useToast } from '@/components/ui/sonner';
-import { handleFormError } from '@/lib/error/errorHandler';
+import { useDeleteEntity } from '@/components/hooks/useDeleteEntity';
 
-export function useDeleteUser() {
-  const { t } = useTranslation();
-  const toast = useToast();
-  const [deleteUser, { loading }] = useMutation(DELETE_USER_MUTATION);
+type DeleteUserData = {
+  deleteUser: { affected: number };
+};
 
-  const handleDelete = async (userId: string): Promise<boolean> => {
-    try {
-      const response = await deleteUser({
-        variables: {
-          userId,
-        },
-      });
+type DeleteUserVars = {
+  userId: string;
+};
 
-      const isSuccess = Boolean(response.data?.deleteUser?.affected);
+type UseDeleteUserOptions = {
+  onSuccess?: () => void | Promise<void>;
+};
 
-      if (isSuccess) {
-        toast.success(
-          t('users.notifications.deleteSuccess', 'User successfully deleted'),
-        );
-      }
+export function useDeleteUser({ onSuccess }: UseDeleteUserOptions = {}) {
+  const { handleDelete, loading, t } = useDeleteEntity<
+    DeleteUserData,
+    DeleteUserVars,
+    [userId: string]
+  >({
+    mutation: DELETE_USER_MUTATION,
+    successMessageKey: 'users.notifications.deleteSuccess',
+    defaultSuccessMessage: 'User successfully deleted',
+    errorContext: 'Delete user',
+    buildVariables: (userId) => ({ userId }),
+    isSuccessCheck: (data) => Boolean(data?.deleteUser?.affected),
+    onSuccess,
+  });
 
-      return isSuccess;
-    } catch (error) {
-      handleFormError(error, {
-        t,
-        context: 'Delete user',
-      });
-
-      return false;
-    }
-  };
-
-  return {
-    handleDelete,
-    loading,
-    t,
-  };
+  return { handleDelete, loading, t };
 }

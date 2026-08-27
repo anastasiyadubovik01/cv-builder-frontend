@@ -1,8 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery } from '@apollo/client/react';
+import { useMutation } from '@apollo/client/react';
 
-import { PROJECTS_QUERY, type ApiProject } from '@/api/projects';
-import { POSITIONS_QUERY, type PositionsQueryResponse } from '@/api/positions';
 import { ADD_CV_PROJECT_MUTATION } from '@/api/cv-projects';
 import {
   type CreateCvProjectInputValues,
@@ -11,6 +9,8 @@ import {
 import { useValidatedForm } from '@/components/hooks/useValidatedForm';
 import { useToast } from '@/components/ui/sonner';
 import { handleFormError } from '@/lib/error/errorHandler';
+import { useCvProjectForm } from './useCvProjectForm';
+import { parseCommaSeparated } from '@/lib/helpers/formatters';
 
 const INITIAL_VALUES: CreateCvProjectInputValues = {
   projectId: '',
@@ -25,19 +25,23 @@ const INITIAL_VALUES: CreateCvProjectInputValues = {
   projectEndDate: '',
 };
 
-type UseCreateCvProjectFormOptions = {
+type UseAddCvProjectFormOptions = {
   cvId: string;
   onSuccess?: () => void | Promise<void>;
 };
 
-const LIMIT = 1000;
-
 export function useAddCvProjectForm({
   cvId,
   onSuccess,
-}: UseCreateCvProjectFormOptions) {
+}: UseAddCvProjectFormOptions) {
   const { t } = useTranslation();
   const toast = useToast();
+  const {
+    catalogProjects,
+    positions,
+    loadingCatalog,
+    getAutoFilledProjectData,
+  } = useCvProjectForm();
 
   const {
     formData,
@@ -53,65 +57,25 @@ export function useAddCvProjectForm({
     schema: createCvProjectSchema,
   });
 
-  const { data: projectsData, loading: projectsLoading } = useQuery(
-    PROJECTS_QUERY,
-    {
-      variables: { params: { limit: LIMIT } },
-    },
-  );
-
-  const { data: positionsData, loading: positionsLoading } =
-    useQuery<PositionsQueryResponse>(POSITIONS_QUERY, {
-      variables: { params: { limit: LIMIT } },
-    });
-
   const [addCvProject, { loading: mutationLoading }] = useMutation(
     ADD_CV_PROJECT_MUTATION,
   );
 
-  const catalogProjects: ApiProject[] = projectsData?.projects?.items || [];
-  const positions = positionsData?.positions?.items || [];
-
   const isValid = createCvProjectSchema.safeParse(formData).success;
 
   const handleProjectSelect = (selectedProjectId: string) => {
-    const project = catalogProjects.find((p) => p.id === selectedProjectId);
-    if (!project) return;
-
-    const envString = Array.isArray(project.environment)
-      ? project.environment.join(', ')
-      : project.environment || '';
+    const autofillData = getAutoFilledProjectData(selectedProjectId);
+    if (!autofillData) return;
 
     setFormData((prev) => ({
       ...prev,
-      projectId: project.id,
-      domain: project.domain || '',
-      description: project.description || '',
-      environment: envString,
-      startDate: project.start_date || '',
-      endDate: project.end_date || '',
-      projectStartDate: project.start_date || '',
-      projectEndDate: project.end_date || '',
+      ...autofillData,
     }));
     clearErrors();
   };
 
   const handleSubmit = async (): Promise<boolean> => {
-    if (!validateForm()) {
-      return false;
-    }
-
-    const rolesArray = formData.roles
-      .split(',')
-      .map((item) => item.trim())
-      .filter(Boolean);
-
-    const responsibilitiesArray = formData.responsibilities
-      ? formData.responsibilities
-          .split(',')
-          .map((item) => item.trim())
-          .filter(Boolean)
-      : [];
+    if (!validateForm()) return false;
 
     try {
       await addCvProject({
@@ -121,8 +85,8 @@ export function useAddCvProjectForm({
             projectId: formData.projectId,
             start_date: formData.startDate.trim(),
             end_date: formData.endDate?.trim() || null,
-            roles: rolesArray,
-            responsibilities: responsibilitiesArray,
+            roles: parseCommaSeparated(formData.roles),
+            responsibilities: parseCommaSeparated(formData.responsibilities),
           },
         },
       });
@@ -140,10 +104,7 @@ export function useAddCvProjectForm({
       await onSuccess?.();
       return true;
     } catch (err) {
-      handleFormError(err, {
-        t,
-        context: 'Add CV Project',
-      });
+      handleFormError(err, { t, context: 'Add CV Project' });
       return false;
     }
   };
@@ -156,7 +117,7 @@ export function useAddCvProjectForm({
   return {
     formData,
     errors,
-    loading: mutationLoading || projectsLoading || positionsLoading,
+    loading: mutationLoading || loadingCatalog,
     isValid,
     catalogProjects,
     positions,

@@ -20,6 +20,7 @@ import { DeletePositionModal } from './DeletePositionModal';
 import { PositionsTable } from './PositionsTable';
 import { UpdatePositionModal } from './UpdatePositionModal';
 import type { PositionSortField, SortDirection } from '../types';
+import { QueryErrorState } from '@/components/common/QueryErrorState';
 
 export function PositionsContent() {
   const { t } = useTranslation();
@@ -191,15 +192,10 @@ export function PositionsContent() {
 
       <div className="flex min-h-0 flex-1 flex-col px-5 pt-4">
         {hasError ? (
-          <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4">
-            <p className="text-base text-foreground">
-              {t('positions.loadError', 'Failed to load positions')}
-            </p>
-
-            <Button type="button" onClick={() => void handleRefresh()}>
-              {t('retry', 'Retry')}
-            </Button>
-          </div>
+          <QueryErrorState
+            message={t('positions.loadError', 'Failed to load positions')}
+            onRetry={handleRefresh}
+          />
         ) : (
           <>
             <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]">

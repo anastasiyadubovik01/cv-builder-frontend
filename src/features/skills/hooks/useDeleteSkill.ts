@@ -1,41 +1,21 @@
-import { useMutation } from '@apollo/client/react';
-import { useTranslation } from 'react-i18next';
-
 import { DELETE_SKILL_MUTATION } from '@/api/skills';
-import { useToast } from '@/components/ui/sonner';
-import { handleFormError } from '@/lib/error/errorHandler';
+import { useDeleteEntity } from '@/components/hooks/useDeleteEntity';
+
+type DeleteSkillVars = {
+  skill: { skillId: string };
+};
 
 export function useDeleteSkill() {
-  const { t } = useTranslation();
-  const toast = useToast();
+  const { handleDelete, loading, t } = useDeleteEntity<
+    unknown,
+    DeleteSkillVars,
+    [skillId: string]
+  >({
+    mutation: DELETE_SKILL_MUTATION,
+    successMessageKey: 'skills.admin.notifications.deleteSuccess',
+    errorContext: 'Delete skill',
+    buildVariables: (skillId) => ({ skill: { skillId } }),
+  });
 
-  const [deleteSkill] = useMutation(DELETE_SKILL_MUTATION);
-
-  const handleDelete = async (skillId: string): Promise<boolean> => {
-    try {
-      await deleteSkill({
-        variables: {
-          skill: {
-            skillId,
-          },
-        },
-      });
-
-      toast.success(t('skills.admin.notifications.deleteSuccess'));
-
-      return true;
-    } catch (error) {
-      handleFormError(error, {
-        t,
-        context: 'Delete skill',
-      });
-
-      return false;
-    }
-  };
-
-  return {
-    handleDelete,
-    t,
-  };
+  return { handleDelete, loading, t };
 }

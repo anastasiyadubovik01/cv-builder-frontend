@@ -7,6 +7,7 @@ import { CV_QUERY } from '@/api/cvs';
 import { Button } from '@/components/ui/button';
 import { LoadingOverlay } from '@/components/ui/loading-overlay';
 import { CvDetailsForm } from './CvDetailsForm';
+import { QueryErrorState } from '@/components/common/QueryErrorState';
 
 type CvDetailsProps = {
   cvId: string;
@@ -29,14 +30,10 @@ export function CvDetails({ cvId, currentUserId, isAdmin }: CvDetailsProps) {
 
   if (error) {
     return (
-      <div className="flex flex-col items-center gap-4 pt-10 text-center">
-        <p className="text-sm text-destructive">
-          {t('cvs.detailsLoadError', 'Failed to load CV details')}
-        </p>
-        <Button variant="secondary" type="button" onClick={() => refetch()}>
-          {t('retry', 'Retry')}
-        </Button>
-      </div>
+      <QueryErrorState
+        message={t('cvs.detailsLoadError', 'Failed to load CV details')}
+        onRetry={refetch}
+      />
     );
   }
 
