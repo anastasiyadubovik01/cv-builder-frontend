@@ -87,7 +87,7 @@ export function PositionsContent() {
         <UpdatePositionModal
           position={editingPosition}
           positions={allPositions}
-          open={Boolean(editingPosition)}
+          open
           onOpenChange={(open) => {
             if (!open) {
               setEditingPosition(null);
@@ -104,7 +104,7 @@ export function PositionsContent() {
         <DeletePositionModal
           positionId={deletingPosition.id}
           name={deletingPosition.name}
-          open={Boolean(deletingPosition)}
+          open
           onOpenChange={(open) => {
             if (!open) {
               setDeletingPosition(null);

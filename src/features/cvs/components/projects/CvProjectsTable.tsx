@@ -174,7 +174,7 @@ export function CvProjectsTable({
         <UpdateCvProjectModal
           cvId={cvId}
           project={editingProject}
-          open={Boolean(editingProject)}
+          open
           onOpenChange={(open) => {
             if (!open) setEditingProject(null);
           }}
@@ -190,7 +190,7 @@ export function CvProjectsTable({
           cvId={cvId}
           projectId={deletingProject.id}
           name={deletingProject.name}
-          open={Boolean(deletingProject)}
+          open
           onOpenChange={(open) => {
             if (!open) setDeletingProject(null);
           }}

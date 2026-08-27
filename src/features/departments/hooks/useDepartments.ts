@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { usePaginatedQuery } from '@/components/hooks/usePaginatedQuery';
+import { getEmptyPaginatedResponse } from '@/components/hooks/useFetchAllPages';
 import {
   DEPARTMENTS_QUERY,
   type ApiDepartment,
@@ -12,7 +13,7 @@ export function useDepartments() {
     if ('departments' in data && data.departments) {
       return data.departments;
     }
-    return { items: [], total: 0, total_pages: 0 };
+    return getEmptyPaginatedResponse<ApiDepartment>();
   }, []);
 
   const filterItem = useCallback(

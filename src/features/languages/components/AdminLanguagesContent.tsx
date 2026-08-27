@@ -90,7 +90,7 @@ export function AdminLanguagesContent() {
         <UpdateLanguageModal
           language={editingLanguage}
           languages={allLanguages}
-          open={Boolean(editingLanguage)}
+          open
           onOpenChange={(open) => {
             if (!open) {
               setEditingLanguage(null);
@@ -107,7 +107,7 @@ export function AdminLanguagesContent() {
         <DeleteLanguageModal
           languageId={deletingLanguage.id}
           name={deletingLanguage.name}
-          open={Boolean(deletingLanguage)}
+          open
           onOpenChange={(open) => {
             if (!open) {
               setDeletingLanguage(null);

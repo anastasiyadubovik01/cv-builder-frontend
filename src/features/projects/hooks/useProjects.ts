@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { usePaginatedQuery } from '@/components/hooks/usePaginatedQuery';
+import { getEmptyPaginatedResponse } from '@/components/hooks/useFetchAllPages';
 import {
   PROJECTS_QUERY,
   type ApiProject,
@@ -12,7 +13,7 @@ export function useProjects() {
     if ('projects' in data && data.projects) {
       return data.projects;
     }
-    return { items: [], total: 0, total_pages: 0 };
+    return getEmptyPaginatedResponse<ApiProject>();
   }, []);
 
   const filterItem = useCallback((project: ApiProject, queryStr: string) => {

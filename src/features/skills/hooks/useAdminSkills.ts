@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { useQuery } from '@apollo/client/react';
 import { usePaginatedQuery } from '@/components/hooks/usePaginatedQuery';
+import { getEmptyPaginatedResponse } from '@/components/hooks/useFetchAllPages';
 import {
   SKILL_CATEGORIES_QUERY,
   SKILLS_QUERY,
@@ -14,7 +15,7 @@ export function useAdminSkills() {
     if ('skills' in data && data.skills) {
       return data.skills;
     }
-    return { items: [], total: 0, total_pages: 0 };
+    return getEmptyPaginatedResponse<ApiSkill>();
   }, []);
 
   const filterItem = useCallback((skill: ApiSkill, queryStr: string) => {

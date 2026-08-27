@@ -107,7 +107,7 @@ export function CvsTable({
       {editingCv && (
         <UpdateCvModal
           cvId={editingCv.id}
-          open={Boolean(editingCv)}
+          open
           onOpenChange={(open) => {
             if (!open) {
               setEditingCv(null);
@@ -129,7 +129,7 @@ export function CvsTable({
         <DeleteCvModal
           cvId={deletingCv.id}
           name={deletingCv.name}
-          open={Boolean(deletingCv)}
+          open
           onOpenChange={(open) => {
             if (!open) {
               setDeletingCv(null);

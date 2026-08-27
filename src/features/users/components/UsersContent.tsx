@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useApolloClient } from '@apollo/client/react';
 
@@ -37,28 +38,28 @@ export function UsersContent({ isAdmin }: UsersContentProps) {
     handleRefresh,
   } = useUsers();
 
-  const users: User[] = rawUsers.map((user) => ({
-    id: user.id,
-    firstName: user.profile.first_name ?? '',
-    lastName: user.profile.last_name ?? '',
-    email: user.email,
-    department: user.department?.name ?? '',
-    position: user.position?.name ?? '',
-    avatar: user.profile.avatar ?? undefined,
-  }));
+  const users: User[] = useMemo(
+    () =>
+      rawUsers.map((user) => ({
+        id: user.id,
+        firstName: user.profile.first_name ?? '',
+        lastName: user.profile.last_name ?? '',
+        email: user.email,
+        department: user.department?.name ?? '',
+        position: user.position?.name ?? '',
+        avatar: user.profile.avatar ?? undefined,
+      })),
+    [rawUsers],
+  );
 
   const handleRetry = async () => {
-    try {
-      await handleRefresh();
+    await handleRefresh();
 
-      await client
-        .refetchQueries({
-          include: ['Me'],
-        })
-        .catch(() => undefined);
-    } catch (error) {
-      throw error;
-    }
+    await client
+      .refetchQueries({
+        include: ['Me'],
+      })
+      .catch(() => undefined);
   };
 
   return (

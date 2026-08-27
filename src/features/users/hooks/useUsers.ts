@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { usePaginatedQuery } from '@/components/hooks/usePaginatedQuery';
+import { getEmptyPaginatedResponse } from '@/components/hooks/useFetchAllPages';
 import { USERS_QUERY, type ApiUser, type UsersData } from '@/api/users';
 import type { SortField } from '@/features/users/types';
 
@@ -8,7 +9,7 @@ export function useUsers() {
     if ('users' in data && data.users) {
       return data.users;
     }
-    return { items: [], total: 0, total_pages: 0 };
+    return getEmptyPaginatedResponse<ApiUser>();
   }, []);
 
   const filterItem = useCallback((user: ApiUser, queryStr: string) => {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { DocumentNode, OperationVariables } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { BACKEND_PAGE_SIZE } from '@/lib/constants/pagination';
@@ -9,6 +9,12 @@ export interface PaginatedBackendResponse<TItem> {
   items: TItem[];
   total: number;
   total_pages: number;
+}
+
+export function getEmptyPaginatedResponse<
+  TItem,
+>(): PaginatedBackendResponse<TItem> {
+  return { items: [], total: 0, total_pages: 0 };
 }
 
 export interface UseFetchAllPagesOptions<
@@ -47,14 +53,23 @@ export function useFetchAllPages<
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [loadError, setLoadError] = useState(false);
 
-  const queryVariables = {
-    ...variables,
-    params: {
-      ...(variables?.params as object | undefined),
-      page: 1,
-      limit: BACKEND_PAGE_SIZE,
-    },
-  } as unknown as TVariables;
+  const buildPagedVariables = useCallback(
+    (page: number) =>
+      ({
+        ...variables,
+        params: {
+          ...(variables?.params as object | undefined),
+          page,
+          limit: BACKEND_PAGE_SIZE,
+        },
+      }) as unknown as TVariables,
+    [variables],
+  );
+
+  const queryVariables = useMemo(
+    () => buildPagedVariables(1),
+    [buildPagedVariables],
+  );
 
   const { data, loading, error, fetchMore, refetch } = useQuery<
     TData,
@@ -82,17 +97,8 @@ export function useFetchAllPages<
 
       const responses = await Promise.all(
         pagesToLoad.map((page) => {
-          const fetchMoreVars = {
-            ...variables,
-            params: {
-              ...(variables?.params as object | undefined),
-              page,
-              limit: BACKEND_PAGE_SIZE,
-            },
-          } as unknown as TVariables;
-
           return fetchMore({
-            variables: fetchMoreVars,
+            variables: buildPagedVariables(page),
           });
         }),
       );
@@ -104,7 +110,7 @@ export function useFetchAllPages<
 
       return [...firstPageItems, ...remainingItems];
     },
-    [fetchMore, extractPaginatedData, variables],
+    [fetchMore, extractPaginatedData, buildPagedVariables],
   );
 
   useEffect(() => {

@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { usePaginatedQuery } from '@/components/hooks/usePaginatedQuery';
+import { getEmptyPaginatedResponse } from '@/components/hooks/useFetchAllPages';
 import {
   CVS_BY_USER_ID_QUERY,
   CVS_QUERY,
@@ -26,7 +27,7 @@ export function useCvs(userId?: string) {
     if ('cvs' in data && data.cvs) {
       return data.cvs;
     }
-    return { items: [], total: 0, total_pages: 0 };
+    return getEmptyPaginatedResponse<ApiCv>();
   }, []);
 
   const filterItem = useCallback((cv: ApiCv, queryStr: string) => {
