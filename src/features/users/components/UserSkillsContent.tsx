@@ -12,7 +12,7 @@ import {
 import { DeleteIcon } from '@/components/icons/delete-icon';
 import { PlusIcon } from '@/components/icons/plus-icon';
 import { Button } from '@/components/ui/button';
-import { LoadingOverlay } from '@/components/ui/loading-overlay';
+import { ContentLayout } from '@/components/common/ContentLayout';
 import { AddSkillModal } from '@/features/skills/components/AddSkillModal';
 import { RemoveSkillsModal } from '@/features/skills/components/RemoveSkillsModal';
 import { SkillMasteryProgress } from '@/features/skills/components/SkillMasteryProgress';
@@ -38,7 +38,7 @@ export function UserSkillsContent({
     data: userData,
     loading: userLoading,
     error: userError,
-    refetch,
+    refetch: refetchUser,
   } = useQuery(USER_SKILLS_QUERY, {
     variables: {
       userId,
@@ -49,6 +49,7 @@ export function UserSkillsContent({
     data: skillsData,
     loading: skillsLoading,
     error: skillsError,
+    refetch: refetchSkills,
   } = useQuery(SKILLS_QUERY, {
     variables: {
       params: {
@@ -68,6 +69,10 @@ export function UserSkillsContent({
     (skill) =>
       !profileSkills.some((profileSkill) => profileSkill.name === skill.name),
   );
+
+  const handleRefetch = async () => {
+    await Promise.all([refetchUser(), refetchSkills()]);
+  };
 
   const handleSkillSelection = (skillName: string) => {
     setSelectedSkills((current) =>
@@ -92,26 +97,6 @@ export function UserSkillsContent({
     setIsRemoveMode(false);
     setSelectedSkills([]);
   };
-
-  if (loading) {
-    return <LoadingOverlay />;
-  }
-
-  if (error) {
-    return (
-      <div className="flex flex-col items-center gap-4 pt-10">
-        <p className="text-sm text-destructive">{t('skills.loadError')}</p>
-
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={() => void refetch()}
-        >
-          {t('retry')}
-        </Button>
-      </div>
-    );
-  }
 
   const groupedSkills = profileSkills.reduce<Record<string, ProfileSkill[]>>(
     (groups, profileSkill) => {
@@ -139,128 +124,135 @@ export function UserSkillsContent({
   );
 
   return (
-    <div className="mx-auto w-full max-w-[760px] pt-8">
-      {profileSkills.length === 0 ? (
-        <p className="pt-8 text-center text-muted-foreground">
-          {t('skills.empty')}
-        </p>
-      ) : (
-        <div className="flex flex-col gap-10">
-          {Object.entries(groupedSkills).map(([category, skills]) => (
-            <section key={category}>
-              <h2 className="mb-6 text-base font-normal text-foreground">
-                {category}
-              </h2>
+    <ContentLayout
+      isLoading={loading}
+      hasError={Boolean(error)}
+      errorMessage={t('skills.loadError', 'Failed to load skills')}
+      onRetry={handleRefetch}
+    >
+      <div className="mx-auto w-full max-w-[760px] pt-8">
+        {profileSkills.length === 0 ? (
+          <p className="pt-8 text-center text-muted-foreground">
+            {t('skills.empty')}
+          </p>
+        ) : (
+          <div className="flex flex-col gap-10">
+            {Object.entries(groupedSkills).map(([category, skills]) => (
+              <section key={category}>
+                <h2 className="mb-6 text-base font-normal text-foreground">
+                  {category}
+                </h2>
 
-              <div className="grid grid-cols-1 gap-x-16 gap-y-6 pl-5 md:grid-cols-2 lg:grid-cols-3">
-                {skills.map((skill) => {
-                  return (
-                    <button
-                      key={`${skill.name}-${skill.categoryId ?? ''}`}
-                      type="button"
-                      disabled={!canManage}
-                      onClick={() => handleSkillClick(skill)}
-                      className="flex items-center gap-4 text-left disabled:cursor-default"
-                    >
-                      <SkillMasteryProgress
-                        mastery={skill.mastery}
-                        selected={selectedSkills.includes(skill.name)}
-                      />
+                <div className="grid grid-cols-1 gap-x-16 gap-y-6 pl-5 md:grid-cols-2 lg:grid-cols-3">
+                  {skills.map((skill) => {
+                    return (
+                      <button
+                        key={`${skill.name}-${skill.categoryId ?? ''}`}
+                        type="button"
+                        disabled={!canManage}
+                        onClick={() => handleSkillClick(skill)}
+                        className="flex items-center gap-4 text-left disabled:cursor-default"
+                      >
+                        <SkillMasteryProgress
+                          mastery={skill.mastery}
+                          selected={selectedSkills.includes(skill.name)}
+                        />
 
-                      <span className="text-sm text-foreground">
-                        {skill.name}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
-          ))}
-        </div>
-      )}
+                        <span className="text-sm text-foreground">
+                          {skill.name}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </section>
+            ))}
+          </div>
+        )}
 
-      {canManage && (
-        <div className="mt-10 flex justify-end gap-6">
-          {isRemoveMode ? (
-            <>
-              <Button
-                type="button"
-                variant="secondary"
-                className="w-[160px]"
-                onClick={handleCancelRemove}
-              >
-                {t('dialogs.common.cancel')}
-              </Button>
+        {canManage && (
+          <div className="mt-10 flex justify-end gap-6">
+            {isRemoveMode ? (
+              <>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="w-[160px]"
+                  onClick={handleCancelRemove}
+                >
+                  {t('dialogs.common.cancel')}
+                </Button>
 
-              <Button
-                type="button"
-                className="w-[160px]"
-                disabled={selectedSkills.length === 0}
-                onClick={() => setRemoveDialogOpen(true)}
-              >
-                {t('skills.removeSelected', {
-                  count: selectedSkills.length,
-                })}
-              </Button>
-            </>
-          ) : (
-            <>
-              <AddSkillModal
-                userId={userId}
-                skills={selectableSkills}
-                onSuccess={async () => {
-                  await refetch();
-                }}
-                trigger={
-                  <Button type="button" variant="ghost" className="gap-3">
-                    <PlusIcon className="size-5" />
-                    {t('skills.add')}
-                  </Button>
-                }
-              />
+                <Button
+                  type="button"
+                  className="w-[160px]"
+                  disabled={selectedSkills.length === 0}
+                  onClick={() => setRemoveDialogOpen(true)}
+                >
+                  {t('skills.removeSelected', {
+                    count: selectedSkills.length,
+                  })}
+                </Button>
+              </>
+            ) : (
+              <>
+                <AddSkillModal
+                  userId={userId}
+                  skills={selectableSkills}
+                  onSuccess={async () => {
+                    await handleRefetch();
+                  }}
+                  trigger={
+                    <Button type="button" variant="ghost" className="gap-3">
+                      <PlusIcon className="size-5" />
+                      {t('skills.add')}
+                    </Button>
+                  }
+                />
 
-              <Button
-                type="button"
-                variant="ghost"
-                className="gap-3 text-primary hover:text-primary"
-                onClick={() => setIsRemoveMode(true)}
-              >
-                <DeleteIcon className="shrink-0" />
-                {t('skills.remove')}
-              </Button>
-            </>
-          )}
-        </div>
-      )}
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="gap-3 text-primary hover:text-primary"
+                  onClick={() => setIsRemoveMode(true)}
+                >
+                  <DeleteIcon className="shrink-0" />
+                  {t('skills.remove')}
+                </Button>
+              </>
+            )}
+          </div>
+        )}
 
-      {editingSkill && (
-        <UpdateSkillModal
-          userId={userId}
-          skill={editingSkill}
-          skills={availableSkills}
-          open={Boolean(editingSkill)}
-          onOpenChange={(open) => {
-            if (!open) {
+        {editingSkill && (
+          <UpdateSkillModal
+            userId={userId}
+            skill={editingSkill}
+            skills={availableSkills}
+            open={Boolean(editingSkill)}
+            onOpenChange={(open) => {
+              if (!open) {
+                setEditingSkill(null);
+              }
+            }}
+            onSuccess={async () => {
+              await handleRefetch();
               setEditingSkill(null);
-            }
-          }}
+            }}
+          />
+        )}
+
+        <RemoveSkillsModal
+          userId={userId}
+          selectedSkills={selectedSkills}
+          open={removeDialogOpen}
+          onOpenChange={setRemoveDialogOpen}
           onSuccess={async () => {
-            await refetch();
-            setEditingSkill(null);
+            await handleRefetch();
+            handleCancelRemove();
           }}
         />
-      )}
-
-      <RemoveSkillsModal
-        userId={userId}
-        selectedSkills={selectedSkills}
-        open={removeDialogOpen}
-        onOpenChange={setRemoveDialogOpen}
-        onSuccess={async () => {
-          await refetch();
-          handleCancelRemove();
-        }}
-      />
-    </div>
+      </div>
+    </ContentLayout>
   );
 }

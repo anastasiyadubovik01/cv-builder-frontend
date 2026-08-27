@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 
@@ -8,99 +8,74 @@ import {
   SKILL_CATEGORIES_QUERY,
   SKILLS_QUERY,
   type ApiSkill,
+  type SkillsData,
 } from '@/api/skills';
 
 import { PlusIcon } from '@/components/icons/plus-icon';
 import { Button } from '@/components/ui/button';
-import { LoadingOverlay } from '@/components/ui/loading-overlay';
-import { Pagination } from '@/components/ui/pagination';
-import { SearchInput } from '@/components/ui/search-input';
+import { ContentLayout } from '@/components/common/ContentLayout';
+import { usePaginatedQuery } from '@/components/hooks/usePaginatedQuery';
 import { SkillsTable } from '@/features/skills/components/SkillsTable';
-import type { SkillSortField, SortDirection } from '@/features/skills/types';
+import type { SkillSortField } from '@/features/skills/types';
 
 import { CreateSkillAdminModal } from '@/features/skills/components/CreateSkillAdminModal';
 import { DeleteSkillModal } from '@/features/skills/components/DeleteSkillModal';
 import { UpdateSkillAdminModal } from '@/features/skills/components/UpdateSkillAdminModal';
-import {
-  BACKEND_PAGE_SIZE,
-  DEFAULT_PAGE_SIZE,
-} from '@/lib/constants/pagination';
 
 export function AdminSkillsContent() {
   const { t } = useTranslation();
 
-  const [search, setSearch] = useState('');
-  const [sortBy, setSortBy] = useState<SkillSortField>('name');
-  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [editingSkill, setEditingSkill] = useState<ApiSkill | null>(null);
   const [deletingSkill, setDeletingSkill] = useState<ApiSkill | null>(null);
-  const [allSkills, setAllSkills] = useState<ApiSkill[]>([]);
-  const [loadError, setLoadError] = useState(false);
 
-  const { data, loading, error, fetchMore, refetch } = useQuery(SKILLS_QUERY, {
-    variables: {
-      params: {
-        page: 1,
-        limit: BACKEND_PAGE_SIZE,
-      },
-    },
-    fetchPolicy: 'cache-and-network',
+  const extractPaginatedData = useCallback((data: SkillsData) => {
+    if ('skills' in data && data.skills) {
+      return data.skills;
+    }
+    return { items: [], total: 0, total_pages: 0 };
+  }, []);
+
+  const filterItem = useCallback((skill: ApiSkill, queryStr: string) => {
+    return skill.name.toLowerCase().includes(queryStr);
+  }, []);
+
+  const getSortValue = useCallback((skill: ApiSkill, field: SkillSortField) => {
+    switch (field) {
+      case 'name':
+        return skill.name;
+      default:
+        return '';
+    }
+  }, []);
+
+  const {
+    paginatedItems: skills,
+    allItems: allSkills,
+    loading,
+    error,
+    search,
+    setSearch,
+    sortBy,
+    sortDirection,
+    handleSort,
+    currentPage,
+    totalPages,
+    pageSize,
+    setCurrentPage,
+    setPageSize,
+    handleRefresh,
+  } = usePaginatedQuery<
+    SkillsData,
+    Record<string, unknown>,
+    ApiSkill,
+    SkillSortField
+  >({
+    query: SKILLS_QUERY,
+    defaultSortBy: 'name',
+    extractPaginatedData,
+    filterItem,
+    getSortValue,
   });
-
-  const loadAllSkills = useCallback(
-    async (sourceData: NonNullable<typeof data>): Promise<ApiSkill[]> => {
-      const firstPageSkills = sourceData.skills.items;
-      const totalBackendPages = sourceData.skills.total_pages;
-
-      if (totalBackendPages <= 1) {
-        return firstPageSkills;
-      }
-
-      const pagesToLoad = Array.from(
-        { length: totalBackendPages - 1 },
-        (_, index) => index + 2,
-      );
-
-      const responses = await Promise.all(
-        pagesToLoad.map((page) =>
-          fetchMore({
-            variables: {
-              params: {
-                page,
-                limit: BACKEND_PAGE_SIZE,
-              },
-            },
-          }),
-        ),
-      );
-
-      const remainingSkills = responses.flatMap(
-        (response) => response.data.skills.items,
-      );
-
-      return [...firstPageSkills, ...remainingSkills];
-    },
-    [fetchMore],
-  );
-
-  useEffect(() => {
-    if (!data) return;
-
-    const syncSkills = async () => {
-      try {
-        const skills = await loadAllSkills(data);
-
-        setAllSkills(skills);
-        setLoadError(false);
-      } catch {
-        setLoadError(true);
-      }
-    };
-
-    void syncSkills();
-  }, [data, loadAllSkills]);
 
   const {
     data: categoriesData,
@@ -108,24 +83,6 @@ export function AdminSkillsContent() {
     error: categoriesError,
     refetch: refetchCategories,
   } = useQuery(SKILL_CATEGORIES_QUERY);
-
-  const normalizedSearch = search.trim().toLowerCase();
-
-  const filteredSkills = allSkills.filter((skill) =>
-    skill.name.toLowerCase().includes(normalizedSearch),
-  );
-
-  const sortedSkills = [...filteredSkills].sort((a, b) =>
-    sortDirection === 'asc'
-      ? a.name.localeCompare(b.name)
-      : b.name.localeCompare(a.name),
-  );
-
-  const totalPages = Math.ceil(sortedSkills.length / pageSize) || 1;
-
-  const startIndex = (currentPage - 1) * pageSize;
-
-  const skills = sortedSkills.slice(startIndex, startIndex + pageSize);
 
   const categoryTypes = useMemo(() => {
     const result: Record<string, string> = {};
@@ -165,64 +122,26 @@ export function AdminSkillsContent() {
     return [...result.values()].sort((a, b) => a.name.localeCompare(b.name));
   }, [categoriesData]);
 
-  const handleRefresh = async (): Promise<void> => {
-    try {
-      const result = await refetch();
-
-      if (!result.data) {
-        return;
-      }
-
-      const refreshedSkills = await loadAllSkills(result.data);
-
-      setAllSkills(refreshedSkills);
-      setLoadError(false);
-    } catch {
-      setLoadError(true);
-    }
-  };
-
-  const handleSort = (field: SkillSortField) => {
-    if (sortBy === field) {
-      setSortDirection((current) => (current === 'asc' ? 'desc' : 'asc'));
-    } else {
-      setSortBy(field);
-      setSortDirection('asc');
-    }
-
-    setCurrentPage(1);
-  };
-
   const handleRetry = async () => {
     await Promise.all([handleRefresh(), refetchCategories()]);
   };
 
-  const isLoading =
-    loading ||
-    categoriesLoading ||
-    Boolean(data && allSkills.length < data.skills.total);
-
-  const hasError = Boolean(error) || Boolean(categoriesError) || loadError;
+  const hasError = Boolean(error) || Boolean(categoriesError);
+  const isLoading = loading || categoriesLoading;
 
   return (
-    <div className="flex h-[calc(100dvh-3.5rem)] min-h-0 flex-col overflow-hidden">
-      {!hasError && isLoading && <LoadingOverlay />}
-
-      <div className="mx-6 mt-[7px] flex shrink-0 items-center justify-between">
-        <SearchInput
-          value={search}
-          onChange={(event) => {
-            setSearch(event.target.value);
-            setCurrentPage(1);
-          }}
-          placeholder={t('skills.admin.search')}
-          className="bg-background"
-        />
-
+    <ContentLayout
+      isLoading={isLoading}
+      hasError={hasError}
+      errorMessage={t('skills.admin.loadError', 'Failed to load skills')}
+      onRetry={handleRetry}
+      search={search}
+      onSearchChange={setSearch}
+      actionTrigger={
         <CreateSkillAdminModal
           skills={allSkills}
           categories={selectableCategories}
-          onSuccess={handleRefresh}
+          onSuccess={() => void handleRefresh()}
           trigger={
             <Button
               type="button"
@@ -230,91 +149,66 @@ export function AdminSkillsContent() {
               className="w-10 border-transparent px-0 lg:w-auto lg:gap-3 lg:border-transparent lg:px-5 lg:hover:border-primary"
             >
               <PlusIcon className="size-6" />
-
               <span className="hidden lg:inline">
                 {t('skills.admin.create')}
               </span>
             </Button>
           }
         />
-      </div>
+      }
+      pagination={{
+        currentPage,
+        totalPages,
+        pageSize,
+        onPageChange: setCurrentPage,
+        onPageSizeChange: setPageSize,
+      }}
+    >
+      <SkillsTable
+        skills={skills}
+        categoryTypes={categoryTypes}
+        sortBy={sortBy}
+        sortDirection={sortDirection}
+        onSort={handleSort}
+        onEdit={setEditingSkill}
+        onDelete={setDeletingSkill}
+      />
 
-      <div className="flex min-h-0 flex-1 flex-col px-5 pt-4">
-        {hasError ? (
-          <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4">
-            <p className="text-base text-foreground">
-              {t('skills.admin.loadError')}
-            </p>
+      {editingSkill && (
+        <UpdateSkillAdminModal
+          skill={editingSkill}
+          skills={allSkills}
+          categories={selectableCategories}
+          open={Boolean(editingSkill)}
+          onOpenChange={(open) => {
+            if (!open) {
+              setEditingSkill(null);
+            }
+          }}
+          onSuccess={async () => {
+            await handleRefresh();
+            setEditingSkill(null);
+          }}
+        />
+      )}
 
-            <Button type="button" onClick={() => void handleRetry()}>
-              {t('retry')}
-            </Button>
-          </div>
-        ) : (
-          <>
-            <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]">
-              <SkillsTable
-                skills={skills}
-                categoryTypes={categoryTypes}
-                sortBy={sortBy}
-                sortDirection={sortDirection}
-                onSort={handleSort}
-                onEdit={setEditingSkill}
-                onDelete={setDeletingSkill}
-              />
-            </div>
-
-            <div className="shrink-0 bg-background pb-4">
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                pageSize={pageSize}
-                onPageChange={setCurrentPage}
-                onPageSizeChange={(size) => {
-                  setPageSize(size);
-                  setCurrentPage(1);
-                }}
-              />
-            </div>
-
-            {editingSkill && (
-              <UpdateSkillAdminModal
-                skill={editingSkill}
-                skills={allSkills}
-                categories={selectableCategories}
-                open={Boolean(editingSkill)}
-                onOpenChange={(open) => {
-                  if (!open) {
-                    setEditingSkill(null);
-                  }
-                }}
-                onSuccess={async () => {
-                  await handleRefresh();
-                  setEditingSkill(null);
-                }}
-              />
-            )}
-
-            {deletingSkill && (
-              <DeleteSkillModal
-                skillId={deletingSkill.id}
-                name={deletingSkill.name}
-                open={Boolean(deletingSkill)}
-                onOpenChange={(open) => {
-                  if (!open) {
-                    setDeletingSkill(null);
-                  }
-                }}
-                onSuccess={async () => {
-                  await handleRefresh();
-                  setDeletingSkill(null);
-                  setCurrentPage(1);
-                }}
-              />
-            )}
-          </>
-        )}
-      </div>
-    </div>
+      {deletingSkill && (
+        <DeleteSkillModal
+          skillId={deletingSkill.id}
+          name={deletingSkill.name}
+          open={Boolean(deletingSkill)}
+          onOpenChange={(open) => {
+            if (!open) {
+              setDeletingSkill(null);
+            }
+          }}
+          onSuccess={async () => {
+            await handleRefresh();
+            setDeletingSkill(null);
+            setCurrentPage(1);
+          }}
+        />
+      )}
+    </ContentLayout>
   );
 }

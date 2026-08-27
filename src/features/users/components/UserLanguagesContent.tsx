@@ -12,7 +12,7 @@ import {
 import { DeleteIcon } from '@/components/icons/delete-icon';
 import { PlusIcon } from '@/components/icons/plus-icon';
 import { Button } from '@/components/ui/button';
-import { LoadingOverlay } from '@/components/ui/loading-overlay';
+import { ContentLayout } from '@/components/common/ContentLayout';
 import { AddUserLanguageModal } from '@/features/languages/components/AddUserLanguageModal';
 import { LanguageProficiencyProgress } from '@/features/languages/components/LanguageProficiencyProgress';
 import { RemoveUserLanguagesModal } from '@/features/languages/components/RemoveUserLanguagesModal';
@@ -101,143 +101,130 @@ export function UserLanguagesContent({
     await Promise.all([refetchUserLanguages(), refetchLanguages()]);
   };
 
-  if (loading) {
-    return <LoadingOverlay />;
-  }
-
-  if (error) {
-    return (
-      <div className="flex flex-col items-center gap-4 pt-10">
-        <p className="text-sm text-destructive">
-          {t('users.languages.loadError')}
-        </p>
-
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={() => void handleRetry()}
-        >
-          {t('retry')}
-        </Button>
-      </div>
-    );
-  }
-
   return (
-    <div className="mx-auto w-full max-w-[760px] pt-8">
-      {profileLanguages.length === 0 ? (
-        <p className="pt-8 text-center text-muted-foreground">
-          {t('users.languages.empty')}
-        </p>
-      ) : (
-        <section>
-          <h2 className="mb-8 text-base font-normal text-foreground">
-            {t('users.languages.current')}
-          </h2>
+    <ContentLayout
+      isLoading={loading}
+      hasError={Boolean(error)}
+      errorMessage={t('users.languages.loadError', 'Failed to load languages')}
+      onRetry={handleRetry}
+    >
+      <div className="mx-auto w-full max-w-[760px] pt-8">
+        {profileLanguages.length === 0 ? (
+          <p className="pt-8 text-center text-muted-foreground">
+            {t('users.languages.empty')}
+          </p>
+        ) : (
+          <section>
+            <h2 className="mb-8 text-base font-normal text-foreground">
+              {t('users.languages.current')}
+            </h2>
 
-          <div className="grid grid-cols-1 gap-x-16 gap-y-6 md:grid-cols-2 lg:grid-cols-3">
-            {profileLanguages.map((language) => (
-              <button
-                key={language.name}
-                type="button"
-                disabled={!canManage}
-                onClick={() => handleLanguageClick(language)}
-                className="flex items-center gap-4 text-left disabled:cursor-default"
-              >
-                <LanguageProficiencyProgress
-                  proficiency={language.proficiency}
-                  selected={selectedLanguages.includes(language.name)}
+            <div className="grid grid-cols-1 gap-x-16 gap-y-6 md:grid-cols-2 lg:grid-cols-3">
+              {profileLanguages.map((language) => (
+                <button
+                  key={language.name}
+                  type="button"
+                  disabled={!canManage}
+                  onClick={() => handleLanguageClick(language)}
+                  className="flex items-center gap-4 text-left disabled:cursor-default"
+                >
+                  <LanguageProficiencyProgress
+                    proficiency={language.proficiency}
+                    selected={selectedLanguages.includes(language.name)}
+                  />
+
+                  <span className="text-sm text-foreground">
+                    {language.name}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {canManage && (
+          <div className="mt-10 flex justify-end gap-6">
+            {isRemoveMode ? (
+              <>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="w-[160px]"
+                  onClick={handleCancelRemove}
+                >
+                  {t('dialogs.common.cancel')}
+                </Button>
+
+                <Button
+                  type="button"
+                  className="w-[160px]"
+                  disabled={selectedLanguages.length === 0}
+                  onClick={() => setRemoveDialogOpen(true)}
+                >
+                  {t('users.languages.removeSelected', {
+                    count: selectedLanguages.length,
+                  })}
+                </Button>
+              </>
+            ) : (
+              <>
+                <AddUserLanguageModal
+                  userId={userId}
+                  languages={selectableLanguages}
+                  onSuccess={async () => {
+                    await refetchUserLanguages();
+                  }}
+                  trigger={
+                    <Button type="button" variant="ghost" className="gap-3">
+                      <PlusIcon className="size-5" />
+                      {t('users.languages.add')}
+                    </Button>
+                  }
                 />
 
-                <span className="text-sm text-foreground">{language.name}</span>
-              </button>
-            ))}
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="gap-3 text-primary hover:text-primary"
+                  onClick={() => setIsRemoveMode(true)}
+                >
+                  <DeleteIcon className="shrink-0" />
+                  {t('users.languages.remove')}
+                </Button>
+              </>
+            )}
           </div>
-        </section>
-      )}
+        )}
 
-      {canManage && (
-        <div className="mt-10 flex justify-end gap-6">
-          {isRemoveMode ? (
-            <>
-              <Button
-                type="button"
-                variant="secondary"
-                className="w-[160px]"
-                onClick={handleCancelRemove}
-              >
-                {t('dialogs.common.cancel')}
-              </Button>
-
-              <Button
-                type="button"
-                className="w-[160px]"
-                disabled={selectedLanguages.length === 0}
-                onClick={() => setRemoveDialogOpen(true)}
-              >
-                {t('users.languages.removeSelected', {
-                  count: selectedLanguages.length,
-                })}
-              </Button>
-            </>
-          ) : (
-            <>
-              <AddUserLanguageModal
-                userId={userId}
-                languages={selectableLanguages}
-                onSuccess={async () => {
-                  await refetchUserLanguages();
-                }}
-                trigger={
-                  <Button type="button" variant="ghost" className="gap-3">
-                    <PlusIcon className="size-5" />
-                    {t('users.languages.add')}
-                  </Button>
-                }
-              />
-
-              <Button
-                type="button"
-                variant="ghost"
-                className="gap-3 text-primary hover:text-primary"
-                onClick={() => setIsRemoveMode(true)}
-              >
-                <DeleteIcon className="shrink-0" />
-                {t('users.languages.remove')}
-              </Button>
-            </>
-          )}
-        </div>
-      )}
-
-      {editingLanguage && (
-        <UpdateUserLanguageModal
-          userId={userId}
-          language={editingLanguage}
-          languages={availableLanguages}
-          open={Boolean(editingLanguage)}
-          onOpenChange={(open) => {
-            if (!open) {
+        {editingLanguage && (
+          <UpdateUserLanguageModal
+            userId={userId}
+            language={editingLanguage}
+            languages={availableLanguages}
+            open={Boolean(editingLanguage)}
+            onOpenChange={(open) => {
+              if (!open) {
+                setEditingLanguage(null);
+              }
+            }}
+            onSuccess={async () => {
+              await refetchUserLanguages();
               setEditingLanguage(null);
-            }
-          }}
+            }}
+          />
+        )}
+
+        <RemoveUserLanguagesModal
+          userId={userId}
+          selectedLanguages={selectedLanguages}
+          open={removeDialogOpen}
+          onOpenChange={setRemoveDialogOpen}
           onSuccess={async () => {
             await refetchUserLanguages();
-            setEditingLanguage(null);
+            handleCancelRemove();
           }}
         />
-      )}
-
-      <RemoveUserLanguagesModal
-        userId={userId}
-        selectedLanguages={selectedLanguages}
-        open={removeDialogOpen}
-        onOpenChange={setRemoveDialogOpen}
-        onSuccess={async () => {
-          await refetchUserLanguages();
-          handleCancelRemove();
-        }}
-      />
-    </div>
+      </div>
+    </ContentLayout>
   );
 }
