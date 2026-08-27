@@ -41,14 +41,6 @@ export function DepartmentsContent() {
     handleRefresh,
   } = useDepartments();
 
-  const handleEdit = (department: ApiDepartment) => {
-    setEditingDepartment(department);
-  };
-
-  const handleDelete = (department: ApiDepartment) => {
-    setDeletingDepartment(department);
-  };
-
   return (
     <ContentLayout
       isLoading={loading}
@@ -88,15 +80,15 @@ export function DepartmentsContent() {
         sortBy={sortBy}
         sortDirection={sortDirection}
         onSort={handleSort}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
+        onEdit={setEditingDepartment}
+        onDelete={setDeletingDepartment}
       />
 
       {editingDepartment && (
         <UpdateDepartmentModal
           department={editingDepartment}
           departments={allDepartments}
-          open={Boolean(editingDepartment)}
+          open
           onOpenChange={(open) => {
             if (!open) {
               setEditingDepartment(null);
@@ -113,7 +105,7 @@ export function DepartmentsContent() {
         <DeleteDepartmentModal
           departmentId={deletingDepartment.id}
           name={deletingDepartment.name}
-          open={Boolean(deletingDepartment)}
+          open
           onOpenChange={(open) => {
             if (!open) {
               setDeletingDepartment(null);

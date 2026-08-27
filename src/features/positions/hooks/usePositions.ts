@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { usePaginatedQuery } from '@/components/hooks/usePaginatedQuery';
+import { getEmptyPaginatedResponse } from '@/components/hooks/useFetchAllPages';
 import {
   POSITIONS_QUERY,
   type Position,
@@ -12,7 +13,7 @@ export function usePositions() {
     if ('positions' in data && data.positions) {
       return data.positions;
     }
-    return { items: [], total: 0, total_pages: 0 };
+    return getEmptyPaginatedResponse<Position>();
   }, []);
 
   const filterItem = useCallback((position: Position, queryStr: string) => {

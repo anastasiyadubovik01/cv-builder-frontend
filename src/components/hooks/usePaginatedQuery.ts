@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import type { DocumentNode, OperationVariables } from '@apollo/client';
 import {
   useFetchAllPages,
@@ -99,9 +100,16 @@ export function usePaginatedQuery<
       onStateChange: resetPagination,
     });
 
-  const totalPages = Math.ceil(sortedItems.length / pageSize) || 1;
-  const startIndex = (currentPage - 1) * pageSize;
+  const totalPages = Math.max(1, Math.ceil(sortedItems.length / pageSize));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const startIndex = (safeCurrentPage - 1) * pageSize;
   const paginatedItems = sortedItems.slice(startIndex, startIndex + pageSize);
+
+  useEffect(() => {
+    if (safeCurrentPage !== currentPage) {
+      setCurrentPage(safeCurrentPage);
+    }
+  }, [currentPage, safeCurrentPage, setCurrentPage]);
 
   return {
     allItems,
@@ -113,7 +121,7 @@ export function usePaginatedQuery<
     sortBy,
     sortDirection,
     handleSort,
-    currentPage,
+    currentPage: safeCurrentPage,
     totalPages,
     pageSize,
     setCurrentPage,

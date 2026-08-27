@@ -171,7 +171,7 @@ export function UserLanguagesContent({
             userId={userId}
             language={editingLanguage}
             languages={availableLanguages}
-            open={Boolean(editingLanguage)}
+            open
             onOpenChange={(open) => {
               if (!open) {
                 setEditingLanguage(null);

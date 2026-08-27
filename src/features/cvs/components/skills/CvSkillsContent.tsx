@@ -177,7 +177,7 @@ export function CvSkillsContent({ cvId }: CvSkillsContentProps) {
             cvId={cvId}
             skill={editingSkill}
             skills={availableSkills}
-            open={Boolean(editingSkill)}
+            open
             onOpenChange={(open) => {
               if (!open) setEditingSkill(null);
             }}

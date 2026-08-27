@@ -148,7 +148,7 @@ export function UsersTable({
       {editingUser && (
         <UpdateUserModal
           userId={editingUser.id}
-          open={Boolean(editingUser)}
+          open
           onOpenChange={(open) => {
             if (!open) {
               setEditingUser(null);
@@ -165,7 +165,7 @@ export function UsersTable({
         <DeleteUserModal
           userId={deletingUser.id}
           name={`${deletingUser.firstName} ${deletingUser.lastName}`}
-          open={Boolean(deletingUser)}
+          open
           onOpenChange={(open) => {
             if (!open) {
               setDeletingUser(null);

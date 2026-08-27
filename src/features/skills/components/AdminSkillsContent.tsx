@@ -90,7 +90,7 @@ export function AdminSkillsContent() {
           skill={editingSkill}
           skills={allSkills}
           categories={selectableCategories}
-          open={Boolean(editingSkill)}
+          open
           onOpenChange={(open) => {
             if (!open) {
               setEditingSkill(null);
@@ -107,7 +107,7 @@ export function AdminSkillsContent() {
         <DeleteSkillModal
           skillId={deletingSkill.id}
           name={deletingSkill.name}
-          open={Boolean(deletingSkill)}
+          open
           onOpenChange={(open) => {
             if (!open) {
               setDeletingSkill(null);

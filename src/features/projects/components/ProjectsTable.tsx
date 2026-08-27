@@ -130,7 +130,7 @@ export function ProjectsTable({
       {editingProject && (
         <UpdateProjectModal
           project={editingProject}
-          open={Boolean(editingProject)}
+          open
           onOpenChange={(open) => {
             if (!open) setEditingProject(null);
           }}
@@ -141,7 +141,7 @@ export function ProjectsTable({
         <DeleteProjectModal
           projectId={deletingProject.id}
           name={deletingProject.name}
-          open={Boolean(deletingProject)}
+          open
           onOpenChange={(open) => {
             if (!open) setDeletingProject(null);
           }}

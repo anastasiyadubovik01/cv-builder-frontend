@@ -192,7 +192,7 @@ export function UserSkillsContent({
             userId={userId}
             skill={editingSkill}
             skills={availableSkills}
-            open={Boolean(editingSkill)}
+            open
             onOpenChange={(open) => {
               if (!open) {
                 setEditingSkill(null);
