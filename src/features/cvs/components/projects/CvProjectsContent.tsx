@@ -1,23 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@apollo/client/react';
-
+import {
+  CV_PROJECTS_QUERY,
+  type ApiCvProject,
+  type CvProjectsData,
+} from '@/api/cv-projects';
 import { PlusIcon } from '@/components/icons/plus-icon';
 import { Button } from '@/components/ui/button';
-import { LoadingOverlay } from '@/components/ui/loading-overlay';
-import { SearchInput } from '@/components/ui/search-input';
+import { ContentLayout } from '@/components/common/ContentLayout';
 import { CvProjectsTable } from '@/features/cvs/components/projects/CvProjectsTable';
 import { AddCvProjectModal } from '@/features/cvs/components/projects/modals/AddCvProjectModal';
-
-import type {
-  CvProject,
-  CvProjectSortField,
-  SortDirection,
-} from '@/features/cvs/types';
-import { CV_PROJECTS_QUERY, type ApiCvProject } from '@/api/cv-projects';
-import { QueryErrorState } from '@/components/common/QueryErrorState';
+import type { CvProject, CvProjectSortField } from '@/features/cvs/types';
+import { usePaginatedQuery } from '@/components/hooks/usePaginatedQuery';
 
 interface CvProjectsContentProps {
   cvId: string;
@@ -26,19 +22,68 @@ interface CvProjectsContentProps {
 export function CvProjectsContent({ cvId }: CvProjectsContentProps) {
   const { t } = useTranslation();
 
-  const [search, setSearch] = useState('');
-  const [sortBy, setSortBy] = useState<CvProjectSortField>('name');
-  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const extractPaginatedData = useCallback((data: CvProjectsData) => {
+    const projects = data?.cv?.projects ?? [];
+    return {
+      items: projects,
+      total: projects.length,
+      total_pages: 1,
+    };
+  }, []);
 
-  const { data, loading, error, refetch } = useQuery(CV_PROJECTS_QUERY, {
+  const filterItem = useCallback((p: ApiCvProject, queryStr: string) => {
+    const name = (p.name || p.project?.name || '').toLowerCase();
+    const domain = (p.domain || p.project?.domain || '').toLowerCase();
+
+    return name.includes(queryStr) || domain.includes(queryStr);
+  }, []);
+
+  const getSortValue = useCallback(
+    (p: ApiCvProject, field: CvProjectSortField) => {
+      switch (field) {
+        case 'name':
+          return p.name || p.project?.name || '';
+        case 'startDate':
+          return p.start_date || p.project?.start_date || '';
+        case 'endDate':
+          return p.end_date || p.project?.end_date || '';
+        default:
+          return '';
+      }
+    },
+    [],
+  );
+
+  const {
+    paginatedItems: rawProjects,
+    loading,
+    error,
+    search,
+    setSearch,
+    sortBy,
+    sortDirection,
+    handleSort,
+    currentPage,
+    totalPages,
+    pageSize,
+    setCurrentPage,
+    setPageSize,
+    handleRefresh,
+  } = usePaginatedQuery<
+    CvProjectsData,
+    { cvId: string },
+    ApiCvProject,
+    CvProjectSortField
+  >({
+    query: CV_PROJECTS_QUERY,
     variables: { cvId },
-    fetchPolicy: 'cache-and-network',
+    defaultSortBy: 'name',
+    extractPaginatedData,
+    filterItem,
+    getSortValue,
   });
 
-  const apiProjects: ApiCvProject[] = data?.cv?.projects ?? [];
-
-  const projects: CvProject[] = apiProjects.map((p) => ({
+  const projects: CvProject[] = rawProjects.map((p) => ({
     id: p.id,
     name: p.name || p.project?.name || '',
     domain: p.domain || p.project?.domain || '',
@@ -50,59 +95,18 @@ export function CvProjectsContent({ cvId }: CvProjectsContentProps) {
     roles: p.roles ?? [],
   }));
 
-  const normalizedSearch = search.trim().toLowerCase();
-
-  const filteredProjects = projects.filter((project) => {
-    return (
-      project.name.toLowerCase().includes(normalizedSearch) ||
-      project.domain.toLowerCase().includes(normalizedSearch)
-    );
-  });
-
-  const sortedProjects = [...filteredProjects].sort((a, b) => {
-    const firstValue = (a[sortBy] ?? '').trim();
-    const secondValue = (b[sortBy] ?? '').trim();
-
-    if (!firstValue && !secondValue) return 0;
-    if (!firstValue) return 1;
-    if (!secondValue) return -1;
-
-    return sortDirection === 'asc'
-      ? firstValue.localeCompare(secondValue)
-      : secondValue.localeCompare(firstValue);
-  });
-
-  const handleSort = (field: CvProjectSortField) => {
-    if (sortBy === field) {
-      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-      return;
-    }
-
-    setSortBy(field);
-    setSortDirection('asc');
-  };
-
-  const handleRefresh = async (): Promise<void> => {
-    await refetch();
-  };
-
   return (
-    <div className="flex h-[calc(100dvh-3.5rem)] min-h-0 flex-col overflow-hidden">
-      {loading && <LoadingOverlay />}
-
-      <div className="mx-6 mt-[7px] flex items-center justify-between shrink-0">
-        <SearchInput
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder={t('cvs.search', 'Search')}
-          className="bg-background"
-        />
-
+    <ContentLayout
+      isLoading={loading}
+      hasError={error}
+      errorMessage={t('projects.loadError', 'Failed to load projects')}
+      onRetry={handleRefresh}
+      search={search}
+      onSearchChange={setSearch}
+      actionTrigger={
         <AddCvProjectModal
           cvId={cvId}
-          open={isCreateModalOpen}
-          onOpenChange={setIsCreateModalOpen}
-          onSuccess={handleRefresh}
+          onSuccess={() => void handleRefresh()}
           trigger={
             <Button
               type="button"
@@ -116,29 +120,27 @@ export function CvProjectsContent({ cvId }: CvProjectsContentProps) {
             </Button>
           }
         />
-      </div>
-
-      <div className="flex min-h-0 flex-1 flex-col px-6 pt-4">
-        {error ? (
-          <QueryErrorState
-            message={t('projects.loadError', 'Failed to load projects')}
-            onRetry={handleRefresh}
-          />
-        ) : (
-          <div className="min-h-0 flex-1 overflow-y-auto">
-            <CvProjectsTable
-              cvId={cvId}
-              projects={sortedProjects}
-              rawProjects={apiProjects}
-              sortBy={sortBy}
-              sortDirection={sortDirection}
-              onSort={handleSort}
-              hasSearchQuery={normalizedSearch.length > 0}
-              onRefetch={handleRefresh}
-            />
-          </div>
-        )}
-      </div>
-    </div>
+      }
+      pagination={{
+        currentPage,
+        totalPages,
+        pageSize,
+        onPageChange: setCurrentPage,
+        onPageSizeChange: setPageSize,
+      }}
+    >
+      <CvProjectsTable
+        cvId={cvId}
+        projects={projects}
+        rawProjects={rawProjects}
+        sortBy={sortBy}
+        sortDirection={sortDirection}
+        onSort={handleSort}
+        hasSearchQuery={search.trim().length > 0}
+        onRefetch={async () => {
+          await handleRefresh();
+        }}
+      />
+    </ContentLayout>
   );
 }
