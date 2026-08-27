@@ -17,7 +17,7 @@ type UseRemoveCvProjectOptions = {
 };
 
 export function useRemoveCvProject(options: UseRemoveCvProjectOptions = {}) {
-  const { handleDelete, loading, t } = useDeleteEntity<
+  const { handleDelete, loading } = useDeleteEntity<
     RemoveCvProjectData,
     RemoveCvProjectVariables,
     [cvId: string, projectId: string]
@@ -31,5 +31,5 @@ export function useRemoveCvProject(options: UseRemoveCvProjectOptions = {}) {
     onSuccess: options.onSuccess,
   });
 
-  return { handleDelete, loading, t };
+  return { handleDelete, loading };
 }

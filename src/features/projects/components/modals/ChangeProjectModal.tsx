@@ -2,7 +2,6 @@
 
 import React, { ChangeEvent } from 'react';
 import { useQuery } from '@apollo/client/react';
-import type { TFunction } from 'i18next';
 import { ChangeDialog } from '@/components/dialogs/ChangeDialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -14,6 +13,7 @@ import type {
 } from '@/components/dialogs/types';
 import { CreateProjectInputValues } from '@/lib/validations/project';
 import { SKILLS_QUERY } from '@/api/skills';
+import { useTranslation } from 'react-i18next';
 
 const SKILLS_LIMIT = 1000;
 
@@ -30,7 +30,6 @@ export interface ChangeProjectModalProps {
   ) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   setFieldValue: (field: keyof CreateProjectInputValues, value: string) => void;
   handleSubmit: () => Promise<boolean>;
-  t: TFunction;
 }
 
 export function ChangeProjectModal({
@@ -44,8 +43,8 @@ export function ChangeProjectModal({
   handleChange,
   setFieldValue,
   handleSubmit,
-  t,
 }: ChangeProjectModalProps) {
+  const { t } = useTranslation();
   const { data: skillsData, loading: skillsLoading } = useQuery(SKILLS_QUERY, {
     variables: {
       params: {
@@ -85,7 +84,6 @@ export function ChangeProjectModal({
       onConfirm={handleSubmit}
       confirmDisabled={loading}
       trigger={trigger}
-      t={t}
       open={open}
       onOpenChange={onOpenChange}
       size="wide"

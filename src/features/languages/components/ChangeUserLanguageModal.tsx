@@ -1,9 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import type { TFunction } from 'i18next';
 import type { ReactNode } from 'react';
-
 import type { ApiLanguage } from '@/api/languages';
 import { ChangeDialog } from '@/components/dialogs/ChangeDialog';
 import type {
@@ -19,6 +17,7 @@ import {
 } from '@/components/ui/select';
 import type { AddUserLanguageFormValues } from '@/lib/validations/language';
 import { proficiencyValues } from '@/lib/validations/language';
+import { useTranslation } from 'react-i18next';
 
 type ChangeUserLanguageModalProps = {
   type: createActionTitles | updateActionTitles;
@@ -27,13 +26,10 @@ type ChangeUserLanguageModalProps = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   languageDisabled?: boolean;
-
   formData: AddUserLanguageFormValues;
   errors: Partial<Record<keyof AddUserLanguageFormValues, string>>;
-
   loading: boolean;
   isValid: boolean;
-
   setFieldValue: (
     field: keyof AddUserLanguageFormValues,
     value: string,
@@ -41,11 +37,8 @@ type ChangeUserLanguageModalProps = {
       shouldValidate?: boolean;
     },
   ) => void;
-
   validateField: (field: keyof AddUserLanguageFormValues) => boolean;
-
   handleSubmit: () => Promise<boolean>;
-  t: TFunction;
 };
 
 export function ChangeUserLanguageModal({
@@ -62,8 +55,8 @@ export function ChangeUserLanguageModal({
   setFieldValue,
   validateField,
   handleSubmit,
-  t,
 }: ChangeUserLanguageModalProps) {
+  const { t } = useTranslation();
   const languageItems = languages.map((language) => ({
     value: language.name,
     label: language.name,
@@ -84,7 +77,6 @@ export function ChangeUserLanguageModal({
       onConfirm={handleSubmit}
       confirmDisabled={!isValid || loading}
       size="sm"
-      t={t}
     >
       <div className="flex flex-col gap-9">
         <div>

@@ -9,7 +9,7 @@ import { useDeleteLanguage } from '../hooks/useDeleteLanguage';
 
 type DeleteLanguageModalProps = Omit<
   DeleteDialogProps,
-  'itemType' | 'onConfirm' | 't'
+  'itemType' | 'onConfirm'
 > & {
   languageId: string;
   onSuccess?: () => void | Promise<void>;
@@ -21,7 +21,7 @@ export function DeleteLanguageModal({
   onSuccess,
   ...props
 }: DeleteLanguageModalProps) {
-  const { handleDelete, t } = useDeleteLanguage({
+  const { handleDelete } = useDeleteLanguage({
     onSuccess,
   });
 
@@ -31,7 +31,6 @@ export function DeleteLanguageModal({
       name={name}
       itemType="language"
       onConfirm={() => handleDelete(languageId)}
-      t={t}
     />
   );
 }

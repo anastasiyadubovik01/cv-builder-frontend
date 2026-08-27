@@ -2,6 +2,7 @@
 
 import { DeleteCountDialog } from '@/components/dialogs/DeleteCountDialog';
 import { useRemoveCvSkills } from '@/features/cvs/components/skills/hooks/useRemoveCvSkills';
+import { useTranslation } from 'react-i18next';
 
 type RemoveCvSkillsModalProps = {
   cvId: string;
@@ -18,7 +19,8 @@ export function RemoveCvSkillsModal({
   onOpenChange,
   onSuccess,
 }: RemoveCvSkillsModalProps) {
-  const { handleRemove, loading, t } = useRemoveCvSkills({
+  const { t } = useTranslation();
+  const { handleRemove, loading } = useRemoveCvSkills({
     cvId,
     onSuccess,
   });
@@ -33,7 +35,6 @@ export function RemoveCvSkillsModal({
       })}
       confirmDisabled={loading}
       onConfirm={() => handleRemove(selectedSkills)}
-      t={t}
     />
   );
 }

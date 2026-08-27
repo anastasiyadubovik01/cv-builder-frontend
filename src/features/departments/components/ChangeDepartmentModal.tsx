@@ -1,8 +1,6 @@
 'use client';
 
 import type { ChangeEvent, ReactNode } from 'react';
-import type { TFunction } from 'i18next';
-
 import { ChangeDialog } from '@/components/dialogs/ChangeDialog';
 import type {
   createActionTitles,
@@ -10,6 +8,7 @@ import type {
 } from '@/components/dialogs/types';
 import { Input } from '@/components/ui/input';
 import type { AdminDepartmentFormValues } from '@/lib/validations/admin-department';
+import { useTranslation } from 'react-i18next';
 
 type ChangeDepartmentModalProps = {
   type: createActionTitles | updateActionTitles;
@@ -21,14 +20,10 @@ type ChangeDepartmentModalProps = {
   errors: Partial<Record<keyof AdminDepartmentFormValues, string>>;
   loading: boolean;
   duplicateName: boolean;
-
   handleChange: (
     field: keyof AdminDepartmentFormValues,
   ) => (event: ChangeEvent<HTMLInputElement>) => void;
-
   handleSubmit: () => Promise<boolean>;
-
-  t: TFunction;
 };
 
 export function ChangeDepartmentModal({
@@ -42,8 +37,8 @@ export function ChangeDepartmentModal({
   duplicateName,
   handleChange,
   handleSubmit,
-  t,
 }: ChangeDepartmentModalProps) {
+  const { t } = useTranslation();
   return (
     <ChangeDialog
       actionTitle={type}
@@ -51,7 +46,6 @@ export function ChangeDepartmentModal({
       onConfirm={handleSubmit}
       confirmDisabled={loading}
       trigger={trigger}
-      t={t}
       open={open}
       onOpenChange={onOpenChange}
     >

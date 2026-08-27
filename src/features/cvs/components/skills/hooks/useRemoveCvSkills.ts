@@ -7,7 +7,7 @@ type UseRemoveCvSkillsProps = {
 };
 
 export function useRemoveCvSkills({ cvId, onSuccess }: UseRemoveCvSkillsProps) {
-  const { handleDelete, loading, t } = useDeleteEntity<
+  const { handleDelete, loading } = useDeleteEntity<
     unknown,
     { skill: { cvId: string; name: string[] } },
     [skillNames: string[]]
@@ -25,5 +25,5 @@ export function useRemoveCvSkills({ cvId, onSuccess }: UseRemoveCvSkillsProps) {
     return handleDelete(skillNames);
   };
 
-  return { handleRemove, loading, t };
+  return { handleRemove, loading };
 }

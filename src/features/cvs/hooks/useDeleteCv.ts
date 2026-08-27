@@ -14,7 +14,7 @@ type UseDeleteCvOptions = {
 };
 
 export function useDeleteCv(options: UseDeleteCvOptions = {}) {
-  const { handleDelete, loading, t } = useDeleteEntity<
+  const { handleDelete, loading } = useDeleteEntity<
     DeleteCvData,
     DeleteCvVariables,
     [cvId: string]
@@ -28,5 +28,5 @@ export function useDeleteCv(options: UseDeleteCvOptions = {}) {
     onSuccess: options.onSuccess,
   });
 
-  return { handleDelete, loading, t };
+  return { handleDelete, loading };
 }

@@ -16,7 +16,7 @@ type UseDeleteLanguageOptions = {
 export function useDeleteLanguage({
   onSuccess,
 }: UseDeleteLanguageOptions = {}) {
-  const { handleDelete, loading, t } = useDeleteEntity<
+  const { handleDelete, loading } = useDeleteEntity<
     DeleteLanguageData,
     DeleteLanguageVars,
     [languageId: string]
@@ -29,5 +29,5 @@ export function useDeleteLanguage({
     onSuccess,
   });
 
-  return { handleDelete, loading, t };
+  return { handleDelete, loading };
 }

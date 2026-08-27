@@ -9,7 +9,7 @@ import { useRemoveCvProject } from '../hooks/useRemoveCvProject';
 
 export interface DeleteCvProjectModalProps extends Omit<
   DeleteDialogProps,
-  'itemType' | 'onConfirm' | 't'
+  'itemType' | 'onConfirm'
 > {
   cvId: string;
   projectId: string;
@@ -23,7 +23,7 @@ export function RemoveCvProjectModal({
   onSuccess,
   ...props
 }: DeleteCvProjectModalProps) {
-  const { handleDelete, t } = useRemoveCvProject({ onSuccess });
+  const { handleDelete } = useRemoveCvProject({ onSuccess });
 
   const handleConfirm = async (): Promise<boolean> => {
     return await handleDelete(cvId, projectId);
@@ -36,7 +36,6 @@ export function RemoveCvProjectModal({
       name={name}
       itemType="CV Project"
       onConfirm={handleConfirm}
-      t={t}
     />
   );
 }

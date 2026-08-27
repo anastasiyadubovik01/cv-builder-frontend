@@ -1,8 +1,6 @@
 'use client';
 
-import type { TFunction } from 'i18next';
 import type { ReactNode } from 'react';
-
 import { ChangeDialog } from '@/components/dialogs/ChangeDialog';
 import type {
   createActionTitles,
@@ -17,6 +15,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import type { AdminSkillFormValues } from '@/lib/validations/admin-skill';
+import { useTranslation } from 'react-i18next';
 
 export type SkillFormCategory = {
   id: string;
@@ -29,14 +28,11 @@ type ChangeSkillModalProps = {
   trigger?: ReactNode;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-
   formData: AdminSkillFormValues;
   errors: Partial<Record<keyof AdminSkillFormValues, string>>;
-
   loading: boolean;
   isValid: boolean;
   isDuplicate: boolean;
-
   setFieldValue: (
     field: keyof AdminSkillFormValues,
     value: string,
@@ -44,11 +40,8 @@ type ChangeSkillModalProps = {
       shouldValidate?: boolean;
     },
   ) => void;
-
   validateField: (field: keyof AdminSkillFormValues) => boolean;
-
   handleSubmit: () => Promise<boolean>;
-  t: TFunction;
 };
 
 export function ChangeSkillAdminModal({
@@ -65,8 +58,8 @@ export function ChangeSkillAdminModal({
   setFieldValue,
   validateField,
   handleSubmit,
-  t,
 }: ChangeSkillModalProps) {
+  const { t } = useTranslation();
   const categoryItems = categories.map((category) => ({
     value: category.id,
     label: category.name,
@@ -88,7 +81,6 @@ export function ChangeSkillAdminModal({
       onConfirm={handleSubmit}
       confirmDisabled={!isValid || loading}
       size="sm"
-      t={t}
     >
       <div className="flex flex-col gap-9">
         <div>

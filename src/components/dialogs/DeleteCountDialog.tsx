@@ -14,6 +14,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { useTranslation } from 'react-i18next';
 
 type DeleteCountDialogProps = {
   title: string;
@@ -23,7 +24,6 @@ type DeleteCountDialogProps = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   confirmDisabled?: boolean;
-  t: (key: string) => string;
 };
 
 export function DeleteCountDialog({
@@ -34,8 +34,8 @@ export function DeleteCountDialog({
   open: externalOpen,
   onOpenChange: externalOnOpenChange,
   confirmDisabled = false,
-  t,
 }: DeleteCountDialogProps) {
+  const { t } = useTranslation();
   const [internalOpen, setInternalOpen] = useState(false);
 
   const isControlled = externalOpen !== undefined;

@@ -1,7 +1,6 @@
 'use client';
 
 import type { ChangeEvent, ReactNode } from 'react';
-
 import type {
   createActionTitles,
   updateActionTitles,
@@ -17,6 +16,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import type { CreateUserFormValues } from '@/lib/validations/user';
+import { useTranslation } from 'react-i18next';
 
 type SelectOption = {
   value: string;
@@ -36,20 +36,15 @@ export type ChangeUserModalProps = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   authDisabled?: boolean;
-
   formData: CreateUserFormValues;
   errors: Partial<Record<keyof CreateUserFormValues, string>>;
-
   departments: NamedEntity[];
   positions: NamedEntity[];
-
   loading: boolean;
   isValid: boolean;
-
   handleChange: (
     field: keyof CreateUserFormValues,
   ) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-
   setFieldValue: (
     field: keyof CreateUserFormValues,
     value: string,
@@ -57,11 +52,8 @@ export type ChangeUserModalProps = {
       shouldValidate?: boolean;
     },
   ) => void;
-
   validateField: (field: keyof CreateUserFormValues) => boolean;
-
   handleSubmit: () => Promise<boolean>;
-  t: (key: string) => string;
 };
 
 export function ChangeUserModal({
@@ -80,8 +72,8 @@ export function ChangeUserModal({
   setFieldValue,
   validateField,
   handleSubmit,
-  t,
 }: ChangeUserModalProps) {
+  const { t } = useTranslation();
   const departmentItems: SelectOption[] = departments.map((department) => ({
     value: String(department.id),
     label: department.name,
@@ -113,7 +105,6 @@ export function ChangeUserModal({
       onConfirm={handleSubmit}
       confirmDisabled={!isValid || loading}
       size="wide"
-      t={t}
     >
       <div className="grid grid-cols-1 gap-y-10 lg:grid-cols-2 lg:gap-x-3 lg:gap-y-9">
         <Input

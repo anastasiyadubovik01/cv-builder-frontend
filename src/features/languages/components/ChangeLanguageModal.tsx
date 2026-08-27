@@ -1,8 +1,6 @@
 'use client';
 
 import type { ChangeEvent, ReactNode } from 'react';
-import type { TFunction } from 'i18next';
-
 import { ChangeDialog } from '@/components/dialogs/ChangeDialog';
 import type {
   createActionTitles,
@@ -10,6 +8,7 @@ import type {
 } from '@/components/dialogs/types';
 import { Input } from '@/components/ui/input';
 import type { AdminLanguageFormValues } from '@/lib/validations/admin-language';
+import { useTranslation } from 'react-i18next';
 
 type ChangeLanguageModalProps = {
   type: createActionTitles | updateActionTitles;
@@ -25,7 +24,6 @@ type ChangeLanguageModalProps = {
     field: keyof AdminLanguageFormValues,
   ) => (event: ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: () => Promise<boolean>;
-  t: TFunction;
   isValid: boolean;
 };
 
@@ -41,9 +39,9 @@ export function ChangeLanguageModal({
   duplicateIso,
   handleChange,
   handleSubmit,
-  t,
   isValid,
 }: ChangeLanguageModalProps) {
+  const { t } = useTranslation();
   const handleIsoChange = (event: ChangeEvent<HTMLInputElement>) => {
     event.target.value = event.target.value.toUpperCase().slice(0, 2);
     handleChange('iso2')(event);
@@ -56,7 +54,6 @@ export function ChangeLanguageModal({
       onConfirm={handleSubmit}
       confirmDisabled={!isValid || loading}
       trigger={trigger}
-      t={t}
       open={open}
       onOpenChange={onOpenChange}
     >

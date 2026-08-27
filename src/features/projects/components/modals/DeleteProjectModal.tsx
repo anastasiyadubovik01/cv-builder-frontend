@@ -9,7 +9,7 @@ import { useDeleteProject } from '../../hooks/useDeleteProject';
 
 export interface DeleteProjectModalProps extends Omit<
   DeleteDialogProps,
-  'itemType' | 'onConfirm' | 't'
+  'itemType' | 'onConfirm'
 > {
   projectId: string;
   onSuccess?: () => void | Promise<void>;
@@ -21,7 +21,7 @@ export function DeleteProjectModal({
   onSuccess,
   ...props
 }: DeleteProjectModalProps) {
-  const { handleDelete, t } = useDeleteProject({ onSuccess });
+  const { handleDelete } = useDeleteProject({ onSuccess });
 
   const handleConfirm = async (): Promise<boolean> => {
     return await handleDelete(projectId);
@@ -33,7 +33,6 @@ export function DeleteProjectModal({
       name={name}
       itemType="project"
       onConfirm={handleConfirm}
-      t={t}
     />
   );
 }

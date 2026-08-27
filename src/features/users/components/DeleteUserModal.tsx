@@ -8,7 +8,7 @@ import { useDeleteUser } from '@/features/users/hooks/useDeleteUser';
 
 type DeleteUserModalProps = Omit<
   DeleteDialogProps,
-  'itemType' | 'onConfirm' | 't'
+  'itemType' | 'onConfirm'
 > & {
   userId: string;
   onSuccess?: () => void;
@@ -20,7 +20,7 @@ export function DeleteUserModal({
   onSuccess,
   ...props
 }: DeleteUserModalProps) {
-  const { handleDelete, t } = useDeleteUser();
+  const { handleDelete } = useDeleteUser();
 
   const handleConfirm = async (): Promise<boolean> => {
     const success = await handleDelete(userId);
@@ -38,7 +38,6 @@ export function DeleteUserModal({
       name={name}
       itemType="user"
       onConfirm={handleConfirm}
-      t={t}
     />
   );
 }

@@ -8,7 +8,7 @@ import { useDeleteSkill } from '@/features/skills/hooks/useDeleteSkill';
 
 type DeleteSkillModalProps = Omit<
   DeleteDialogProps,
-  'itemType' | 'onConfirm' | 't'
+  'itemType' | 'onConfirm'
 > & {
   skillId: string;
   onSuccess?: () => void | Promise<void>;
@@ -20,7 +20,7 @@ export function DeleteSkillModal({
   onSuccess,
   ...props
 }: DeleteSkillModalProps) {
-  const { handleDelete, t } = useDeleteSkill();
+  const { handleDelete } = useDeleteSkill();
 
   const handleConfirm = async (): Promise<boolean> => {
     const success = await handleDelete(skillId);
@@ -38,7 +38,6 @@ export function DeleteSkillModal({
       name={name}
       itemType="skill"
       onConfirm={handleConfirm}
-      t={t}
     />
   );
 }

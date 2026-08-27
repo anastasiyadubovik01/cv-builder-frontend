@@ -9,7 +9,7 @@ import { useDeleteDepartment } from '../hooks/useDeleteDepartment';
 
 type DeleteDepartmentModalProps = Omit<
   DeleteDialogProps,
-  'itemType' | 'onConfirm' | 't'
+  'itemType' | 'onConfirm'
 > & {
   departmentId: string;
   onSuccess?: () => void | Promise<void>;
@@ -21,7 +21,7 @@ export function DeleteDepartmentModal({
   onSuccess,
   ...props
 }: DeleteDepartmentModalProps) {
-  const { handleDelete, t } = useDeleteDepartment({
+  const { handleDelete } = useDeleteDepartment({
     onSuccess,
   });
 
@@ -31,7 +31,6 @@ export function DeleteDepartmentModal({
       name={name}
       itemType="department"
       onConfirm={() => handleDelete(departmentId)}
-      t={t}
     />
   );
 }

@@ -14,7 +14,7 @@ export function useRemoveUserLanguages({
   userId,
   onSuccess,
 }: UseRemoveUserLanguagesOptions) {
-  const { handleDelete, loading, t } = useDeleteEntity<
+  const { handleDelete, loading } = useDeleteEntity<
     unknown,
     RemoveUserLanguagesVars,
     [names: string[]]
@@ -31,5 +31,5 @@ export function useRemoveUserLanguages({
     return handleDelete(names);
   };
 
-  return { handleRemove, loading, t };
+  return { handleRemove, loading };
 }

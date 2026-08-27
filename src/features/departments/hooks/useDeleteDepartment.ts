@@ -16,7 +16,7 @@ type UseDeleteDepartmentOptions = {
 export function useDeleteDepartment({
   onSuccess,
 }: UseDeleteDepartmentOptions = {}) {
-  const { handleDelete, loading, t } = useDeleteEntity<
+  const { handleDelete, loading } = useDeleteEntity<
     DeleteDepartmentData,
     DeleteDepartmentVars,
     [departmentId: string]
@@ -29,5 +29,5 @@ export function useDeleteDepartment({
     onSuccess,
   });
 
-  return { handleDelete, loading, t };
+  return { handleDelete, loading };
 }

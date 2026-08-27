@@ -8,7 +8,7 @@ import { useDeleteCv } from '@/features/cvs/hooks/useDeleteCv';
 
 export interface DeleteCvModalProps extends Omit<
   DeleteDialogProps,
-  'itemType' | 'onConfirm' | 't'
+  'itemType' | 'onConfirm'
 > {
   cvId: string;
   onSuccess?: () => void | Promise<void>;
@@ -20,7 +20,7 @@ export function DeleteCvModal({
   onSuccess,
   ...props
 }: DeleteCvModalProps) {
-  const { handleDelete, t } = useDeleteCv();
+  const { handleDelete } = useDeleteCv();
 
   const handleConfirm = async (): Promise<boolean> => {
     const success = await handleDelete(cvId);
@@ -36,7 +36,6 @@ export function DeleteCvModal({
       name={name}
       itemType="CV"
       onConfirm={handleConfirm}
-      t={t}
     />
   );
 }

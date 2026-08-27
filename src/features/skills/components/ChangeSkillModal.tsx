@@ -1,7 +1,6 @@
 'use client';
 
 import type { ReactNode } from 'react';
-
 import type { ApiSkill } from '@/api/skills';
 import type {
   createActionTitles,
@@ -17,6 +16,7 @@ import {
 } from '@/components/ui/select';
 import type { Mastery } from '@/features/skills/types';
 import type { AddSkillFormValues } from '@/lib/validations/skill';
+import { useTranslation } from 'react-i18next';
 
 type ChangeUserSkillModalProps = {
   type: createActionTitles | updateActionTitles;
@@ -24,14 +24,11 @@ type ChangeUserSkillModalProps = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   skillDisabled?: boolean;
-
   skills: ApiSkill[];
   formData: AddSkillFormValues;
   errors: Partial<Record<keyof AddSkillFormValues, string>>;
-
   loading: boolean;
   isValid: boolean;
-
   setFieldValue: (
     field: keyof AddSkillFormValues,
     value: string,
@@ -39,11 +36,8 @@ type ChangeUserSkillModalProps = {
       shouldValidate?: boolean;
     },
   ) => void;
-
   validateField: (field: keyof AddSkillFormValues) => boolean;
-
   handleSubmit: () => Promise<boolean>;
-  t: (key: string) => string;
 };
 
 const masteryItems: {
@@ -71,8 +65,8 @@ export function ChangeSkillModal({
   setFieldValue,
   validateField,
   handleSubmit,
-  t,
 }: ChangeUserSkillModalProps) {
+  const { t } = useTranslation();
   const skillItems = skills.map((skill) => ({
     value: skill.name,
     label: skill.name,
@@ -88,7 +82,6 @@ export function ChangeSkillModal({
       onConfirm={handleSubmit}
       confirmDisabled={!isValid || loading}
       size="sm"
-      t={t}
     >
       <div className="flex flex-col gap-9">
         <div>
