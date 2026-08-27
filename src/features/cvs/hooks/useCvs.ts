@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { usePaginatedQuery } from '@/components/hooks/usePaginatedQuery';
 import {
   CVS_BY_USER_ID_QUERY,
@@ -14,7 +14,10 @@ type CombinedCvResponse = CvsData | CvsByUserIdData;
 export function useCvs(userId?: string) {
   const isUserSpecific = Boolean(userId);
   const query = isUserSpecific ? CVS_BY_USER_ID_QUERY : CVS_QUERY;
-  const variables = isUserSpecific ? { userId: userId ?? '' } : undefined;
+  const variables = useMemo(
+    () => (isUserSpecific ? { userId: userId ?? '' } : undefined),
+    [isUserSpecific, userId],
+  );
 
   const extractPaginatedData = useCallback((data: CombinedCvResponse) => {
     if ('cvsByUserId' in data && data.cvsByUserId) {

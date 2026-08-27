@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { usePaginatedQuery } from '@/components/hooks/usePaginatedQuery';
 import {
   CV_PROJECTS_QUERY,
@@ -40,6 +40,8 @@ export function useCvProjects(cvId: string) {
     [],
   );
 
+  const variables = useMemo(() => ({ cvId }), [cvId]);
+
   return usePaginatedQuery<
     CvProjectsData,
     { cvId: string },
@@ -47,7 +49,7 @@ export function useCvProjects(cvId: string) {
     CvProjectSortField
   >({
     query: CV_PROJECTS_QUERY,
-    variables: { cvId },
+    variables: variables,
     defaultSortBy: 'name',
     extractPaginatedData,
     filterItem,
