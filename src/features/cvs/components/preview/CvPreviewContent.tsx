@@ -14,6 +14,7 @@ import {
 } from '@/features/cvs/utils/calculateSkillsCategoryMetrics';
 import { formatPeriodDate } from '@/lib/helpers/date';
 import { capitalizeFirstLetter } from '@/lib/helpers/formatters';
+import { QueryErrorState } from '@/components/common/QueryErrorState';
 
 type CvPreviewContentProps = {
   cvId: string;
@@ -59,14 +60,10 @@ export function CvPreviewContent({ cvId }: CvPreviewContentProps) {
 
   if (cvError || !cv) {
     return (
-      <div className="flex flex-col items-center gap-4 pt-10">
-        <p className="text-sm text-destructive">
-          {t('cvs.preview.loadError', 'Failed to load CV preview')}
-        </p>
-        <Button variant="secondary" onClick={() => void refetch()}>
-          {t('retry', 'RETRY')}
-        </Button>
-      </div>
+      <QueryErrorState
+        message={t('cvs.preview.loadError', 'Failed to load CV preview')}
+        onRetry={refetch}
+      />
     );
   }
 

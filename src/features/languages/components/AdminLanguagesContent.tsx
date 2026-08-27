@@ -21,6 +21,7 @@ import {
 
 import { LanguagesTable } from './LanguagesTable';
 import type { LanguageSortField, SortDirection } from '../types';
+import { QueryErrorState } from '@/components/common/QueryErrorState';
 
 export function AdminLanguagesContent() {
   const { t } = useTranslation();
@@ -197,15 +198,10 @@ export function AdminLanguagesContent() {
 
       <div className="flex min-h-0 flex-1 flex-col px-5 pt-4">
         {hasError ? (
-          <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4">
-            <p className="text-base text-foreground">
-              {t('languages.admin.loadError', 'Failed to load languages')}
-            </p>
-
-            <Button type="button" onClick={() => void handleRefresh()}>
-              {t('retry', 'Retry')}
-            </Button>
-          </div>
+          <QueryErrorState
+            message={t('languages.admin.loadError', 'Failed to load languages')}
+            onRetry={handleRefresh}
+          />
         ) : (
           <>
             <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]">

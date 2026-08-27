@@ -14,6 +14,7 @@ import { SkillMasteryProgress } from '@/features/skills/components/SkillMasteryP
 import { AddCvSkillModal } from '@/features/cvs/components/skills/modals/AddCvSkillModal';
 import { UpdateCvSkillModal } from '@/features/cvs/components/skills/modals/UpdateCvSkillModal';
 import { RemoveCvSkillsModal } from '@/features/cvs/components/skills/modals/RemoveCvSkillsModal';
+import { QueryErrorState } from '@/components/common/QueryErrorState';
 
 type CvSkillsContentProps = {
   cvId: string;
@@ -93,19 +94,10 @@ export function CvSkillsContent({ cvId }: CvSkillsContentProps) {
 
   if (error) {
     return (
-      <div className="flex flex-col items-center gap-4 pt-10">
-        <p className="text-sm text-destructive">
-          {t('skills.loadError', 'Failed to load skills')}
-        </p>
-
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={() => void handleRefresh()}
-        >
-          {t('retry', 'Retry')}
-        </Button>
-      </div>
+      <QueryErrorState
+        message={t('skills.loadError', 'Failed to load skills')}
+        onRetry={handleRefresh}
+      />
     );
   }
 

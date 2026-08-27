@@ -22,6 +22,7 @@ import {
   DEFAULT_PAGE_SIZE,
 } from '@/lib/constants/pagination';
 import type { Cv, SortDirection, SortField } from '@/features/cvs/types';
+import { QueryErrorState } from '@/components/common/QueryErrorState';
 
 interface CvsContentProps {
   isAdmin?: boolean;
@@ -255,14 +256,10 @@ export function CvsContent({
 
       <div className="flex min-h-0 flex-1 flex-col px-6 pt-4">
         {hasError ? (
-          <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4">
-            <p className="text-base text-foreground">
-              {t('cvs.loadError', 'Failed to load CVs')}
-            </p>
-            <Button type="button" onClick={() => void handleRefresh()}>
-              {t('retry', 'Retry')}
-            </Button>
-          </div>
+          <QueryErrorState
+            message={t('cvs.loadError', 'Failed to load CVs')}
+            onRetry={handleRefresh}
+          />
         ) : (
           <>
             <div className="min-h-0 flex-1 overflow-y-auto">

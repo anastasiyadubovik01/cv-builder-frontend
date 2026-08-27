@@ -17,6 +17,7 @@ import type {
   SortDirection,
 } from '@/features/cvs/types';
 import { CV_PROJECTS_QUERY, type ApiCvProject } from '@/api/cv-projects';
+import { QueryErrorState } from '@/components/common/QueryErrorState';
 
 interface CvProjectsContentProps {
   cvId: string;
@@ -119,14 +120,10 @@ export function CvProjectsContent({ cvId }: CvProjectsContentProps) {
 
       <div className="flex min-h-0 flex-1 flex-col px-6 pt-4">
         {error ? (
-          <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4">
-            <p className="text-base text-foreground">
-              {t('projects.loadError', 'Failed to load projects')}
-            </p>
-            <Button type="button" onClick={() => void handleRefresh()}>
-              {t('retry', 'Retry')}
-            </Button>
-          </div>
+          <QueryErrorState
+            message={t('projects.loadError', 'Failed to load projects')}
+            onRetry={handleRefresh}
+          />
         ) : (
           <div className="min-h-0 flex-1 overflow-y-auto">
             <CvProjectsTable
