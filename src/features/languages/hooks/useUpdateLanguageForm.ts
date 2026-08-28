@@ -104,7 +104,6 @@ export function useUpdateLanguageForm({
     duplicateIso,
     handleChange,
     handleSubmit,
-    t,
     isValid,
   };
 }
