@@ -300,4 +300,87 @@ describe('useFetchAllPages', () => {
 
     expect(result.current.allItems).toEqual([{ id: 10 }, { id: 20 }]);
   });
+
+  it('returns undefined when refetch returns no data', async () => {
+    const firstPage: TestData = {
+      itemsPage: {
+        items: [{ id: 1 }],
+        total: 1,
+        total_pages: 1,
+      },
+    };
+
+    refetch.mockResolvedValue({
+      data: undefined,
+    });
+
+    vi.mocked(useQuery).mockReturnValue({
+      data: firstPage,
+      loading: false,
+      error: undefined,
+      fetchMore,
+      refetch,
+    } as never);
+
+    const { result } = renderHook(() =>
+      useFetchAllPages<TestData, Record<string, unknown>, Item>({
+        query,
+        extractPaginatedData,
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.allItems).toEqual([{ id: 1 }]);
+    });
+
+    let refreshedItems: Item[] | undefined;
+
+    await act(async () => {
+      refreshedItems = await result.current.refetchAll();
+    });
+
+    expect(refreshedItems).toBeUndefined();
+    expect(result.current.loading).toBe(false);
+  });
+
+  it('returns undefined and sets error when refetch fails', async () => {
+    const firstPage: TestData = {
+      itemsPage: {
+        items: [{ id: 1 }],
+        total: 1,
+        total_pages: 1,
+      },
+    };
+
+    refetch.mockRejectedValue(new Error('Refetch failed'));
+
+    vi.mocked(useQuery).mockReturnValue({
+      data: firstPage,
+      loading: false,
+      error: undefined,
+      fetchMore,
+      refetch,
+    } as never);
+
+    const { result } = renderHook(() =>
+      useFetchAllPages<TestData, Record<string, unknown>, Item>({
+        query,
+        extractPaginatedData,
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.allItems).toEqual([{ id: 1 }]);
+    });
+
+    let refreshedItems: Item[] | undefined;
+
+    await act(async () => {
+      refreshedItems = await result.current.refetchAll();
+    });
+
+    expect(refreshedItems).toBeUndefined();
+    expect(result.current.error).toBe(true);
+    expect(result.current.loading).toBe(false);
+  });
 });
