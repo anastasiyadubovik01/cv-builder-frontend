@@ -1,13 +1,14 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useAdminSkills } from './useAdminSkills';
-import type { ApiSkill, AdminSkillCategory } from '@/api/skills';
+import type { ApiSkill, AdminSkillCategory, SkillsData } from '@/api/skills';
+import type { SkillSortField } from '@/features/skills/types';
 
 const mockPaginatedQuery = vi.fn();
 const mockUseQuery = vi.fn();
 
 vi.mock('@/components/hooks/usePaginatedQuery', () => ({
-  usePaginatedQuery: () => mockPaginatedQuery(),
+  usePaginatedQuery: (options: unknown) => mockPaginatedQuery(options),
 }));
 
 vi.mock('@apollo/client/react', () => ({
@@ -106,16 +107,35 @@ describe('useAdminSkills', () => {
     expect(typeof result.current.handleRefresh).toBe('function');
   });
 
-  it('should compute categoryTypes correctly', () => {
+  it('should compute categoryTypes correctly including parent categories and child iterations', () => {
+    const categoriesWithParent: AdminSkillCategory[] = [
+      ...mockCategories,
+      {
+        id: '5',
+        name: 'Subcategory Without Parent Reference in Root',
+        order: 3,
+        parent: { id: '1', name: 'Programming' },
+        children: [],
+      },
+    ];
+
+    mockUseQuery.mockReturnValue({
+      data: { skillCategories: categoriesWithParent },
+      loading: false,
+      error: null,
+      refetch: vi.fn(),
+    });
+
     const { result } = renderHook(() => useAdminSkills());
     const expected = {
       '2': 'Programming',
       '3': 'Programming',
+      '5': 'Programming',
     };
     expect(result.current.categoryTypes).toEqual(expected);
   });
 
-  it('should compute selectableCategories correctly', () => {
+  it('should compute selectableCategories correctly covering both branches of children presence', () => {
     const { result } = renderHook(() => useAdminSkills());
     const expectedSelectable = [
       { id: '2', name: 'Frontend' },
@@ -124,6 +144,36 @@ describe('useAdminSkills', () => {
     ].sort((a, b) => a.name.localeCompare(b.name));
 
     expect(result.current.selectableCategories).toEqual(expectedSelectable);
+  });
+
+  it('should cover extractPaginatedData fallback and filtering logic via returned hooks utilities', () => {
+    renderHook(() => useAdminSkills());
+    const paginatedArg = mockPaginatedQuery.mock.calls[0]?.[0] as {
+      extractPaginatedData: (data: SkillsData) => typeof mockPaginatedData;
+      filterItem: (skill: ApiSkill, queryStr: string) => boolean;
+      getSortValue: (skill: ApiSkill, field: SkillSortField) => string;
+    };
+    const { extractPaginatedData, filterItem, getSortValue } = paginatedArg;
+
+    const extracted = extractPaginatedData({ skills: mockPaginatedData });
+    expect(extracted).toEqual(mockPaginatedData);
+
+    const fallbackExtracted = extractPaginatedData({
+      skills: null,
+    } as unknown as SkillsData);
+    expect(fallbackExtracted).toEqual({
+      items: [],
+      total: 0,
+      total_pages: 0,
+    });
+
+    expect(filterItem(mockSkillItems[0], 'java')).toBe(true);
+    expect(filterItem(mockSkillItems[0], 'python')).toBe(false);
+
+    expect(getSortValue(mockSkillItems[0], 'name')).toBe('JavaScript');
+    expect(getSortValue(mockSkillItems[0], 'unknown' as SkillSortField)).toBe(
+      '',
+    );
   });
 
   it('should handle loading state', () => {
