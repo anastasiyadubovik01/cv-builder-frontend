@@ -3,7 +3,7 @@
 import {
   ChangeUserModal,
   type ChangeUserModalProps,
-} from '@/features/users/components/ChangeUserModal';
+} from '@/features/users/components/modals/ChangeUserModal';
 import { useCreateUserForm } from '@/features/users/hooks/useCreateUserForm';
 
 type CreateUserModalProps = {

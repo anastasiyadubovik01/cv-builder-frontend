@@ -3,7 +3,7 @@
 import { useQuery } from '@apollo/client/react';
 
 import { USER_QUERY, type ApiUserDetails } from '@/api/users';
-import { ChangeUserModal } from '@/features/users/components/ChangeUserModal';
+import { ChangeUserModal } from '@/features/users/components/modals/ChangeUserModal';
 import { useUpdateUserForm } from '@/features/users/hooks/useUpdateUserForm';
 import type { UserRole } from '@/features/users/types';
 import type { UpdateUserFormValues } from '@/lib/validations/user';
