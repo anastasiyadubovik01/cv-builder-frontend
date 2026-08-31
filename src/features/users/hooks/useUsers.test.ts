@@ -82,7 +82,6 @@ describe('useUsers', () => {
     };
     const { extractPaginatedData, filterItem, getSortValue } = paginatedArg;
 
-    // extractPaginatedData tests
     const extracted = extractPaginatedData({ users: mockPaginatedData });
     expect(extracted).toEqual(mockPaginatedData);
 
@@ -95,13 +94,11 @@ describe('useUsers', () => {
       total_pages: 0,
     });
 
-    // filterItem tests
     expect(filterItem(mockUserItems[0], 'john')).toBe(true);
     expect(filterItem(mockUserItems[0], 'doe')).toBe(true);
     expect(filterItem(mockUserItems[0], 'john.doe@example.com')).toBe(true);
     expect(filterItem(mockUserItems[0], 'unknown')).toBe(false);
 
-    // getSortValue tests
     expect(getSortValue(mockUserItems[0], 'firstName')).toBe('John');
     expect(getSortValue(mockUserItems[0], 'lastName')).toBe('Doe');
     expect(getSortValue(mockUserItems[0], 'department')).toBe('Engineering');
