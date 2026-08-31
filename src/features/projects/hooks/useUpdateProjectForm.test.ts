@@ -119,6 +119,8 @@ describe('useUpdateProjectForm', () => {
       },
       schema: createProjectSchema,
     });
+
+    expect(useMutation).toHaveBeenCalledWith(UPDATE_PROJECT_MUTATION);
   });
 
   it('uses empty end date when project is active', () => {

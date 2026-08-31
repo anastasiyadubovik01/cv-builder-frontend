@@ -104,6 +104,8 @@ describe('useCreateProjectForm', () => {
       },
       schema: createProjectSchema,
     });
+
+    expect(useMutation).toHaveBeenCalledWith(CREATE_PROJECT_MUTATION);
   });
 
   it('does not create project when validation fails', async () => {
