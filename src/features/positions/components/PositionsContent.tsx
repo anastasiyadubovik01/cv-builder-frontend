@@ -7,10 +7,10 @@ import { Button } from '@/components/ui/button';
 import { ContentLayout } from '@/components/common/ContentLayout';
 import { usePositions } from '@/features/positions/hooks/usePositions';
 
-import { CreatePositionModal } from './CreatePositionModal';
-import { DeletePositionModal } from './DeletePositionModal';
+import { CreatePositionModal } from './modals/CreatePositionModal';
+import { DeletePositionModal } from './modals/DeletePositionModal';
 import { PositionsTable } from './PositionsTable';
-import { UpdatePositionModal } from './UpdatePositionModal';
+import { UpdatePositionModal } from './modals/UpdatePositionModal';
 
 import type { Position } from '@/api/positions';
 

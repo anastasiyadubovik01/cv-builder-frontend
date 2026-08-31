@@ -2,7 +2,7 @@
 
 import type { ApiDepartment } from '@/api/departments';
 
-import { useUpdateDepartmentForm } from '../hooks/useUpdateDepartmentForm';
+import { useUpdateDepartmentForm } from '../../hooks/useUpdateDepartmentForm';
 import { ChangeDepartmentModal } from './ChangeDepartmentModal';
 
 type UpdateDepartmentModalProps = {

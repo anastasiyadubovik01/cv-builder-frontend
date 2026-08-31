@@ -5,7 +5,7 @@ import type { ReactNode } from 'react';
 import type { ApiDepartment } from '@/api/departments';
 
 import { ChangeDepartmentModal } from './ChangeDepartmentModal';
-import { useCreateDepartmentForm } from '../hooks/useCreateDepartmentForm';
+import { useCreateDepartmentForm } from '../../hooks/useCreateDepartmentForm';
 
 type CreateDepartmentModalProps = {
   departments: ApiDepartment[];

@@ -5,7 +5,7 @@ import type { ReactNode } from 'react';
 import type { Position } from '@/api/positions';
 
 import { ChangePositionModal } from './ChangePositionModal';
-import { useCreatePositionForm } from '../hooks/useCreatePositionForm';
+import { useCreatePositionForm } from '../../hooks/useCreatePositionForm';
 
 type CreatePositionModalProps = {
   positions: Position[];

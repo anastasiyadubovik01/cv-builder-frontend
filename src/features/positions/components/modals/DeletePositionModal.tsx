@@ -5,7 +5,7 @@ import {
   type DeleteDialogProps,
 } from '@/components/dialogs/DeleteDialog';
 
-import { useDeletePosition } from '../hooks/useDeletePosition';
+import { useDeletePosition } from '../../hooks/useDeletePosition';
 
 type DeletePositionModalProps = Omit<
   DeleteDialogProps,

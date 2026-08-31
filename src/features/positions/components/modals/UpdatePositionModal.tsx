@@ -2,7 +2,7 @@
 
 import type { Position } from '@/api/positions';
 
-import { useUpdatePositionForm } from '../hooks/useUpdatePositionForm';
+import { useUpdatePositionForm } from '../../hooks/useUpdatePositionForm';
 import { ChangePositionModal } from './ChangePositionModal';
 
 type UpdatePositionModalProps = {
