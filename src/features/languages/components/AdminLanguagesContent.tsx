@@ -7,10 +7,10 @@ import { Button } from '@/components/ui/button';
 import { ContentLayout } from '@/components/common/ContentLayout';
 import { useLanguages } from '@/features/languages/hooks/useLanguages';
 
-import { CreateLanguageModal } from './CreateLanguageModal';
-import { DeleteLanguageModal } from './DeleteLanguageModal';
+import { CreateLanguageModal } from './modals/CreateLanguageModal';
+import { DeleteLanguageModal } from './modals/DeleteLanguageModal';
 import { LanguagesTable } from './LanguagesTable';
-import { UpdateLanguageModal } from './UpdateLanguageModal';
+import { UpdateLanguageModal } from './modals/UpdateLanguageModal';
 
 import type { ApiLanguage } from '@/api/languages';
 

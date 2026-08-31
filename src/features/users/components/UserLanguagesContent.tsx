@@ -8,10 +8,10 @@ import { DeleteIcon } from '@/components/icons/delete-icon';
 import { PlusIcon } from '@/components/icons/plus-icon';
 import { Button } from '@/components/ui/button';
 import { ContentLayout } from '@/components/common/ContentLayout';
-import { AddUserLanguageModal } from '@/features/languages/components/AddUserLanguageModal';
+import { AddUserLanguageModal } from '@/features/languages/components/modals/AddUserLanguageModal';
 import { LanguageProficiencyProgress } from '@/features/languages/components/LanguageProficiencyProgress';
-import { RemoveUserLanguagesModal } from '@/features/languages/components/RemoveUserLanguagesModal';
-import { UpdateUserLanguageModal } from '@/features/languages/components/UpdateUserLanguageModal';
+import { RemoveUserLanguagesModal } from '@/features/languages/components/modals/RemoveUserLanguagesModal';
+import { UpdateUserLanguageModal } from '@/features/languages/components/modals/UpdateUserLanguageModal';
 import { useUserLanguages } from '@/features/users/hooks/useUserLanguages';
 
 type UserLanguagesContentProps = {

@@ -2,7 +2,7 @@
 
 import type { ApiLanguage } from '@/api/languages';
 
-import { useUpdateLanguageForm } from '../hooks/useUpdateLanguageForm';
+import { useUpdateLanguageForm } from '../../hooks/useUpdateLanguageForm';
 import { ChangeLanguageModal } from './ChangeLanguageModal';
 
 type UpdateLanguageModalProps = {

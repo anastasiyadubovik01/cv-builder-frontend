@@ -1,7 +1,7 @@
 'use client';
 
 import type { ApiLanguage, ProfileLanguage } from '@/api/languages';
-import { ChangeUserLanguageModal } from '@/features/languages/components/ChangeUserLanguageModal';
+import { ChangeUserLanguageModal } from '@/features/languages/components/modals/ChangeUserLanguageModal';
 import { useUpdateUserLanguage } from '@/features/languages/hooks/useUpdateUserLanguage';
 
 type UpdateUserLanguageModalProps = {

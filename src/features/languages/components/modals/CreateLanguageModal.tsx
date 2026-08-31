@@ -5,7 +5,7 @@ import type { ReactNode } from 'react';
 import type { ApiLanguage } from '@/api/languages';
 
 import { ChangeLanguageModal } from './ChangeLanguageModal';
-import { useCreateLanguageForm } from '../hooks/useCreateLanguageForm';
+import { useCreateLanguageForm } from '../../hooks/useCreateLanguageForm';
 
 type CreateLanguageModalProps = {
   languages: ApiLanguage[];
