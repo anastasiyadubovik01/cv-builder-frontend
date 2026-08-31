@@ -7,10 +7,10 @@ import { Button } from '@/components/ui/button';
 import { ContentLayout } from '@/components/common/ContentLayout';
 import { useDepartments } from '@/features/departments/hooks/useDepartments';
 
-import { CreateDepartmentModal } from './CreateDepartmentModal';
+import { CreateDepartmentModal } from './modals/CreateDepartmentModal';
 import { DepartmentsTable } from './DepartmentsTable';
-import { UpdateDepartmentModal } from './UpdateDepartmentModal';
-import { DeleteDepartmentModal } from './DeleteDepartmentModal';
+import { UpdateDepartmentModal } from './modals/UpdateDepartmentModal';
+import { DeleteDepartmentModal } from './modals/DeleteDepartmentModal';
 
 import type { ApiDepartment } from '@/api/departments';
 

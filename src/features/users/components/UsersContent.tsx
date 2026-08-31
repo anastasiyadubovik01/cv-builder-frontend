@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { PlusIcon } from '@/components/icons/plus-icon';
 import { ContentLayout } from '@/components/common/ContentLayout';
 import { UsersTable } from '@/features/users/components/UsersTable';
-import { CreateUserModal } from './CreateUserModal';
+import { CreateUserModal } from './modals/CreateUserModal';
 import { useUsers } from '@/features/users/hooks/useUsers';
 
 import type { User } from '@/features/users/types';

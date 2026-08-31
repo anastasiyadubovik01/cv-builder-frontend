@@ -9,8 +9,8 @@ import { DataTable, type DataTableColumn } from '@/components/ui/data-table';
 import { RowActionsMenu } from '@/components/ui/row-actions-menu';
 
 import type { SortDirection, SortField, User } from '@/features/users/types';
-import { DeleteUserModal } from '@/features/users/components/DeleteUserModal';
-import { UpdateUserModal } from '@/features/users/components/UpdateUserModal';
+import { DeleteUserModal } from '@/features/users/components/modals/DeleteUserModal';
+import { UpdateUserModal } from '@/features/users/components/modals/UpdateUserModal';
 
 type UsersTableProps = {
   users: User[];
