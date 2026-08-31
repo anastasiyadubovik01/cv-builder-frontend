@@ -6,9 +6,9 @@ import { PlusIcon } from '@/components/icons/plus-icon';
 import { Button } from '@/components/ui/button';
 import { ContentLayout } from '@/components/common/ContentLayout';
 import { SkillsTable } from '@/features/skills/components/SkillsTable';
-import { CreateSkillAdminModal } from '@/features/skills/components/CreateSkillAdminModal';
-import { DeleteSkillModal } from '@/features/skills/components/DeleteSkillModal';
-import { UpdateSkillAdminModal } from '@/features/skills/components/UpdateSkillAdminModal';
+import { CreateSkillAdminModal } from '@/features/skills/components/modals/CreateSkillAdminModal';
+import { DeleteSkillModal } from '@/features/skills/components/modals/DeleteSkillModal';
+import { UpdateSkillAdminModal } from '@/features/skills/components/modals/UpdateSkillAdminModal';
 import { useAdminSkills } from '@/features/skills/hooks/useAdminSkills';
 
 import type { ApiSkill } from '@/api/skills';

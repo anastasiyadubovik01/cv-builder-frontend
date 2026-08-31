@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react';
 
 import type { ApiSkill } from '@/api/skills';
-import { ChangeSkillModal } from '@/features/skills/components/ChangeSkillModal';
+import { ChangeSkillModal } from '@/features/skills/components/modals/ChangeSkillModal';
 import { useAddCvSkill } from '@/features/skills/hooks/useAddCvSkill';
 
 type AddCvSkillModalProps = {

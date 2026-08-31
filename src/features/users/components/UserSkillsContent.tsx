@@ -7,10 +7,10 @@ import { DeleteIcon } from '@/components/icons/delete-icon';
 import { PlusIcon } from '@/components/icons/plus-icon';
 import { Button } from '@/components/ui/button';
 import { ContentLayout } from '@/components/common/ContentLayout';
-import { AddSkillModal } from '@/features/skills/components/AddSkillModal';
-import { RemoveSkillsModal } from '@/features/skills/components/RemoveSkillsModal';
+import { AddSkillModal } from '@/features/skills/components/modals/AddSkillModal';
+import { RemoveSkillsModal } from '@/features/skills/components/modals/RemoveSkillsModal';
 import { SkillMasteryProgress } from '@/features/skills/components/SkillMasteryProgress';
-import { UpdateSkillModal } from '@/features/skills/components/UpdateSkillModal';
+import { UpdateSkillModal } from '@/features/skills/components/modals/UpdateSkillModal';
 import { useUserSkills } from '@/features/users/hooks/useUserSkills';
 
 type UserSkillsContentProps = {

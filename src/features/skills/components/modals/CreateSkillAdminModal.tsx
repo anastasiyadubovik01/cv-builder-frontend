@@ -6,7 +6,7 @@ import type { ApiSkill } from '@/api/skills';
 import {
   ChangeSkillAdminModal,
   type SkillFormCategory,
-} from '@/features/skills/components/ChangeSkillAdminModal';
+} from '@/features/skills/components/modals/ChangeSkillAdminModal';
 import { useCreateSkillForm } from '@/features/skills/hooks/useCreateSkillForm';
 
 type CreateSkillModalProps = {

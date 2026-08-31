@@ -1,7 +1,7 @@
 'use client';
 
 import type { ApiSkill, ProfileSkill } from '@/api/skills';
-import { ChangeSkillModal } from '@/features/skills/components/ChangeSkillModal';
+import { ChangeSkillModal } from '@/features/skills/components/modals/ChangeSkillModal';
 import { useUpdateCvSkill } from '@/features/skills/hooks/useUpdateCvSkill';
 
 type UpdateCvSkillModalProps = {
