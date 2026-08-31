@@ -1,17 +1,18 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { UserSkillsContent } from './UserSkillsContent';
+import React from 'react';
 
 const mockHandleRefetch = vi.fn().mockResolvedValue(undefined);
 
-const mockUseUserSkillsReturn = {
+let mockUseUserSkillsReturn = {
   profileSkills: [
-    { name: 'React', mastery: 'ADVANCED' as const, categoryId: 'cat-1' },
-    { name: 'Python', mastery: 'INTERMEDIATE' as const, categoryId: 'cat-2' },
+    { name: 'React', mastery: 'Advanced' as const, categoryId: '1' },
+    { name: 'Python', mastery: 'Intermediate' as const, categoryId: '2' },
   ],
   availableSkills: [
-    { id: 's-1', name: 'React', category: { id: 'cat-1', name: 'Frontend' } },
-    { id: 's-2', name: 'Python', category: { id: 'cat-2', name: 'Backend' } },
+    { id: '1', name: 'React', category: { id: '1', name: 'Frontend' } },
+    { id: '2', name: 'Python', category: { id: '2', name: 'Backend' } },
   ],
   loading: false,
   error: false,
@@ -116,7 +117,7 @@ vi.mock('@/features/skills/components/UpdateSkillModal', () => ({
         <button data-testid="close-update" onClick={() => onOpenChange(false)}>
           Close Update
         </button>
-        <button data-testid="success-update" onClick={() => void onSuccess()}>
+        <button data-testid="succesupdate" onClick={() => void onSuccess()}>
           Success Update
         </button>
       </div>
@@ -134,11 +135,11 @@ vi.mock('@/features/skills/components/RemoveSkillsModal', () => ({
     onSuccess: () => void;
   }) =>
     open ? (
-      <div data-testid="remove-skills-modal">
+      <div data-testid="remove-skillmodal">
         <button data-testid="close-remove" onClick={() => onOpenChange(false)}>
           Close Remove
         </button>
-        <button data-testid="success-remove" onClick={() => void onSuccess()}>
+        <button data-testid="succesremove" onClick={() => void onSuccess()}>
           Success Remove
         </button>
       </div>
@@ -149,13 +150,90 @@ vi.mock('@/features/users/hooks/useUserSkills', () => ({
   useUserSkills: () => mockUseUserSkillsReturn,
 }));
 
+vi.mock('@/features/skills/components/modals/AddSkillModal', () => ({
+  AddSkillModal: ({
+    onSuccess,
+    trigger,
+  }: {
+    onSuccess: () => void;
+    trigger: React.ReactNode;
+  }) => (
+    <div data-testid="add-skill-modal">
+      <div data-testid="add-modal-trigger">{trigger}</div>
+      <button
+        data-testid="trigger-add-success"
+        onClick={() => void onSuccess()}
+      >
+        Add Success
+      </button>
+    </div>
+  ),
+}));
+
+vi.mock('@/features/skills/components/modals/UpdateSkillModal', () => ({
+  UpdateSkillModal: ({
+    open,
+    onOpenChange,
+    onSuccess,
+  }: {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    onSuccess: () => void;
+  }) =>
+    open ? (
+      <div data-testid="update-skill-modal">
+        <button data-testid="close-update" onClick={() => onOpenChange(false)}>
+          Close Update
+        </button>
+        <button data-testid="succesupdate" onClick={() => void onSuccess()}>
+          Success Update
+        </button>
+      </div>
+    ) : null,
+}));
+
+vi.mock('@/features/skills/components/modals/RemoveSkillsModal', () => ({
+  RemoveSkillsModal: ({
+    open,
+    onOpenChange,
+    onSuccess,
+  }: {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    onSuccess: () => void;
+  }) =>
+    open ? (
+      <div data-testid="remove-skillmodal">
+        <button data-testid="close-remove" onClick={() => onOpenChange(false)}>
+          Close Remove
+        </button>
+        <button data-testid="succesremove" onClick={() => void onSuccess()}>
+          Success Remove
+        </button>
+      </div>
+    ) : null,
+}));
+
 describe('UserSkillsContent', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockUseUserSkillsReturn = {
+      profileSkills: [
+        { name: 'React', mastery: 'Advanced' as const, categoryId: '1' },
+        { name: 'Python', mastery: 'Intermediate' as const, categoryId: '2' },
+      ],
+      availableSkills: [
+        { id: '1', name: 'React', category: { id: '1', name: 'Frontend' } },
+        { id: '2', name: 'Python', category: { id: '2', name: 'Backend' } },
+      ],
+      loading: false,
+      error: false,
+      handleRefetch: mockHandleRefetch,
+    };
   });
 
   it('should render grouped skills and allow management when canManage is true', () => {
-    render(<UserSkillsContent userId="user-1" canManage={true} />);
+    render(<UserSkillsContent userId="1" canManage={true} />);
 
     expect(screen.getByTestId('content-layout')).toBeDefined();
     expect(screen.getByText('Frontend')).toBeDefined();
@@ -166,7 +244,7 @@ describe('UserSkillsContent', () => {
   });
 
   it('should not allow opening modals or editing when canManage is false', () => {
-    render(<UserSkillsContent userId="user-1" canManage={false} />);
+    render(<UserSkillsContent userId="1" canManage={false} />);
 
     const reactButton = screen.getByText('React').closest('button');
     expect(reactButton).toBeDefined();
@@ -175,7 +253,7 @@ describe('UserSkillsContent', () => {
   });
 
   it('should open update modal when skill is clicked in normal mode and reset when closed', async () => {
-    render(<UserSkillsContent userId="user-1" canManage={true} />);
+    render(<UserSkillsContent userId="1" canManage={true} />);
 
     const reactButton = screen.getByText('React').closest('button');
     expect(reactButton).toBeDefined();
@@ -186,30 +264,33 @@ describe('UserSkillsContent', () => {
     expect(screen.queryByTestId('update-skill-modal')).toBeNull();
 
     fireEvent.click(reactButton!);
-    fireEvent.click(screen.getByTestId('success-update'));
+    fireEvent.click(screen.getByTestId('succesupdate'));
     expect(mockHandleRefetch).toHaveBeenCalled();
   });
 
   it('should handle remove mode selection toggle and open remove dialog with successful removal flow', async () => {
-    render(<UserSkillsContent userId="user-1" canManage={true} />);
+    render(<UserSkillsContent userId="1" canManage={true} />);
 
     fireEvent.click(screen.getByText('Remove Skills'));
 
     const reactCardButton = screen.getByText('React').closest('button');
+
+    fireEvent.click(reactCardButton!);
+    fireEvent.click(reactCardButton!);
     fireEvent.click(reactCardButton!);
 
     const removeBtn = screen.getByRole('button', { name: /Remove Selected/i });
     expect(removeBtn).not.toBeDisabled();
 
     fireEvent.click(removeBtn);
-    expect(screen.getByTestId('remove-skills-modal')).toBeDefined();
+    expect(screen.getByTestId('remove-skillmodal')).toBeDefined();
 
-    fireEvent.click(screen.getByTestId('success-remove'));
+    fireEvent.click(screen.getByTestId('succesremove'));
     expect(mockHandleRefetch).toHaveBeenCalled();
   });
 
   it('should handle cancel remove mode correctly', async () => {
-    render(<UserSkillsContent userId="user-1" canManage={true} />);
+    render(<UserSkillsContent userId="1" canManage={true} />);
 
     fireEvent.click(screen.getByText('Remove Skills'));
     fireEvent.click(screen.getByText('Cancel'));
@@ -218,16 +299,45 @@ describe('UserSkillsContent', () => {
   });
 
   it('should handle add skill success correctly', async () => {
-    render(<UserSkillsContent userId="user-1" canManage={true} />);
+    render(<UserSkillsContent userId="1" canManage={true} />);
 
     fireEvent.click(screen.getByTestId('trigger-add-success'));
     expect(mockHandleRefetch).toHaveBeenCalled();
   });
 
   it('should handle retry action correctly', async () => {
-    render(<UserSkillsContent userId="user-1" canManage={true} />);
+    render(<UserSkillsContent userId="1" canManage={true} />);
 
     fireEvent.click(screen.getByTestId('retry-btn'));
     expect(mockHandleRefetch).toHaveBeenCalled();
+  });
+
+  it('should cover fallback category / uncategorized and category grouping logic', () => {
+    mockUseUserSkillsReturn = {
+      ...mockUseUserSkillsReturn,
+      profileSkills: [
+        { name: 'UnknownSkill', mastery: 'Advanced' as const, categoryId: '1' },
+        { name: 'OtherSkill', mastery: 'Advanced' as const, categoryId: '2' },
+      ],
+      availableSkills: [
+        { id: '1', name: 'React', category: { id: '1', name: 'Frontend' } },
+        { id: '2', name: 'Python', category: { id: '2', name: 'Backend' } },
+      ],
+    };
+
+    render(<UserSkillsContent userId="1" canManage={true} />);
+
+    expect(screen.getByText('Uncategorized')).toBeDefined();
+    expect(screen.getByText('UnknownSkill')).toBeDefined();
+    expect(screen.getByText('OtherSkill')).toBeDefined();
+  });
+
+  it('should not set editing skill if canManage is false even if somehow clicked', () => {
+    render(<UserSkillsContent userId="1" canManage={false} />);
+
+    const reactButton = screen.getByText('React').closest('button');
+    fireEvent.click(reactButton!);
+
+    expect(screen.queryByTestId('update-skill-modal')).toBeNull();
   });
 });
