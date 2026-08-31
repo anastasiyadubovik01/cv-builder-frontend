@@ -10,8 +10,6 @@ type NoInternetErrorProps = {
 
 export function NoInternetError({ onRetry }: NoInternetErrorProps) {
   const { t } = useT('common');
-
-  // TODO: Заменить временную перезагрузку страницы на повтор failed GraphQL-запроса через refetch
   const handleRetry = onRetry ?? (() => window.location.reload());
 
   return (
