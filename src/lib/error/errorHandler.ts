@@ -23,7 +23,7 @@ export function handleFormError(
     });
   }
 
-  if (context) {
+  if (context && process.env.NODE_ENV === 'development') {
     console.error(`${context}:`, error);
   }
 }

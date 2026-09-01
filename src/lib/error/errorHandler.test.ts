@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { toast as sonnerToast } from 'sonner';
 import type { TFunction } from 'i18next';
 import { handleFormError } from '@/lib/error/errorHandler';
@@ -14,15 +14,13 @@ describe('errorHandler', () => {
   const mockT = vi.fn(
     (key: string) => `translated_${key}`,
   ) as unknown as TFunction;
-  const originalConsoleError = console.error;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    console.error = vi.fn();
-  });
-
-  afterEach(() => {
-    console.error = originalConsoleError;
+    vi.stubGlobal('console', {
+      ...console,
+      error: vi.fn(),
+    });
   });
 
   it('calls setFieldError when the mapped error translation key is included in fieldErrorKeys', () => {
@@ -70,7 +68,8 @@ describe('errorHandler', () => {
     });
   });
 
-  it('logs error to console when context is provided', () => {
+  it('logs error to console when context is provided and NODE_ENV is development', () => {
+    vi.stubEnv('NODE_ENV', 'development');
     const error = new Error('Some error');
     const context = 'LoginForm';
 
@@ -84,10 +83,24 @@ describe('errorHandler', () => {
   });
 
   it('does not log error to console when context is omitted', () => {
+    vi.stubEnv('NODE_ENV', 'development');
     const error = new Error('Some error');
 
     handleFormError(error, {
       t: mockT,
+    });
+
+    expect(console.error).not.toHaveBeenCalled();
+  });
+
+  it('does not log error to console when NODE_ENV is production even if context is provided', () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    const error = new Error('Some error');
+    const context = 'LoginForm';
+
+    handleFormError(error, {
+      t: mockT,
+      context,
     });
 
     expect(console.error).not.toHaveBeenCalled();
