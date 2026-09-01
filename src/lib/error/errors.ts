@@ -12,8 +12,6 @@ export const SERVER_ERROR_CODES = {
   OLD_PASSWORD_INCORRECT: 'oldPasswordIncorrect',
   OLD_PASSWORD_SAME_NEW_PASSWORD: 'oldPasswordSameNewPassword',
   CONFIRM_PASSWORD_MISMATCH: 'confirmPasswordMismatch',
-
-  // Пока не протестированы конкретные имена ошибок
   EXPIRED_OTP: 'expiredOtp',
 } as const;
 
