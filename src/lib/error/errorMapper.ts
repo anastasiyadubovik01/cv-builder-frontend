@@ -25,16 +25,14 @@ export const DEFAULT_ERROR_MAPPING: ErrorMapping = {
   [SERVER_ERROR_CODES.POSITION_IS_IN_USE]: 'positions.errors.inUse',
   [SERVER_ERROR_CODES.OLD_PASSWORD_INCORRECT]:
     'settings.validation.currentPasswordIncorrect',
-
   [SERVER_ERROR_CODES.OLD_PASSWORD_SAME_NEW_PASSWORD]:
     'settings.validation.samePassword',
-
   [SERVER_ERROR_CODES.CONFIRM_PASSWORD_MISMATCH]:
     'settings.validation.passwordsDoNotMatch',
-
-  // Пока не протестированы конкретные имена ошибок
   [SERVER_ERROR_CODES.EXPIRED_OTP]: 'auth.errors.expiredOtp',
 };
+
+const AUTH_ERRORS_UNKNOWN_ERROR = 'auth.errors.unknownError';
 
 export function mapServerError(
   error: unknown,
@@ -45,7 +43,7 @@ export function mapServerError(
   }
 
   if (!(error instanceof Error)) {
-    return 'auth.errors.unknownError';
+    return AUTH_ERRORS_UNKNOWN_ERROR;
   }
 
   const message = error.message.toLowerCase();
@@ -57,5 +55,5 @@ export function mapServerError(
     }
   }
 
-  return 'auth.errors.unknownError';
+  return AUTH_ERRORS_UNKNOWN_ERROR;
 }

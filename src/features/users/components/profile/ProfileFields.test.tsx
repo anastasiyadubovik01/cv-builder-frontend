@@ -208,31 +208,67 @@ vi.mock('@/components/ui/select', () => ({
     value: string;
     onValueChange: (value: string | null) => void;
     disabled?: boolean;
-  }) => (
-    <div data-testid="select">
-      <select
-        data-testid={`select-trigger-${value || 'pos-1'}`}
-        value={value || ''}
-        onChange={(e) => onValueChange?.(e.target.value)}
-        disabled={disabled}
-      >
-        {children}
-      </select>
-    </div>
+  }) => {
+    const options: React.ReactNode[] = [];
+
+    React.Children.forEach(children, (child) => {
+      if (!child || typeof child !== 'object') return;
+      const element = child as React.ReactElement<{
+        children?: React.ReactNode;
+      }>;
+
+      if (element.props && element.props.children) {
+        React.Children.forEach(element.props.children, (subChild) => {
+          if (!subChild || typeof subChild !== 'object') return;
+          const subElement = subChild as React.ReactElement<{
+            children?: React.ReactNode;
+          }>;
+
+          if (
+            subElement.type &&
+            typeof subElement.type === 'function' &&
+            subElement.type.name === 'SelectContent'
+          ) {
+            if (subElement.props && subElement.props.children) {
+              React.Children.forEach(subElement.props.children, (item) => {
+                options.push(item);
+              });
+            }
+          }
+          if (
+            subElement.type &&
+            typeof subElement.type === 'string' &&
+            subElement.type === 'div'
+          ) {
+            if (subElement.props && subElement.props.children) {
+              React.Children.forEach(subElement.props.children, (item) => {
+                options.push(item);
+              });
+            }
+          }
+        });
+      }
+    });
+
+    return (
+      <div data-testid="select">
+        <select
+          data-testid={`select-trigger-${value || 'pos-1'}`}
+          value={value || ''}
+          onChange={(e) => onValueChange?.(e.target.value)}
+          disabled={disabled}
+        >
+          {options}
+        </select>
+      </div>
+    );
+  },
+  SelectTrigger: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
   ),
-  SelectTrigger: ({
-    children,
-  }: {
-    children: React.ReactNode;
-    id: string;
-    className?: string;
-    error?: string;
-  }) => <div>{children}</div>,
-  SelectValue: ({ children }: { children: React.ReactNode }) => (
-    <span>{children}</span>
-  ),
+  SelectValue: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   SelectContent: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="select-content">{children}</div>
+    <>{children}</>
   ),
   SelectItem: ({
     children,

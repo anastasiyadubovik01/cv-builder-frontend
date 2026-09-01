@@ -21,8 +21,7 @@ function decodeJwt<T = JwtPayload>(token: string): T | null {
     );
 
     return JSON.parse(jsonPayload) as T;
-  } catch (err) {
-    console.error('Failed to parse JWT payload:', err);
+  } catch {
     return null;
   }
 }
