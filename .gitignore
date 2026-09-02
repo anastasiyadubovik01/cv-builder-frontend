@@ -50,3 +50,11 @@ next-env.d.ts
 *.njsproj
 *.sln
 *.sw?
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
