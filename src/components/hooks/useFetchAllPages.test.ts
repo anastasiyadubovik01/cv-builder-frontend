@@ -73,6 +73,51 @@ describe('useFetchAllPages', () => {
     });
   });
 
+  it('preserves existing variables and params', () => {
+    renderHook(() =>
+      useFetchAllPages<TestData, Record<string, unknown>, Item>({
+        query,
+        variables: {
+          userId: 'user-1',
+          params: {
+            search: 'react',
+          },
+        },
+        extractPaginatedData,
+      }),
+    );
+
+    expect(useQuery).toHaveBeenCalledWith(query, {
+      variables: {
+        userId: 'user-1',
+        params: {
+          search: 'react',
+          page: 1,
+          limit: BACKEND_PAGE_SIZE,
+        },
+      },
+      fetchPolicy: 'cache-and-network',
+      skip: false,
+    });
+  });
+
+  it('passes skip to Apollo query', () => {
+    renderHook(() =>
+      useFetchAllPages<TestData, Record<string, unknown>, Item>({
+        query,
+        skip: true,
+        extractPaginatedData,
+      }),
+    );
+
+    expect(useQuery).toHaveBeenCalledWith(
+      query,
+      expect.objectContaining({
+        skip: true,
+      }),
+    );
+  });
+
   it('loads items from a single backend page without fetchMore', async () => {
     const firstPage: TestData = {
       itemsPage: {
@@ -104,6 +149,69 @@ describe('useFetchAllPages', () => {
     expect(fetchMore).not.toHaveBeenCalled();
   });
 
+  it('uses empty items when first page items are missing', async () => {
+    const firstPage = {
+      itemsPage: {
+        items: undefined,
+        total: 0,
+        total_pages: 1,
+      },
+    } as unknown as TestData;
+
+    vi.mocked(useQuery).mockReturnValue({
+      data: firstPage,
+      loading: false,
+      error: undefined,
+      fetchMore,
+      refetch,
+    } as never);
+
+    const { result } = renderHook(() =>
+      useFetchAllPages<TestData, Record<string, unknown>, Item>({
+        query,
+        extractPaginatedData,
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.allItems).toEqual([]);
+    });
+
+    expect(fetchMore).not.toHaveBeenCalled();
+  });
+
+  it('treats missing total_pages as zero', async () => {
+    const firstPage = {
+      itemsPage: {
+        items: [{ id: 1 }],
+        total: 1,
+        total_pages: undefined,
+      },
+    } as unknown as TestData;
+
+    vi.mocked(useQuery).mockReturnValue({
+      data: firstPage,
+      loading: false,
+      error: undefined,
+      fetchMore,
+      refetch,
+    } as never);
+
+    const { result } = renderHook(() =>
+      useFetchAllPages<TestData, Record<string, unknown>, Item>({
+        query,
+        extractPaginatedData,
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.allItems).toEqual([{ id: 1 }]);
+    });
+
+    expect(fetchMore).not.toHaveBeenCalled();
+    expect(result.current.loading).toBe(false);
+  });
+
   it('loads remaining backend pages and combines all items', async () => {
     const firstPage: TestData = {
       itemsPage: {
@@ -130,8 +238,12 @@ describe('useFetchAllPages', () => {
     };
 
     fetchMore
-      .mockResolvedValueOnce({ data: secondPage })
-      .mockResolvedValueOnce({ data: thirdPage });
+      .mockResolvedValueOnce({
+        data: secondPage,
+      })
+      .mockResolvedValueOnce({
+        data: thirdPage,
+      });
 
     vi.mocked(useQuery).mockReturnValue({
       data: firstPage,
@@ -177,6 +289,82 @@ describe('useFetchAllPages', () => {
     });
   });
 
+  it('ignores fetchMore response without data', async () => {
+    const firstPage: TestData = {
+      itemsPage: {
+        items: [{ id: 1 }],
+        total: 2,
+        total_pages: 2,
+      },
+    };
+
+    fetchMore.mockResolvedValue({
+      data: undefined,
+    });
+
+    vi.mocked(useQuery).mockReturnValue({
+      data: firstPage,
+      loading: false,
+      error: undefined,
+      fetchMore,
+      refetch,
+    } as never);
+
+    const { result } = renderHook(() =>
+      useFetchAllPages<TestData, Record<string, unknown>, Item>({
+        query,
+        extractPaginatedData,
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.allItems).toEqual([{ id: 1 }]);
+    });
+
+    expect(fetchMore).toHaveBeenCalledTimes(1);
+  });
+
+  it('uses empty items when fetched page items are missing', async () => {
+    const firstPage: TestData = {
+      itemsPage: {
+        items: [{ id: 1 }],
+        total: 2,
+        total_pages: 2,
+      },
+    };
+
+    const secondPage = {
+      itemsPage: {
+        items: undefined,
+        total: 2,
+        total_pages: 2,
+      },
+    } as unknown as TestData;
+
+    fetchMore.mockResolvedValue({
+      data: secondPage,
+    });
+
+    vi.mocked(useQuery).mockReturnValue({
+      data: firstPage,
+      loading: false,
+      error: undefined,
+      fetchMore,
+      refetch,
+    } as never);
+
+    const { result } = renderHook(() =>
+      useFetchAllPages<TestData, Record<string, unknown>, Item>({
+        query,
+        extractPaginatedData,
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.allItems).toEqual([{ id: 1 }]);
+    });
+  });
+
   it('returns loading state from Apollo', () => {
     vi.mocked(useQuery).mockReturnValue({
       data: undefined,
@@ -194,6 +382,63 @@ describe('useFetchAllPages', () => {
     );
 
     expect(result.current.loading).toBe(true);
+  });
+
+  it('returns loading while remaining pages are loading', async () => {
+    const firstPage: TestData = {
+      itemsPage: {
+        items: [{ id: 1 }],
+        total: 2,
+        total_pages: 2,
+      },
+    };
+
+    let resolveFetchMore: ((value: { data: TestData }) => void) | undefined;
+
+    const fetchMorePromise = new Promise<{
+      data: TestData;
+    }>((resolve) => {
+      resolveFetchMore = resolve;
+    });
+
+    fetchMore.mockReturnValue(fetchMorePromise);
+
+    vi.mocked(useQuery).mockReturnValue({
+      data: firstPage,
+      loading: false,
+      error: undefined,
+      fetchMore,
+      refetch,
+    } as never);
+
+    const { result } = renderHook(() =>
+      useFetchAllPages<TestData, Record<string, unknown>, Item>({
+        query,
+        extractPaginatedData,
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.loading).toBe(true);
+    });
+
+    await act(async () => {
+      resolveFetchMore?.({
+        data: {
+          itemsPage: {
+            items: [{ id: 2 }],
+            total: 2,
+            total_pages: 2,
+          },
+        },
+      });
+
+      await fetchMorePromise;
+    });
+
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false);
+    });
   });
 
   it('returns error when Apollo query fails', () => {
@@ -248,6 +493,108 @@ describe('useFetchAllPages', () => {
     expect(result.current.loading).toBe(false);
   });
 
+  it('does not update state when loading completes after unmount', async () => {
+    const firstPage: TestData = {
+      itemsPage: {
+        items: [{ id: 1 }],
+        total: 2,
+        total_pages: 2,
+      },
+    };
+
+    let resolveFetchMore: ((value: { data: TestData }) => void) | undefined;
+
+    const fetchMorePromise = new Promise<{
+      data: TestData;
+    }>((resolve) => {
+      resolveFetchMore = resolve;
+    });
+
+    fetchMore.mockReturnValue(fetchMorePromise);
+
+    vi.mocked(useQuery).mockReturnValue({
+      data: firstPage,
+      loading: false,
+      error: undefined,
+      fetchMore,
+      refetch,
+    } as never);
+
+    const { unmount } = renderHook(() =>
+      useFetchAllPages<TestData, Record<string, unknown>, Item>({
+        query,
+        extractPaginatedData,
+      }),
+    );
+
+    await waitFor(() => {
+      expect(fetchMore).toHaveBeenCalledTimes(1);
+    });
+
+    unmount();
+
+    await act(async () => {
+      resolveFetchMore?.({
+        data: {
+          itemsPage: {
+            items: [{ id: 2 }],
+            total: 2,
+            total_pages: 2,
+          },
+        },
+      });
+
+      await fetchMorePromise;
+      await Promise.resolve();
+    });
+  });
+
+  it('does not update error state when loading fails after unmount', async () => {
+    const firstPage: TestData = {
+      itemsPage: {
+        items: [{ id: 1 }],
+        total: 2,
+        total_pages: 2,
+      },
+    };
+
+    let rejectFetchMore: ((error: Error) => void) | undefined;
+
+    const fetchMorePromise = new Promise<never>((_, reject) => {
+      rejectFetchMore = reject;
+    });
+
+    fetchMore.mockReturnValue(fetchMorePromise);
+
+    vi.mocked(useQuery).mockReturnValue({
+      data: firstPage,
+      loading: false,
+      error: undefined,
+      fetchMore,
+      refetch,
+    } as never);
+
+    const { unmount } = renderHook(() =>
+      useFetchAllPages<TestData, Record<string, unknown>, Item>({
+        query,
+        extractPaginatedData,
+      }),
+    );
+
+    await waitFor(() => {
+      expect(fetchMore).toHaveBeenCalledTimes(1);
+    });
+
+    unmount();
+
+    await act(async () => {
+      rejectFetchMore?.(new Error('Fetch failed'));
+
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+  });
+
   it('refetches and updates all items', async () => {
     const firstPage: TestData = {
       itemsPage: {
@@ -299,6 +646,76 @@ describe('useFetchAllPages', () => {
     expect(refreshedItems).toEqual([{ id: 10 }, { id: 20 }]);
 
     expect(result.current.allItems).toEqual([{ id: 10 }, { id: 20 }]);
+  });
+
+  it('refetches all backend pages', async () => {
+    const firstPage: TestData = {
+      itemsPage: {
+        items: [{ id: 1 }],
+        total: 1,
+        total_pages: 1,
+      },
+    };
+
+    const refreshedFirstPage: TestData = {
+      itemsPage: {
+        items: [{ id: 10 }],
+        total: 2,
+        total_pages: 2,
+      },
+    };
+
+    const refreshedSecondPage: TestData = {
+      itemsPage: {
+        items: [{ id: 20 }],
+        total: 2,
+        total_pages: 2,
+      },
+    };
+
+    refetch.mockResolvedValue({
+      data: refreshedFirstPage,
+    });
+
+    fetchMore.mockResolvedValue({
+      data: refreshedSecondPage,
+    });
+
+    vi.mocked(useQuery).mockReturnValue({
+      data: firstPage,
+      loading: false,
+      error: undefined,
+      fetchMore,
+      refetch,
+    } as never);
+
+    const { result } = renderHook(() =>
+      useFetchAllPages<TestData, Record<string, unknown>, Item>({
+        query,
+        extractPaginatedData,
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.allItems).toEqual([{ id: 1 }]);
+    });
+
+    let refreshedItems: Item[] | undefined;
+
+    await act(async () => {
+      refreshedItems = await result.current.refetchAll();
+    });
+
+    expect(refreshedItems).toEqual([{ id: 10 }, { id: 20 }]);
+
+    expect(fetchMore).toHaveBeenCalledWith({
+      variables: {
+        params: {
+          page: 2,
+          limit: BACKEND_PAGE_SIZE,
+        },
+      },
+    });
   });
 
   it('returns undefined when refetch returns no data', async () => {
