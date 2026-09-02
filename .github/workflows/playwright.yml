@@ -58,7 +58,7 @@ jobs:
         run: |
           sleep 5
           cd backend
-          docker exec cv_backend pnpm run backup
+          docker exec -w /usr/src/app cv_backend npx pnpm run backup
 
       - name: Wait for backend
         run: |
