@@ -18,6 +18,26 @@ jobs:
           repository: innowise-frontend/cv-backend
           path: backend
 
+      - name: Create .env files from secrets
+        run: |
+          mkdir -p frontend/.github/playwright-env
+          cat > frontend/.github/playwright-env/cv_postgres.env << EOF
+          POSTGRES_DB="${{ secrets.POSTGRES_DB }}"
+          POSTGRES_USER="${{ secrets.POSTGRES_USER }}"
+          POSTGRES_PASSWORD="${{ secrets.POSTGRES_PASSWORD }}"
+          EOF
+          cat > frontend/.github/playwright-env/cv_backend.env << EOF
+          PORT="3001"
+          DATABASE_URL="postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@cv_postgres:5432/${{ secrets.POSTGRES_DB }}"
+          DATABASE_SSL=""
+          JWT_SECRET="${{ secrets.JWT_SECRET }}"
+          JWT_SECRET_2="${{ secrets.JWT_SECRET_2 }}"
+          CLOUDINARY_URL="${{ secrets.CLOUDINARY_URL }}"
+          CHROME_WS="${{ secrets.CHROME_WS }}"
+          MAIL_FROM="${{ secrets.MAIL_FROM }}"
+          SMTP_URL="${{ secrets.SMTP_URL }}"
+          EOF
+
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
@@ -30,11 +50,16 @@ jobs:
       - name: Start backend with Docker Compose
         run: |
           cd backend/docker
-          # Копируем наши файлы .env в папку docker
           cp ../../frontend/.github/playwright-env/cv_postgres.env .env.cv_postgres
           cp ../../frontend/.github/playwright-env/cv_backend.env .env.cv_backend
-          # Запускаем контейнеры в фоновом режиме
           docker compose up -d
+
+      - name: Restore database backup
+        run: |
+          sleep 5
+          cd backend
+          docker exec cv_backend pnpm run backup
+
       - name: Wait for backend
         run: |
           echo "Waiting for backend to be ready..."
@@ -52,6 +77,10 @@ jobs:
           pnpm exec playwright test
         env:
           NEXT_PUBLIC_GRAPHQL_URL: http://localhost:3001/api/graphql
+          E2E_ADMIN_EMAIL: ${{ secrets.E2E_ADMIN_EMAIL }}
+          E2E_ADMIN_PASSWORD: ${{ secrets.E2E_ADMIN_PASSWORD }}
+          E2E_EMPLOYEE_EMAIL: ${{ secrets.E2E_EMPLOYEE_EMAIL }}
+          E2E_EMPLOYEE_PASSWORD: ${{ secrets.E2E_EMPLOYEE_PASSWORD }}
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
