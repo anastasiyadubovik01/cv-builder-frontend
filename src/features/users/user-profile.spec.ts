@@ -1,4 +1,9 @@
-import { test, expect } from '@/features/auth/auth.fixture';
+import {
+  test,
+  expect,
+  employeeFirstName,
+  adminFirstName,
+} from '@/features/auth/auth.fixture';
 
 test.describe('User management', () => {
   test('Profile viewing: admin can log in, open user page and verify fields', async ({
@@ -7,7 +12,7 @@ test.describe('User management', () => {
     await adminPage.goto('/users');
 
     const searchInput = adminPage.getByPlaceholder(/search/i);
-    await searchInput.fill('TestEmployee');
+    await searchInput.fill(employeeFirstName);
     await adminPage.waitForTimeout(500);
 
     const firstRow = adminPage.locator('table tbody tr').first();
@@ -55,7 +60,7 @@ test.describe('User management', () => {
     await adminPage.goto('/users');
 
     const searchInput = adminPage.getByPlaceholder(/search/i);
-    await searchInput.fill('TestEmployee');
+    await searchInput.fill(employeeFirstName);
     await adminPage.waitForTimeout(500);
 
     const firstRow = adminPage.locator('table tbody tr').first();
@@ -102,7 +107,7 @@ test.describe('User management', () => {
     await adminPage.goto('/users');
 
     const searchInput = adminPage.getByPlaceholder(/search/i);
-    await searchInput.fill('TestEmployee');
+    await searchInput.fill(employeeFirstName);
     await adminPage.waitForTimeout(500);
 
     const firstRow = adminPage.locator('table tbody tr').first();
@@ -160,7 +165,7 @@ test.describe('User management', () => {
     await employeePage.goto('/users');
 
     const searchInput = employeePage.getByPlaceholder(/search/i);
-    await searchInput.fill('TestAdmin');
+    await searchInput.fill(adminFirstName);
     await employeePage.waitForTimeout(500);
 
     const firstRow = employeePage.locator('table tbody tr').first();

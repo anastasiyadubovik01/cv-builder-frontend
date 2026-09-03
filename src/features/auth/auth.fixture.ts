@@ -11,17 +11,23 @@ type AuthFixtures = {
 type Auth = {
   email: string;
   password: string;
+  firstName: string;
 };
 
 const Admin: Auth = {
   email: process.env.E2E_ADMIN_EMAIL || '',
   password: process.env.E2E_ADMIN_PASSWORD || '',
+  firstName: process.env.E2E_ADMIN_FIRST_NAME || '',
 };
 
 const Employee: Auth = {
   email: process.env.E2E_EMPLOYEE_EMAIL || '',
   password: process.env.E2E_EMPLOYEE_PASSWORD || '',
+  firstName: process.env.E2E_EMPLOYEE_FIRST_NAME || '',
 };
+
+export const adminFirstName = Admin.firstName;
+export const employeeFirstName = Employee.firstName;
 
 const validateAuth = (auth: Auth, role: string) => {
   if (!auth.email || !auth.password) {
