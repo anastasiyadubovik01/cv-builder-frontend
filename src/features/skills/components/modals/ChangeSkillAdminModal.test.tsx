@@ -190,6 +190,32 @@ describe('ChangeSkillAdminModal', () => {
     });
 
     fireEvent.click(screen.getByTestId('select-close-trigger'));
+
+    expect(mockValidateField).toHaveBeenCalledTimes(1);
+    expect(mockValidateField).toHaveBeenCalledWith('name');
+    expect(mockValidateField).not.toHaveBeenCalledWith('categoryId');
+  });
+
+  it('validates category when the select closes without a selection', () => {
+    render(
+      <ChangeSkillAdminModal
+        type="Create"
+        categories={mockCategories}
+        open={true}
+        formData={{ name: 'TypeScript', categoryId: '' }}
+        errors={{}}
+        loading={false}
+        isValid={false}
+        isDuplicate={false}
+        setFieldValue={mockSetFieldValue}
+        validateField={mockValidateField}
+        handleSubmit={mockHandleSubmit}
+      />,
+    );
+
+    fireEvent.click(screen.getByTestId('select-close-trigger'));
+
+    expect(mockValidateField).toHaveBeenCalledTimes(1);
     expect(mockValidateField).toHaveBeenCalledWith('categoryId');
   });
 
