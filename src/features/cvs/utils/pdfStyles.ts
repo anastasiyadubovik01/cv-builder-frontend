@@ -27,7 +27,6 @@ export const getPdfStyles = () => `
     display: none !important;
   }
 
-  /* Utility & Grid System */
   .mx-auto { margin-left: auto; margin-right: auto; }
   .w-full { width: 100%; }
   .max-w-\\[900px\\] { max-width: 900px; }
@@ -45,7 +44,6 @@ export const getPdfStyles = () => `
   .col-span-4 { grid-column: span 4 / span 4; }
   .col-span-8 { grid-column: span 8 / span 8; }
 
-  /* Flexbox & Spacing */
   .flex { display: flex; }
   .flex-col { flex-direction: column; }
   .justify-between { justify-content: space-between; }
@@ -63,7 +61,6 @@ export const getPdfStyles = () => `
   .mt-2 { margin-top: 0.5rem; }
   .mt-\\[10px\\] { margin-top: 10px; }
 
-  /* Typography */
   .text-\\[34px\\] { font-size: 34px; line-height: 1.15; }
   .text-\\[16px\\] { font-size: 16px; line-height: 1.5; }
   .text-\\[14px\\] { font-size: 14px; line-height: 1.4; }
@@ -80,7 +77,6 @@ export const getPdfStyles = () => `
   .text-left { text-align: left; }
   .text-center { text-align: center; }
 
-  /* Colors & Borders */
   .text-primary { color: var(--primary) !important; }
   .border-primary { border-color: var(--primary) !important; }
   .border { border-style: solid; border-width: 1px; }
@@ -89,7 +85,6 @@ export const getPdfStyles = () => `
   .divide-y > * + * { border-top-style: solid; border-top-width: 1px; }
   .divide-border > * + * { border-color: var(--border); }
 
-  /* Tables & Lists */
   .list-disc { list-style-type: disc; }
   .pl-5 { padding-left: 1.25rem; }
   .pl-4 { padding-left: 1rem; }
@@ -103,7 +98,6 @@ export const getPdfStyles = () => `
   .pb-7 { padding-bottom: 1.75rem; }
   .align-sub { vertical-align: baseline; }
 
-  /* Page Break Safety for PDF */
   section, tr, .grid {
     page-break-inside: avoid;
     break-inside: avoid;

@@ -29,7 +29,6 @@ export async function proxy(request: NextRequest) {
 
   const isAuthenticated = Boolean(accessToken || refreshToken);
 
-  // Special cases
   if (normalizedPath === '/reset-password') {
     if (!searchParams.get('token')) {
       return NextResponse.redirect(new URL('/forgot-password', request.url));
@@ -37,7 +36,6 @@ export async function proxy(request: NextRequest) {
     return i18nProxy(request);
   }
 
-  // Public
   if (isPublicAuthRoute(normalizedPath)) {
     if (isAuthenticated) {
       return NextResponse.redirect(new URL('/', request.url));
@@ -45,7 +43,6 @@ export async function proxy(request: NextRequest) {
     return i18nProxy(request);
   }
 
-  // Private
   if (!isAuthenticated) {
     return NextResponse.redirect(new URL('/sign-in', request.url));
   }

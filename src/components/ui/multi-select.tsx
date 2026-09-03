@@ -85,18 +85,14 @@ export function MultiSelect({
               'text-foreground',
               'outline-none transition-colors',
 
-              // Hover
               'hover:border-[var(--input-hover-border)]',
 
-              // Active
               'data-[popup-open]:border-[var(--input-active-border)]',
 
-              // Invalid State
               'aria-invalid:border-destructive',
               'aria-invalid:bg-transparent',
               'aria-invalid:hover:border-destructive',
 
-              // Disabled State
               'data-[disabled]:pointer-events-none',
               'data-[disabled]:cursor-not-allowed',
               'data-[disabled]:border-[var(--input-disabled-border)]',

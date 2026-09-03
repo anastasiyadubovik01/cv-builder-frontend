@@ -49,23 +49,18 @@ function Input({
             'border border-input bg-transparent',
             'px-2.5 py-1',
 
-            // Typography
             'text-[16px] leading-[23px] font-normal tracking-[0.15px]',
             'text-foreground',
 
             'transition-colors outline-none',
 
-            // Placeholder
             'placeholder:text-muted-foreground',
 
-            // Hover
             'hover:border-[var(--input-hover-border)]',
 
-            // Active / Focus
             'focus:border-[var(--input-active-border)]',
             'focus:ring-0',
 
-            // Disabled
             'disabled:pointer-events-none',
             'disabled:cursor-not-allowed',
             'disabled:border-[var(--input-disabled-border)]',
@@ -73,7 +68,6 @@ function Input({
             'disabled:text-[var(--input-disabled-foreground)]',
             'disabled:placeholder:text-[var(--input-disabled-foreground)]',
 
-            // Invalid
             'aria-invalid:border-destructive',
             'aria-invalid:bg-transparent',
             'aria-invalid:text-foreground',
@@ -81,7 +75,6 @@ function Input({
             'aria-invalid:focus:border-destructive',
             'aria-invalid:ring-0',
 
-            // File input
             'file:inline-flex',
             'file:border-0',
             'file:bg-transparent',

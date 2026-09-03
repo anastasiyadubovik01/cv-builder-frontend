@@ -98,7 +98,6 @@ export function DataTable<T, K extends string = string>({
                 <React.Fragment key={rowKey}>
                   <tr
                     className={`h-[71px] ${
-                      // Пока что так
                       !hasSubRow ? 'border-b border-[var(--users-divider)]' : ''
                     }`}
                   >
