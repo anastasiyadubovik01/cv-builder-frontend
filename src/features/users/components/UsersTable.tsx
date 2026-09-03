@@ -21,6 +21,14 @@ type UsersTableProps = {
   onRefresh?: () => Promise<void>;
 };
 
+function TruncatedText({ value }: { value: string }) {
+  return (
+    <span className="block min-w-0 truncate" title={value}>
+      {value || '-'}
+    </span>
+  );
+}
+
 export function UsersTable({
   users,
   sortBy,
@@ -59,27 +67,27 @@ export function UsersTable({
       sortKey: 'firstName',
       header: t('users.table.firstName'),
       widthClassName: 'w-[178px]',
-      render: (user) => user.firstName,
+      render: (user) => <TruncatedText value={user.firstName} />,
     },
     {
       id: 'lastName',
       sortKey: 'lastName',
       header: t('users.table.lastName'),
       widthClassName: 'w-[178px]',
-      render: (user) => user.lastName,
+      render: (user) => <TruncatedText value={user.lastName} />,
     },
     {
       id: 'email',
       header: t('users.table.email'),
-      className: 'hidden xl:table-cell',
-      render: (user) => user.email,
+      className: 'hidden 2xl:table-cell',
+      render: (user) => <TruncatedText value={user.email} />,
     },
     {
       id: 'department',
       sortKey: 'department',
       header: t('users.table.department'),
       widthClassName: 'w-[220px]',
-      render: (user) => user.department,
+      render: (user) => <TruncatedText value={user.department} />,
     },
     {
       id: 'position',
@@ -87,7 +95,7 @@ export function UsersTable({
       header: t('users.table.position'),
       widthClassName: 'w-[220px]',
       className: 'hidden xl:table-cell',
-      render: (user) => user.position,
+      render: (user) => <TruncatedText value={user.position} />,
     },
     {
       id: 'actions',
