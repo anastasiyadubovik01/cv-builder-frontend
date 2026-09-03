@@ -14,7 +14,14 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
       include: ['src/**/*.{ts,tsx}'],
-      exclude: ['src/**/*.d.ts', 'src/**/*.stories.tsx', 'src/app/layout.tsx'],
+      exclude: [
+        'src/**/*.d.ts',
+        'src/**/*.stories.tsx',
+        'src/**/*.test.{ts,tsx}',
+        'src/**/*.spec.{ts,tsx}',
+        'src/**/*.fixture.{ts,tsx}',
+        'src/app/layout.tsx',
+      ],
     },
   },
 });

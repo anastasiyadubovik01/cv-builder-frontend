@@ -201,15 +201,12 @@ function SelectItem({
           'text-[var(--select-foreground)]',
           'outline-none select-none',
 
-          // Hover option
           'data-[highlighted]:bg-[var(--select-option-hover-background)]',
           'data-[highlighted]:text-[var(--select-option-hover-foreground)]',
 
-          // Selected option
           'data-[selected]:bg-[var(--select-option-selected-background)]',
           'data-[selected]:text-[var(--select-option-selected-foreground)]',
 
-          // Disabled option
           'data-[disabled]:pointer-events-none',
           'data-[disabled]:opacity-50',
         ],

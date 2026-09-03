@@ -157,7 +157,6 @@ function makeClient() {
     },
   });
 
-  // GraphQL client
   return new ApolloClient({
     cache,
     link: ApolloLink.from([authLink, errorLink, httpLink]),

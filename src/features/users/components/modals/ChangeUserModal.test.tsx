@@ -298,7 +298,6 @@ describe('ChangeUserModal', () => {
     render(<ChangeUserModal {...defaultProps} />);
 
     const closeButtons = screen.getAllByTestId('select-close-toggle');
-    // Index 0: Department, Index 1: Position, Index 2: Role
     fireEvent.click(closeButtons[1]);
     expect(mockValidateField).toHaveBeenCalledWith('positionId');
 
@@ -310,7 +309,6 @@ describe('ChangeUserModal', () => {
     render(<ChangeUserModal {...defaultProps} />);
 
     const changeValueButtons = screen.getAllByTestId('select-change-val');
-    // Index 1: Position, Index 2: Role
     fireEvent.click(changeValueButtons[1]);
     expect(mockSetFieldValue).toHaveBeenCalledWith('positionId', '2', {
       shouldValidate: true,
