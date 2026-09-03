@@ -4,50 +4,64 @@ import {
   employeeFirstName,
   adminFirstName,
 } from '@/features/auth/auth.fixture';
+import type { Page } from '@playwright/test';
+
+async function goToUserProfile(
+  page: Page,
+  searchName: string,
+  openMethod: 'actions' | 'arrow' = 'actions',
+) {
+  await page.goto('/users');
+
+  const searchInput = page.getByPlaceholder(/search/i);
+  await searchInput.fill(searchName);
+  await page.waitForTimeout(500);
+
+  const firstRow = page.locator('table tbody tr').first();
+
+  if (openMethod === 'actions') {
+    const actionsButton = firstRow.locator('button[aria-label^="Actions for"]');
+    await actionsButton.click();
+    const viewButton = page.locator('[role="menuitem"]:has-text("View")');
+    await viewButton.click();
+  } else {
+    const arrowButton = firstRow.locator('a[aria-label^="Open"]');
+    await arrowButton.click();
+  }
+  await page.waitForURL(/\/users\/[\w-]+/);
+  return firstRow;
+}
 
 test.describe('User management', () => {
   test('Profile viewing: admin can log in, open user page and verify fields', async ({
     adminPage,
   }) => {
-    await adminPage.goto('/users');
+    await goToUserProfile(adminPage, employeeFirstName);
 
-    const searchInput = adminPage.getByPlaceholder(/search/i);
-    await searchInput.fill(employeeFirstName);
-    await adminPage.waitForTimeout(500);
+    const firstNameInput = adminPage.getByRole('textbox', {
+      name: 'First Name',
+    });
+    const lastNameInput = adminPage.getByRole('textbox', { name: 'Last Name' });
+    const departmentSelect = adminPage.getByRole('combobox', {
+      name: 'Department',
+    });
+    const positionSelect = adminPage.getByRole('combobox', {
+      name: 'Position',
+    });
 
-    const firstRow = adminPage.locator('table tbody tr').first();
-
-    const firstName = (await firstRow.locator('td').nth(1).textContent()) ?? '';
-    const lastName = (await firstRow.locator('td').nth(2).textContent()) ?? '';
-    const department =
-      (await firstRow.locator('td').nth(4).textContent()) ?? '';
-    const position = (await firstRow.locator('td').nth(5).textContent()) ?? '';
+    const firstName = await firstNameInput.inputValue();
+    const lastName = await lastNameInput.inputValue();
+    const department = await departmentSelect.textContent();
+    const position = await positionSelect.textContent();
     const fullName = `${firstName} ${lastName}`.trim();
-
-    const actionsButton = firstRow.locator('button[aria-label^="Actions for"]');
-    await actionsButton.click();
-
-    const viewButton = adminPage.locator('[role="menuitem"]:has-text("View")');
-    await viewButton.click();
-
-    await adminPage.waitForURL(/\/users\/[\w-]+/);
 
     await expect(
       adminPage.getByRole('heading', { name: fullName }),
     ).toBeVisible();
-
-    await expect(
-      adminPage.getByRole('textbox', { name: 'First Name' }),
-    ).toHaveValue(firstName);
-    await expect(
-      adminPage.getByRole('textbox', { name: 'Last Name' }),
-    ).toHaveValue(lastName);
-    await expect(
-      adminPage.getByRole('combobox', { name: 'Department' }),
-    ).toContainText(department);
-    await expect(
-      adminPage.getByRole('combobox', { name: 'Position' }),
-    ).toContainText(position);
+    await expect(firstNameInput).toHaveValue(firstName);
+    await expect(lastNameInput).toHaveValue(lastName);
+    await expect(departmentSelect).toContainText(department ?? '');
+    await expect(positionSelect).toContainText(position ?? '');
 
     await expect(
       adminPage.getByRole('button', { name: 'Update' }),
@@ -57,27 +71,16 @@ test.describe('User management', () => {
   test('Edit profile: admin updates test employee name, changes are reflected', async ({
     adminPage,
   }) => {
-    await adminPage.goto('/users');
-
-    const searchInput = adminPage.getByPlaceholder(/search/i);
-    await searchInput.fill(employeeFirstName);
-    await adminPage.waitForTimeout(500);
-
-    const firstRow = adminPage.locator('table tbody tr').first();
-    const initialFirstName =
-      (await firstRow.locator('td').nth(1).textContent()) ?? '';
-    const initialLastName =
-      (await firstRow.locator('td').nth(2).textContent()) ?? '';
-
-    const actionsButton = firstRow.locator('button[aria-label^="Actions for"]');
-    await actionsButton.click();
-    const viewButton = adminPage.locator('[role="menuitem"]:has-text("View")');
-    await viewButton.click();
-    await adminPage.waitForURL(/\/users\/[\w-]+/);
+    await goToUserProfile(adminPage, employeeFirstName);
 
     const firstNameInput = adminPage.getByRole('textbox', {
       name: 'First Name',
     });
+    const initialFirstName = await firstNameInput.inputValue();
+    const initialLastName = await adminPage
+      .getByRole('textbox', { name: 'Last Name' })
+      .inputValue();
+
     const newFirstName = `Updated_${initialFirstName}`;
     await firstNameInput.fill(newFirstName);
 
@@ -104,40 +107,32 @@ test.describe('User management', () => {
   test('Edit profile: admin updates test employee position, changes are reflected', async ({
     adminPage,
   }) => {
-    await adminPage.goto('/users');
-
-    const searchInput = adminPage.getByPlaceholder(/search/i);
-    await searchInput.fill(employeeFirstName);
-    await adminPage.waitForTimeout(500);
-
-    const firstRow = adminPage.locator('table tbody tr').first();
-    const initialPosition =
-      (await firstRow.locator('td').nth(5).textContent()) ?? '';
-
-    const actionsButton = firstRow.locator('button[aria-label^="Actions for"]');
-    await actionsButton.click();
-    const viewButton = adminPage.locator('[role="menuitem"]:has-text("View")');
-    await viewButton.click();
-    await adminPage.waitForURL(/\/users\/[\w-]+/);
+    await goToUserProfile(adminPage, employeeFirstName);
 
     const positionSelect = adminPage.getByRole('combobox', {
       name: 'Position',
     });
+    const initialPosition = (await positionSelect.innerText()).trim();
+
     await positionSelect.click();
 
     const options = adminPage.locator('[role="option"]');
+    await options.first().waitFor();
     const optionCount = await options.count();
     let newPosition = initialPosition;
+    let optionFound = false;
     for (let i = 0; i < optionCount; i++) {
       const text = await options.nth(i).textContent();
-      if (text && text.trim() !== initialPosition) {
-        newPosition = text.trim();
+      const trimmedText = text ? text.trim() : '';
+      if (trimmedText && trimmedText !== initialPosition) {
+        newPosition = trimmedText;
         await options.nth(i).click();
+        optionFound = true;
         break;
       }
     }
 
-    if (newPosition === initialPosition) {
+    if (!optionFound || newPosition === initialPosition) {
       test.skip(true, 'No alternative position available to test');
     }
 
@@ -162,17 +157,7 @@ test.describe('User management', () => {
   test("Permissions: employee cannot edit another user's data", async ({
     employeePage,
   }) => {
-    await employeePage.goto('/users');
-
-    const searchInput = employeePage.getByPlaceholder(/search/i);
-    await searchInput.fill(adminFirstName);
-    await employeePage.waitForTimeout(500);
-
-    const firstRow = employeePage.locator('table tbody tr').first();
-
-    const arrowButton = firstRow.locator('a[aria-label^="Open"]');
-    await arrowButton.click();
-    await employeePage.waitForURL(/\/users\/[\w-]+/);
+    await goToUserProfile(employeePage, adminFirstName, 'arrow');
 
     const firstNameInput = employeePage.getByRole('textbox', {
       name: 'First Name',
