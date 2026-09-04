@@ -175,10 +175,10 @@ Unit tests cover:
 
 | Metric     | Coverage |
 | ---------- | -------- |
-| Statements | 85.97%   |
-| Branches   | 80.05%   |
-| Functions  | 83.71%   |
-| Lines      | 85.94%   |
+| Statements | 85.9%    |
+| Branches   | 80.16%   |
+| Functions  | 83.75%   |
+| Lines      | 85.9%    |
 
 Coverage excludes unit test files, E2E specifications, and E2E fixtures because they are not application source code executed by Vitest.
 
