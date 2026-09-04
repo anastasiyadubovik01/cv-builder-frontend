@@ -1,5 +1,6 @@
 'use client';
 
+import * as React from 'react';
 import type { ReactNode } from 'react';
 import type { ApiSkill } from '@/api/skills';
 import type {
@@ -67,6 +68,35 @@ export function ChangeSkillModal({
   handleSubmit,
 }: ChangeUserSkillModalProps) {
   const { t } = useTranslation();
+
+  const selectedFieldsRef = React.useRef<Set<keyof AddSkillFormValues>>(
+    new Set(),
+  );
+
+  const handleSelectValue = (
+    field: keyof AddSkillFormValues,
+    value: string | null,
+  ) => {
+    if (!value) return;
+
+    selectedFieldsRef.current.add(field);
+    setFieldValue(field, value, { shouldValidate: true });
+  };
+
+  const handleSelectOpenChange = (
+    field: keyof AddSkillFormValues,
+    isOpen: boolean,
+  ) => {
+    if (isOpen) {
+      selectedFieldsRef.current.delete(field);
+      return;
+    }
+
+    if (!selectedFieldsRef.current.delete(field)) {
+      validateField(field);
+    }
+  };
+
   const skillItems = skills.map((skill) => ({
     value: skill.name,
     label: skill.name,
@@ -89,18 +119,10 @@ export function ChangeSkillModal({
             items={skillItems}
             value={formData.skillName}
             disabled={skillDisabled}
-            onValueChange={(value) => {
-              if (value) {
-                setFieldValue('skillName', value, {
-                  shouldValidate: true,
-                });
-              }
-            }}
-            onOpenChange={(isOpen) => {
-              if (!isOpen) {
-                validateField('skillName');
-              }
-            }}
+            onValueChange={(value) => handleSelectValue('skillName', value)}
+            onOpenChange={(isOpen) =>
+              handleSelectOpenChange('skillName', isOpen)
+            }
           >
             <SelectTrigger
               label={t('skills.skill')}
@@ -126,18 +148,8 @@ export function ChangeSkillModal({
           <Select
             items={masteryItems}
             value={formData.mastery}
-            onValueChange={(value) => {
-              if (value) {
-                setFieldValue('mastery', value, {
-                  shouldValidate: true,
-                });
-              }
-            }}
-            onOpenChange={(isOpen) => {
-              if (!isOpen) {
-                validateField('mastery');
-              }
-            }}
+            onValueChange={(value) => handleSelectValue('mastery', value)}
+            onOpenChange={(isOpen) => handleSelectOpenChange('mastery', isOpen)}
           >
             <SelectTrigger
               label={t('skills.mastery')}

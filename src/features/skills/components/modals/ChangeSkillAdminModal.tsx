@@ -1,5 +1,6 @@
 'use client';
 
+import * as React from 'react';
 import type { ReactNode } from 'react';
 import { ChangeDialog } from '@/components/dialogs/ChangeDialog';
 import type {
@@ -60,6 +61,9 @@ export function ChangeSkillAdminModal({
   handleSubmit,
 }: ChangeSkillModalProps) {
   const { t } = useTranslation();
+
+  const wasCategorySelectedRef = React.useRef(false);
+
   const categoryItems = categories.map((category) => ({
     value: category.id,
     label: category.name,
@@ -104,15 +108,24 @@ export function ChangeSkillAdminModal({
             value={formData.categoryId}
             onValueChange={(value) => {
               if (value) {
+                wasCategorySelectedRef.current = true;
+
                 setFieldValue('categoryId', value, {
                   shouldValidate: true,
                 });
               }
             }}
             onOpenChange={(isOpen) => {
-              if (!isOpen) {
+              if (isOpen) {
+                wasCategorySelectedRef.current = false;
+                return;
+              }
+
+              if (!wasCategorySelectedRef.current) {
                 validateField('categoryId');
               }
+
+              wasCategorySelectedRef.current = false;
             }}
           >
             <SelectTrigger

@@ -57,6 +57,35 @@ export function ChangeUserLanguageModal({
   handleSubmit,
 }: ChangeUserLanguageModalProps) {
   const { t } = useTranslation();
+
+  const selectedFieldsRef = React.useRef<Set<keyof AddUserLanguageFormValues>>(
+    new Set(),
+  );
+
+  const handleSelectValue = (
+    field: keyof AddUserLanguageFormValues,
+    value: string | null,
+  ) => {
+    if (!value) return;
+
+    selectedFieldsRef.current.add(field);
+    setFieldValue(field, value, { shouldValidate: true });
+  };
+
+  const handleSelectOpenChange = (
+    field: keyof AddUserLanguageFormValues,
+    isOpen: boolean,
+  ) => {
+    if (isOpen) {
+      selectedFieldsRef.current.delete(field);
+      return;
+    }
+
+    if (!selectedFieldsRef.current.delete(field)) {
+      validateField(field);
+    }
+  };
+
   const languageItems = languages.map((language) => ({
     value: language.name,
     label: language.name,
@@ -84,18 +113,10 @@ export function ChangeUserLanguageModal({
             items={languageItems}
             value={formData.languageName}
             disabled={languageDisabled}
-            onValueChange={(value) => {
-              if (value) {
-                setFieldValue('languageName', value, {
-                  shouldValidate: true,
-                });
-              }
-            }}
-            onOpenChange={(isOpen) => {
-              if (!isOpen) {
-                validateField('languageName');
-              }
-            }}
+            onValueChange={(value) => handleSelectValue('languageName', value)}
+            onOpenChange={(isOpen) =>
+              handleSelectOpenChange('languageName', isOpen)
+            }
           >
             <SelectTrigger
               label={t('users.languages.language')}
@@ -121,18 +142,10 @@ export function ChangeUserLanguageModal({
           <Select
             items={proficiencyItems}
             value={formData.proficiency}
-            onValueChange={(value) => {
-              if (value) {
-                setFieldValue('proficiency', value, {
-                  shouldValidate: true,
-                });
-              }
-            }}
-            onOpenChange={(isOpen) => {
-              if (!isOpen) {
-                validateField('proficiency');
-              }
-            }}
+            onValueChange={(value) => handleSelectValue('proficiency', value)}
+            onOpenChange={(isOpen) =>
+              handleSelectOpenChange('proficiency', isOpen)
+            }
           >
             <SelectTrigger
               label={t('users.languages.proficiency')}
