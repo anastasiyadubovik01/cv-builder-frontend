@@ -271,7 +271,7 @@ describe('UserAvatar', () => {
       });
       expect(mockOnUpdated).toHaveBeenCalled();
       expect(mockToastSuccess).toHaveBeenCalledWith(
-        'users.details.avatar.uploadSucces',
+        'users.details.avatar.uploadSuccess',
       );
     });
   });

@@ -74,13 +74,17 @@ export function UserDetailsNavigation({
 
   return (
     <>
-      <Breadcrumbs
-        items={[
-          { label: labels.employees, href: '/users' },
-          { label: userName, icon: UserBreadcrumbIcon, accent: true },
-          { label: activeTab.label },
-        ]}
-      />
+      <div className="sticky top-0 z-30 w-full px-6">
+        <div className="bg-background">
+          <Breadcrumbs
+            items={[
+              { label: labels.employees, href: '/users' },
+              { label: userName, icon: UserBreadcrumbIcon, accent: true },
+              { label: activeTab.label },
+            ]}
+          />
+        </div>
+      </div>
 
       <div className="px-5">
         <NavTabs items={tabs} />

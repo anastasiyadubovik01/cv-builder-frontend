@@ -63,13 +63,17 @@ export function CvDetailsNavigation({
 
   return (
     <>
-      <Breadcrumbs
-        items={[
-          { label: labels.cvs, href: '/cvs' },
-          { label: cvName, accent: true },
-          { label: activeTab.label },
-        ]}
-      />
+      <div className="sticky top-0 z-30 w-full px-6">
+        <div className="bg-background">
+          <Breadcrumbs
+            items={[
+              { label: labels.cvs, href: '/cvs' },
+              { label: cvName, accent: true },
+              { label: activeTab.label },
+            ]}
+          />
+        </div>
+      </div>
 
       <div className="px-5">
         <NavTabs items={tabs} />
