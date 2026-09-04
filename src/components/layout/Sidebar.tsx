@@ -205,7 +205,7 @@ export function Sidebar({ role }: SidebarProps) {
       >
         <aside
           className={cn(
-            'sticky top-0 z-50 flex h-screen flex-col bg-background transition-[width] duration-200',
+            'fixed top-0 z-50 flex h-screen flex-col bg-background transition-[width] duration-200',
             isTabletOpen ? 'w-[200px]' : 'w-14',
             isCollapsed ? 'lg:w-14' : 'lg:w-[200px]',
           )}
