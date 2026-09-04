@@ -76,7 +76,7 @@ export function UserAvatar({
       });
 
       await onUpdated();
-      toast.success(t('users.details.avatar.uploadSucces'));
+      toast.success(t('users.details.avatar.uploadSuccess'));
     } catch {
       toast.error(t('users.details.avatar.uploadError'));
     } finally {
