@@ -48,7 +48,8 @@ export function useValidatedForm<T extends Record<string, string>>({
   ) => {
     setFormData((prev) => {
       const nextState: T = { ...prev, [field]: value };
-      const validate = options?.shouldValidate ?? isSubmitted;
+      const validate =
+        options?.shouldValidate ?? (isSubmitted || Boolean(errors[field]));
 
       if (validate) {
         validateField(field, nextState);

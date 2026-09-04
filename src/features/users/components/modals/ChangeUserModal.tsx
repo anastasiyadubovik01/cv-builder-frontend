@@ -1,5 +1,6 @@
 'use client';
 
+import * as React from 'react';
 import type { ChangeEvent, ReactNode } from 'react';
 import type {
   createActionTitles,
@@ -74,6 +75,38 @@ export function ChangeUserModal({
   handleSubmit,
 }: ChangeUserModalProps) {
   const { t } = useTranslation();
+
+  const selectedFieldsRef = React.useRef<Set<keyof CreateUserFormValues>>(
+    new Set(),
+  );
+
+  const handleSelectValue = (
+    field: keyof CreateUserFormValues,
+    value: string | null,
+  ) => {
+    if (!value) return;
+
+    selectedFieldsRef.current.add(field);
+
+    setFieldValue(field, value, {
+      shouldValidate: true,
+    });
+  };
+
+  const handleSelectOpenChange = (
+    field: keyof CreateUserFormValues,
+    isOpen: boolean,
+  ) => {
+    if (isOpen) {
+      selectedFieldsRef.current.delete(field);
+      return;
+    }
+
+    if (!selectedFieldsRef.current.delete(field)) {
+      validateField(field);
+    }
+  };
+
   const departmentItems: SelectOption[] = departments.map((department) => ({
     value: String(department.id),
     label: department.name,
@@ -145,18 +178,10 @@ export function ChangeUserModal({
           <Select
             items={departmentItems}
             value={formData.departmentId}
-            onValueChange={(value) => {
-              if (value) {
-                setFieldValue('departmentId', value, {
-                  shouldValidate: true,
-                });
-              }
-            }}
-            onOpenChange={(isOpen) => {
-              if (!isOpen) {
-                validateField('departmentId');
-              }
-            }}
+            onValueChange={(value) => handleSelectValue('departmentId', value)}
+            onOpenChange={(isOpen) =>
+              handleSelectOpenChange('departmentId', isOpen)
+            }
           >
             <SelectTrigger
               label={t('users.create.department')}
@@ -182,18 +207,10 @@ export function ChangeUserModal({
           <Select
             items={positionItems}
             value={formData.positionId}
-            onValueChange={(value) => {
-              if (value) {
-                setFieldValue('positionId', value, {
-                  shouldValidate: true,
-                });
-              }
-            }}
-            onOpenChange={(isOpen) => {
-              if (!isOpen) {
-                validateField('positionId');
-              }
-            }}
+            onValueChange={(value) => handleSelectValue('positionId', value)}
+            onOpenChange={(isOpen) =>
+              handleSelectOpenChange('positionId', isOpen)
+            }
           >
             <SelectTrigger
               label={t('users.create.position')}
@@ -219,18 +236,8 @@ export function ChangeUserModal({
           <Select
             items={roleItems}
             value={formData.role}
-            onValueChange={(value) => {
-              if (value) {
-                setFieldValue('role', value, {
-                  shouldValidate: true,
-                });
-              }
-            }}
-            onOpenChange={(isOpen) => {
-              if (!isOpen) {
-                validateField('role');
-              }
-            }}
+            onValueChange={(value) => handleSelectValue('role', value)}
+            onOpenChange={(isOpen) => handleSelectOpenChange('role', isOpen)}
           >
             <SelectTrigger
               label={t('users.create.role')}
